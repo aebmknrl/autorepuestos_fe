@@ -1,0 +1,10 @@
+.form-container {
+    margin: 0 auto;
+    margin-top: 100px;
+    max-width: 350px;
+}
+
+.form-title {
+    margin-bottom: 10px;
+    text-align: center;
+}
