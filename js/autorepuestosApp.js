@@ -1,5 +1,16 @@
 angular
-    .module('autorepuestosApp', ['ui.router','datatables'])
+    .module('autorepuestosApp', ['ui.router'])
+    .filter('range', function() {
+      return function(input, total) {
+        total = parseInt(total);
+
+        for (var i=0; i<total; i++) {
+          input.push(i);
+        }
+
+        return input;
+      };
+    })
     .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         $stateProvider
@@ -9,8 +20,7 @@ angular
             })
             .state('marcas', {
                 url: '/marcas',
-                templateUrl: 'views/marcas.html',
-                css: '../bower_components/angular-datatables/dist/css/angular-datatables.min.css'
+                templateUrl: 'views/marcas.html'
             })
     })
     .controller('loginController', ['$scope', '$window', function($scope, $window) {
@@ -36,20 +46,32 @@ angular
     .controller('marcasController', ['$scope', '$state', '$http', function($scope, $state, $http) {
 
         var marcas_controller = this;
-        marcas_controller.getMarcas =  $http.get("http://localhost:8000/api/marca/10/1")
-                            .then(function(response){
-                                console.log(response.data[0]);
-                                /*mc.nombre_empresa = response.data[0].nombre;
-                                mc.correo_empresa = response.data[0].correo;
-                                mc.rif_empresa = response.data[0].rif;
-                                mc.telefono_empresa = response.data[0].telefono;
-                                mc.direccion_empresa = response.data[0].direccion;*/
-                            })
-                            .catch(function(error){
-                                console.log(error);
-                                if (error.status == '412') {
-                                    console.log('Error obteniendo datos: ' + error.data.error);
-                                }
-                            });
+        marcas_controller.filter = "";
+
+        marcas_controller.getMarcas =  function(limit,page){
+            var url = "http://localhost:8000/api/marca/" + limit + "/" + page;
+            $http.get(url)
+                .then(function(response){
+                    //console.log(response.data);
+                    marcas_controller.allLoad = false;
+                    marcas_controller.CurrentPage = page;
+                    marcas_controller.marcas = response.data.marcas;
+                    marcas_controller.totalMarcas = response.data.totalMarcas;
+                    marcas_controller.totalMarcasReturned = response.data.totalMarcasReturned;
+                    marcas_controller.totalPages = Math.ceil(marcas_controller.totalMarcas / limit);
+
+                    console.log("Total paginas: " + marcas_controller.totalPages);
+                    console.log("Página actual: " + marcas_controller.CurrentPage);
+                    marcas_controller.allLoad = true;
+                })
+                .catch(function(error){
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        }
+
+        marcas_controller.getMarcas(10,1);
 
     }])
