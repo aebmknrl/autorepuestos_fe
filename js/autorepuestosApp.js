@@ -1,5 +1,5 @@
 angular
-    .module('autorepuestosApp', ['ui.router', 'datatables'])
+    .module('autorepuestosApp', ['ui.router','datatables'])
     .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         $stateProvider
@@ -36,6 +36,20 @@ angular
     .controller('marcasController', ['$scope', '$state', '$http', function($scope, $state, $http) {
 
         var marcas_controller = this;
-
+        marcas_controller.getMarcas =  $http.get("http://localhost:8000/api/marca/10/1")
+                            .then(function(response){
+                                console.log(response.data[0]);
+                                /*mc.nombre_empresa = response.data[0].nombre;
+                                mc.correo_empresa = response.data[0].correo;
+                                mc.rif_empresa = response.data[0].rif;
+                                mc.telefono_empresa = response.data[0].telefono;
+                                mc.direccion_empresa = response.data[0].direccion;*/
+                            })
+                            .catch(function(error){
+                                console.log(error);
+                                if (error.status == '412') {
+                                    console.log('Error obteniendo datos: ' + error.data.error);
+                                }
+                            });
 
     }])
