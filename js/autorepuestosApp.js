@@ -1,5 +1,5 @@
 angular
-    .module('autorepuestosApp', ['ui.router','cgBusy','LocalStorageModule'])
+    .module('autorepuestosApp', ['ui.router','cgBusy','LocalStorageModule','ngMaterial'])
     .filter('range', function() {
       return function(input, total) {
         total = parseInt(total);
@@ -10,6 +10,11 @@ angular
 
         return input;
       };
+    })
+    .config(function($mdThemingProvider) {
+        $mdThemingProvider.theme('docs-dark')
+         .primaryPalette('pink')
+         .accentPalette('orange')
     })
     .config(function (localStorageServiceProvider) {
       localStorageServiceProvider
