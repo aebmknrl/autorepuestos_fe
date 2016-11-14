@@ -1,5 +1,5 @@
 angular
-    .module('autorepuestosApp', ['ui.router','cgBusy','LocalStorageModule'])
+    .module('autorepuestosApp', ['ui.router','cgBusy','LocalStorageModule','ui.bootstrap'])
     .filter('range', function() {
       return function(input, total) {
         total = parseInt(total);
@@ -58,6 +58,7 @@ angular
         marcas_controller.searchText = "";
         $scope.QtyPageTables = storageService.getQtyPageTables();
 
+
         marcas_controller.ChangeQtyPagesTables = function(Qty,searchText){
             storageService.setQtyPageTables(Qty);
             $scope.QtyPageTables = storageService.getQtyPageTables();
@@ -109,20 +110,11 @@ angular
                     }
                 });
         }
-        
-        marcas_controller.checkLastPage = function(){
-            console.log("Presionado > El valor seteado en el localstorage de cantidad de paginas es " + storageService.getQtyPageTables());
-            if (marcas_controller.CurrentPage !== marcas_controller.totalPages) {
-                marcas_controller.getMarcas($scope.QtyPageTables,marcas_controller.CurrentPage + 1)
-            }
-        };
 
-        marcas_controller.checkFirstPage = function(){
-        console.log("Presionado < El valor seteado en el localstorage de cantidad de paginas es " + storageService.getQtyPageTables());
-            if (marcas_controller.CurrentPage !== 1) {
-                marcas_controller.getMarcas($scope.QtyPageTables,marcas_controller.CurrentPage - 1)
-            }
-        };
+        marcas_controller.setPage = function(page){
+            marcas_controller.getMarcas($scope.QtyPageTables,page);
+        }
+
         // The default value on load controller:
         marcas_controller.getMarcas($scope.QtyPageTables,1);
 
