@@ -9,18 +9,31 @@
     text-align: center;
 }
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-  display: none !important;
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+    display: none !important;
 }
 
 .actual-range {
-	margin-top: 30px;
-	font-weight: bold;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+.row-no-visible {
+    display: none;
+}
+
+.row-visible {
+    display: block;
 }
 
 
 /* Overrides */
 
-.in-line-paginator{
-	margin-top: -4px !important;
+.in-line-paginator {
+    margin-top: -4px !important;
 }
