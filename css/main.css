@@ -23,6 +23,10 @@
     font-weight: bold;
 }
 
+.item-visible {
+    display: 
+}
+
 .row-no-visible {
     display: none;
 }
@@ -32,9 +36,14 @@
     background: #ffe1e1;
 }
 
-.table-hover>tbody>tr.row-visible:hover{
+.table-hover>tbody>tr.row-visible:hover {
     background-color: #ffe1e1 !important;
 }
+
+.btn-left-margin-5 {
+    margin-left: 5px !important;
+}
+
 
 /* Overrides */
 
@@ -43,5 +52,5 @@
 }
 
 .ng-toast {
-    position: relative !important;
+    right: 5px;
 }

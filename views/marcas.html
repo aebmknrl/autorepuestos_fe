@@ -13,8 +13,13 @@
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar en todas las marcas..." ng-model="mc.searchText" on-enter="mc.getMarcas(QtyPagesSelected,1,mc.searchText)">
                 <span class="input-group-btn">
-		        <button class="btn btn-default" type="button" ng-click="mc.getMarcas(QtyPagesSelected,1,mc.searchText)">
+		        <button class="btn btn-default btn-left-margin-5" type="button" ng-click="mc.getMarcas(QtyPagesSelected,1,mc.searchText)">
 		        	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+                </span>
+                <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-5" type="button" ng-class="{true:'row-visible', false: 'row-no-visible'}[mc.selectedItem.id == marca.marId]">
+		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>
                 </span>
             </div>
@@ -42,8 +47,7 @@
                     <td>{{marca.marNombre}}</td>
                     <td>{{marca.marObservacion}}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" ng-model="mc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="marca.marId"
-                            btn-checkbox-false="0">
+                        <button type="button" class="btn btn-primary" ng-model="mc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="marca.marId" btn-checkbox-false="0">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editar
 						</button>
                         <button type="button" class="btn btn-danger" ng-disabled="mc.selectedItem.id == marca.marId">
@@ -68,8 +72,7 @@
                     <td>
                         <form name="updateObsForm" novalidate>
                             <div ng-class="{ 'has-error': updateObsForm.observaciones.$touched && updateObsForm.observaciones.$invalid}">
-                                <input type="text" name="observaciones" class="form-control" ng-model="marca.marObservacion" placeholder="Observaciones"
-                                    required/>
+                                <input type="text" name="observaciones" class="form-control" ng-model="marca.marObservacion" placeholder="Observaciones" required/>
                                 <div class="help-block" ng-messages="updateObsForm.observaciones.$error" ng-if="updateObsForm.observaciones.$touched">
                                     <p ng-message="required">"Observación" es requerido.</p>
                                 </div>
@@ -89,8 +92,7 @@
     <div class="row" ng-cloak ng-show="mc.allLoad">
         <form class="form-inline">
             <div class="form-group">
-                <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="mc.ChangeQtyPagesTables(QtyPagesSelected,mc.searchText)"
-                    ng-init="QtyPagesSelected=QtyPageTables">
+                <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="mc.ChangeQtyPagesTables(QtyPagesSelected,mc.searchText)" ng-init="QtyPagesSelected=QtyPageTables">
 				    <option value=10>10</option>
 				    <option value=20>20</option>
 				    <option value=50>50</option>
@@ -99,8 +101,7 @@
 				</select>
             </div>
             <div class="form-group">
-                <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="mc.totalMarcas"
-                    ng-model="mc.CurrentPage" ng-change="mc.setPage(mc.CurrentPage)"></ul>
+                <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="mc.totalMarcas" ng-model="mc.CurrentPage" ng-change="mc.setPage(mc.CurrentPage)"></ul>
             </div>
             <div class="form-group pull-right actual-range" ng-cloak>
                 {{mc.actualRange}}

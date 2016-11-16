@@ -1,7 +1,7 @@
 angular
-    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngToast'])
-    .filter('range', function () {
-        return function (input, total) {
+    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast'])
+    .filter('range', function() {
+        return function(input, total) {
             total = parseInt(total);
 
             for (var i = 0; i < total; i++) {
@@ -11,20 +11,20 @@ angular
             return input;
         };
     })
-    .config(['ngToastProvider', function (ngToast) {
+    .config(['ngToastProvider', function(ngToast) {
         ngToast.configure({
-            horizontalPosition: 'center',
+            horizontalPosition: 'right',
             timeout: 4000,
             dismissButton: true,
             animation: 'fade'
         });
     }])
-    .config(function (localStorageServiceProvider) {
+    .config(function(localStorageServiceProvider) {
         localStorageServiceProvider
             .setPrefix('autorepuestos')
             .setStorageType('sessionStorage');
     })
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         $stateProvider
             .state('autorepuestos_fe', {
@@ -39,40 +39,40 @@ angular
     .constant("endpointApiURL", {
         "url": "http://127.0.0.1:8000/api"
     })
-    .controller('loginController', ['$scope', '$window', function ($scope, $window) {
+    .controller('loginController', ['$scope', '$window', function($scope, $window) {
         var login_controller = this;
         login_controller.isloggedIn = 'No';
 
         // function to check if the user login is valid
-        login_controller.login = function () {
+        login_controller.login = function() {
             console.log('Logged in');
             // if user is valid, redirect
             $window.location.href = 'main.html';
             return true;
         };
     }])
-    .controller('mainController', ['$scope', '$state', 'storageService', 'ngToast', function ($scope, $state, storageService) {
+    .controller('mainController', ['$scope', '$state', 'storageService', 'ngToast', function($scope, $state, storageService) {
         $scope.QtyPageTables = storageService.getQtyPageTables();
         var main_controller = this;
 
-        main_controller.marcas = function () {
+        main_controller.marcas = function() {
             $state.go("marcas");
         };
     }])
-    .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', function ($scope, $state, $http, storageService, endpointApiURL, ngToast) {
+    .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', function($scope, $state, $http, storageService, endpointApiURL, ngToast) {
         var marcas_controller = this;
         marcas_controller.filter = "";
         marcas_controller.searchText = "";
         $scope.QtyPageTables = storageService.getQtyPageTables();
 
 
-        marcas_controller.ChangeQtyPagesTables = function (Qty, searchText) {
+        marcas_controller.ChangeQtyPagesTables = function(Qty, searchText) {
             storageService.setQtyPageTables(Qty);
             $scope.QtyPageTables = storageService.getQtyPageTables();
             marcas_controller.getMarcas(Qty, 1, searchText);
         }
 
-        marcas_controller.updateMarcas = function (id, nombre, observacion) {
+        marcas_controller.updateMarcas = function(id, nombre, observacion) {
             url = endpointApiURL.url + "/marca/edit/" + id;
             $scope.getMarcasPromise = $http.post(
                     url, {
@@ -80,16 +80,16 @@ angular
                         "observacion": observacion
                     }
                 )
-                .then(function (response) {
+                .then(function(response) {
                     console.log(response.data);
                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
                     ngToast.create({
                         className: 'info',
-                        content: 'Se ha actualizado el registro correctamente.'
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
                     });
                     marcas_controller.selectedItem.id = 0;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
@@ -97,7 +97,7 @@ angular
                 });
         }
 
-        marcas_controller.getMarcas = function (limit, page, searchText) {
+        marcas_controller.getMarcas = function(limit, page, searchText) {
             if (searchText !== undefined) {
                 if (searchText !== "") {
                     var url = endpointApiURL.url + "/marca/" + limit + "/" + page + "/" + searchText;
@@ -109,7 +109,7 @@ angular
                 var url = endpointApiURL.url + "/marca/" + limit + "/" + page;
             }
             $scope.getMarcasPromise = $http.get(url)
-                .then(function (response) {
+                .then(function(response) {
                     //console.log(response.data);
                     marcas_controller.allLoad = false;
                     marcas_controller.CurrentPage = page;
@@ -134,7 +134,7 @@ angular
                     // or just use "success", "info", "warning" or "danger" shortcut methods:
 
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
@@ -142,7 +142,7 @@ angular
                 });
         }
 
-        marcas_controller.setPage = function (page) {
+        marcas_controller.setPage = function(page) {
             marcas_controller.getMarcas($scope.QtyPageTables, page);
         }
 
@@ -159,12 +159,12 @@ angular
         marcas_controller.getMarcas($scope.QtyPageTables, 1);
 
     }])
-    .service('storageService', ['localStorageService', function (localStorageService) {
-        this.setQtyPageTables = function (qty = '10') {
+    .service('storageService', ['localStorageService', function(localStorageService) {
+        this.setQtyPageTables = function(qty = '10') {
             localStorageService.set('QtyPageTables', qty);
         }
 
-        this.getQtyPageTables = function () {
+        this.getQtyPageTables = function() {
             var actualValue = localStorageService.get('QtyPageTables');
             if (actualValue != undefined) {
                 return actualValue;
@@ -175,11 +175,11 @@ angular
             }
         }
     }])
-    .directive('onEnter', function () {
-        return function (scope, element, attrs) {
-            element.bind("keydown keypress", function (event) {
+    .directive('onEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
                 if (event.which === 13) {
-                    scope.$apply(function () {
+                    scope.$apply(function() {
                         scope.$eval(attrs.onEnter);
                     });
                     event.preventDefault();
