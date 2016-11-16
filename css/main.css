@@ -28,12 +28,20 @@
 }
 
 .row-visible {
-    display: block;
+    display: table-row;
+    background: #ffe1e1;
 }
 
+.table-hover>tbody>tr.row-visible:hover{
+    background-color: #ffe1e1 !important;
+}
 
 /* Overrides */
 
 .in-line-paginator {
     margin-top: -4px !important;
+}
+
+.ng-toast {
+    position: relative !important;
 }
