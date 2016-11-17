@@ -1,3 +1,9 @@
+@media screen and (max-width: 320px) {
+    .button-text {
+        display: none;
+    }
+}
+
 .form-container {
     margin: 0 auto;
     margin-top: 100px;
