@@ -37,7 +37,7 @@ angular
             })
     })
     .constant("endpointApiURL", {
-        "url": "http://127.0.0.1:8000/api"
+        "url": "http://192.168.1.101:8000/api"
     })
     .controller('loginController', ['$scope', '$window', function($scope, $window) {
         var login_controller = this;
@@ -63,6 +63,12 @@ angular
         var marcas_controller = this;
         marcas_controller.filter = "";
         marcas_controller.searchText = "";
+        marcas_controller.selectedItem = {
+                        nombre: '',
+                        observacion: '',
+                        id: ''
+                    };
+
         $scope.QtyPageTables = storageService.getQtyPageTables();
 
 
@@ -72,7 +78,15 @@ angular
             marcas_controller.getMarcas(Qty, 1, searchText);
         }
 
+        marcas_controller.copyRowData = function(nombre,observacion){
+            marcas_controller.selectedItem.nombre = nombre;
+            marcas_controller.selectedItem.observacion = observacion;
+        }
+
         marcas_controller.updateMarcas = function(id, nombre, observacion) {
+            if(!id || !nombre || !observacion){
+                return false;
+            }
             url = endpointApiURL.url + "/marca/edit/" + id;
             $scope.getMarcasPromise = $http.post(
                     url, {

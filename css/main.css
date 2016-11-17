@@ -24,8 +24,13 @@
 }
 
 .item-visible {
-    display: 
+    display: inline;
 }
+
+.item-no-visible {
+    display: none;
+}
+
 
 .row-no-visible {
     display: none;
@@ -40,8 +45,8 @@
     background-color: #ffe1e1 !important;
 }
 
-.btn-left-margin-5 {
-    margin-left: 5px !important;
+.btn-left-margin-2 {
+    margin-left: 2px !important;
 }
 
 
@@ -53,4 +58,9 @@
 
 .ng-toast {
     right: 5px;
+}
+
+.cg-busy-default-sign {
+    	border-top-left-radius:7px;
+	border-top-right-radius:7px;
 }
