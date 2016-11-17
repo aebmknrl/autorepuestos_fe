@@ -37,7 +37,7 @@ angular
             })
     })
     .constant("endpointApiURL", {
-        "url": "http://192.168.1.101:8000/api"
+        "url": "http://127.0.0.1:8000/api"
     })
     .controller('loginController', ['$scope', '$window', function($scope, $window) {
         var login_controller = this;
