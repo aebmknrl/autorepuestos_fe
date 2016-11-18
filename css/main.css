@@ -15,6 +15,11 @@
     text-align: center;
 }
 
+.button-margin{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 [ng\:cloak],
 [ng-cloak],
 [data-ng-cloak],

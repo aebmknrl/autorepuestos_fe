@@ -1,11 +1,40 @@
 <toast></toast>
-<div class="container" ng-controller="marcasController as mc" ng-cloak cg-busy="{promise:getMarcasPromise,message:'Cargando...',templateUrl:'bower_components/angular-busy/angular-busy.html'}">
+<div class="container" ng-controller="marcasController as mc" ng-cloak cg-busy="{promise:MarcasPromise,message:'Cargando...',templateUrl:'bower_components/angular-busy/angular-busy.html'}">
     <div class="row">
         <div class="col-md-12">
             <h2>Lista de Marcas</h2>
-            <button class="btn btn-primary" type="button" ng-disabled="mc.selectedItem.id !=''" ng-click="mc.searchText=''">
-		    <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
-        </button>
+        </div>
+    </div>
+    <div class="row button-margin">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" ng-disabled="mc.selectedItem.id !=''" ng-click="" ng-model="mc.isAddNewMarca" uib-btn-checkbox btn-checkbox-true="true"
+                                btn-checkbox-false="false">
+		        <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
+            </button>
+        </div>
+    </div>
+    <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[mc.isAddNewMarca==true]">
+        <div class="col-md-12">
+            <form name="newMarcaForm" ng-submit="" novalidate>
+                <div ng-class="{ 'has-error': newMarcaForm.nombre.$touched && newMarcaForm.nombre.$invalid}" class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" ng-model="mc.newItem.nombre" placeholder="Nombre" required/>
+                    <div class="help-block" ng-messages="newMarcaForm.nombre.$error" ng-if="newMarcaForm.nombre.$touched">
+                        <p ng-message="required">"Nombre" es requerido.</p>
+                    </div>
+                </div>
+                <div ng-class="{ 'has-error': newMarcaForm.observaciones.$touched && newMarcaForm.observaciones.$invalid}" class="form-group">
+                    <label for="observaciones">Observaciones</label>
+                    <textarea rows="" cols="" name="observaciones" class="form-control" ng-model="mc.newItem.observacion" placeholder="Observaciones"required></textarea>
+                    <div class="help-block" ng-messages="newMarcaForm.observaciones.$error" ng-if="newMarcaForm.observaciones.$touched">
+                        <p ng-message="required">"Observación" es requerido.</p>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success" ng-click="mc.addMarca(mc.newItem.nombre,mc.newItem.observacion)" ng-disabled="newMarcaForm.$invalid">
+			    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                <span class="button-text">Agregar</span>
+			</button>
+            </form>
         </div>
     </div>
     <div class="row">
@@ -121,4 +150,36 @@
             </form>
         </div>
     </div>
+
+<div class="modal-demo"> 
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <ul>
+                <li ng-repeat="item in $mc.items">
+                    <a href="#" ng-click="$event.preventDefault(); $mc.selected.item = item">{{ item }}</a>
+                </li>
+            </ul>
+            Selected: <b>{{ $mc.selected.item }}</b>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="mc.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="mc.cancel()">Cancel</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="stackedModal.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title-{{name}}">The {{name}} modal!</h3>
+        </div>
+        <div class="modal-body" id="modal-body-{{name}}">
+            Having multiple modals open at once is probably bad UX but it's technically possible.
+        </div>
+    </script>
+
+    <button type="button" class="btn btn-default" ng-click="mc.open()">Open me!</button>
+
+</div>
+
 </div>
