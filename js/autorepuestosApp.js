@@ -1,7 +1,7 @@
 angular
     .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm'])
-    .filter('range', function () {
-        return function (input, total) {
+    .filter('range', function() {
+        return function(input, total) {
             total = parseInt(total);
 
             for (var i = 0; i < total; i++) {
@@ -11,7 +11,7 @@ angular
             return input;
         };
     })
-    .config(['ngToastProvider', function (ngToast) {
+    .config(['ngToastProvider', function(ngToast) {
         ngToast.configure({
             horizontalPosition: 'right',
             timeout: 4000,
@@ -19,12 +19,12 @@ angular
             animation: 'fade'
         });
     }])
-    .config(function (localStorageServiceProvider) {
+    .config(function(localStorageServiceProvider) {
         localStorageServiceProvider
             .setPrefix('autorepuestos')
             .setStorageType('sessionStorage');
     })
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         $stateProvider
             .state('autorepuestos_fe', {
@@ -43,7 +43,7 @@ angular
     .constant("endpointApiURL", {
         "url": "http://127.0.0.1:8000/api"
     })
-    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', function ($scope, $window, $http, endpointApiURL, storageService, $state) {
+    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', function($scope, $window, $http, endpointApiURL, storageService, $state) {
         var login_controller = this;
         login_controller.isloggedIn = 'No';
         login_controller._username = '';
@@ -51,19 +51,19 @@ angular
         login_controller.isCheckingLogin = false;
         login_controller.errorOnLogin = "";
 
-        login_controller.clearErrorLogin = function () {
+        login_controller.clearErrorLogin = function() {
             login_controller.errorOnLogin = "";
         };
 
         // function to check if the user login is valid
-        login_controller.login = function () {
+        login_controller.login = function() {
             login_controller.isCheckingLogin = true;
 
             url = endpointApiURL.url + "/login_check";
             $scope.LoginPromise = $http({
                     url: url,
                     method: 'POST',
-                    transformRequest: function (obj) {
+                    transformRequest: function(obj) {
                         var str = [];
                         for (var p in obj)
                             str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
@@ -77,33 +77,34 @@ angular
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     ignoreAuthModule: true
-                }).then(function (response) {
+                }).then(function(response) {
                     console.log(response.data);
                     storageService.setToken(response.data.token);
                     //The user is valid, redirect
                     $window.location.href = 'main.html';
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '401') {
                         login_controller.errorOnLogin = "Usuario o Contraseña incorrectos";
-                    } else {
-                        login_controller.errorOnLogin = "Ha ocurrido un error: " + error.data.error;
+                    }
+                    if (error.status == -1) {
+                        login_controller.errorOnLogin = "Error de conexión al servidor de datos";
                     }
                 });
 
             login_controller.isCheckingLogin = false;
         };
     }])
-    .controller('mainController', ['$scope', '$state', 'storageService', 'ngToast', function ($scope, $state, storageService, ngToast) {
+    .controller('mainController', ['$scope', '$state', 'storageService', 'ngToast', function($scope, $state, storageService, ngToast) {
         $scope.QtyPageTables = storageService.getQtyPageTables();
         var main_controller = this;
 
-        main_controller.marcas = function () {
+        main_controller.marcas = function() {
             $state.go("marcas");
         };
     }])
-    .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm) {
+    .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', function($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm) {
 
         var marcas_controller = this;
         marcas_controller.filter = "";
@@ -120,10 +121,10 @@ angular
         marcas_controller.isAddNewMarca = false;
         $scope.QtyPageTables = storageService.getQtyPageTables();
 
-        marcas_controller.removeMarca = function (id) {
+        marcas_controller.removeMarca = function(id) {
             url = endpointApiURL.url + "/marca/delete/" + id;
             $scope.MarcasPromise = $http.delete(url)
-                .then(function (response) {
+                .then(function(response) {
                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
                     ngToast.create({
                         className: 'info',
@@ -131,7 +132,7 @@ angular
                     });
                     marcas_controller.selectedItem.id = 0;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
@@ -139,18 +140,18 @@ angular
                 });
         }
 
-        marcas_controller.ChangeQtyPagesTables = function (Qty, searchText) {
+        marcas_controller.ChangeQtyPagesTables = function(Qty, searchText) {
             storageService.setQtyPageTables(Qty);
             $scope.QtyPageTables = storageService.getQtyPageTables();
             marcas_controller.getMarcas(Qty, 1, searchText);
         }
 
-        marcas_controller.copyRowData = function (nombre, observacion) {
+        marcas_controller.copyRowData = function(nombre, observacion) {
             marcas_controller.selectedItem.nombre = nombre;
             marcas_controller.selectedItem.observacion = observacion;
         }
 
-        marcas_controller.addMarca = function (nombre, observacion) {
+        marcas_controller.addMarca = function(nombre, observacion) {
             url = endpointApiURL.url + "/marca/add";
             $scope.MarcasPromise = $http.post(
                     url, {
@@ -158,7 +159,7 @@ angular
                         "observacion": observacion
                     }
                 )
-                .then(function (response) {
+                .then(function(response) {
                     //console.log(response.data.marca[0]);
                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
                     ngToast.create({
@@ -172,7 +173,7 @@ angular
                     };
                     marcas_controller.isAddNewMarca = false;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
@@ -180,7 +181,7 @@ angular
                 });
         }
 
-        marcas_controller.updateMarcas = function (id, nombre, observacion) {
+        marcas_controller.updateMarcas = function(id, nombre, observacion) {
             if (!id || !nombre || !observacion) {
                 return false;
             }
@@ -191,7 +192,7 @@ angular
                         "observacion": observacion
                     }
                 )
-                .then(function (response) {
+                .then(function(response) {
                     //console.log(response.data);
                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
                     ngToast.create({
@@ -200,7 +201,7 @@ angular
                     });
                     marcas_controller.selectedItem.id = 0;
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
@@ -208,7 +209,7 @@ angular
                 });
         }
 
-        marcas_controller.getMarcas = function (limit, page, searchText) {
+        marcas_controller.getMarcas = function(limit, page, searchText) {
             if (searchText !== undefined) {
                 if (searchText !== "") {
                     var url = endpointApiURL.url + "/marca/" + limit + "/" + page + "/" + searchText;
@@ -220,7 +221,7 @@ angular
                 var url = endpointApiURL.url + "/marca/" + limit + "/" + page;
             }
             $scope.MarcasPromise = $http.get(url)
-                .then(function (response) {
+                .then(function(response) {
                     //console.log(response.data);
                     marcas_controller.allLoad = false;
                     marcas_controller.CurrentPage = page;
@@ -245,7 +246,7 @@ angular
                     // or just use "success", "info", "warning" or "danger" shortcut methods:
 
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
@@ -253,7 +254,7 @@ angular
                 });
         }
 
-        marcas_controller.setPage = function (page) {
+        marcas_controller.setPage = function(page) {
             marcas_controller.getMarcas($scope.QtyPageTables, page);
         }
 
@@ -270,12 +271,12 @@ angular
         marcas_controller.getMarcas($scope.QtyPageTables, 1);
 
     }])
-    .service('storageService', ['localStorageService', function (localStorageService) {
-        this.setQtyPageTables = function (qty = '10') {
+    .service('storageService', ['localStorageService', function(localStorageService) {
+        this.setQtyPageTables = function(qty = '10') {
             localStorageService.set('QtyPageTables', qty);
         }
 
-        this.getQtyPageTables = function () {
+        this.getQtyPageTables = function() {
             var actualValue = localStorageService.get('QtyPageTables');
             if (actualValue != undefined) {
                 return actualValue;
@@ -286,21 +287,21 @@ angular
             }
         }
 
-        this.setToken = function (token) {
+        this.setToken = function(token) {
             localStorageService.set('token', token);
         }
 
 
-        this.getToken = function () {
+        this.getToken = function() {
             return localStorageService.get('token');
         }
 
     }])
-    .directive('onEnter', function () {
-        return function (scope, element, attrs) {
-            element.bind("keydown keypress", function (event) {
+    .directive('onEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
                 if (event.which === 13) {
-                    scope.$apply(function () {
+                    scope.$apply(function() {
                         scope.$eval(attrs.onEnter);
                     });
                     event.preventDefault();
