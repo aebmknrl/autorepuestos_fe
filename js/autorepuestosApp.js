@@ -31,6 +31,10 @@ angular
                 url: '/autorepuestos_fe',
                 templateUrl: 'index.html'
             })
+            .state('main', {
+                url: '/main',
+                templateUrl: 'main.html'
+            })
             .state('marcas', {
                 url: '/marcas',
                 templateUrl: 'views/marcas.html'
@@ -39,16 +43,56 @@ angular
     .constant("endpointApiURL", {
         "url": "http://127.0.0.1:8000/api"
     })
-    .controller('loginController', ['$scope', '$window', function ($scope, $window) {
+    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', function ($scope, $window, $http, endpointApiURL, storageService, $state) {
         var login_controller = this;
         login_controller.isloggedIn = 'No';
+        login_controller._username = '';
+        login_controller._password = '';
+        login_controller.isCheckingLogin = false;
+        login_controller.errorOnLogin = "";
+
+        login_controller.clearErrorLogin = function () {
+            login_controller.errorOnLogin = "";
+        };
 
         // function to check if the user login is valid
         login_controller.login = function () {
-            console.log('Logged in');
-            // if user is valid, redirect
-            $window.location.href = 'main.html';
-            return true;
+            login_controller.isCheckingLogin = true;
+
+            url = endpointApiURL.url + "/login_check";
+            $scope.LoginPromise = $http({
+                    url: url,
+                    method: 'POST',
+                    transformRequest: function (obj) {
+                        var str = [];
+                        for (var p in obj)
+                            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                        return str.join("&");
+                    },
+                    data: {
+                        "_username": login_controller._username,
+                        "_password": login_controller._password
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    ignoreAuthModule: true
+                }).then(function (response) {
+                    console.log(response.data);
+                    storageService.setToken(response.data.token);
+                    //The user is valid, redirect
+                    $window.location.href = 'main.html';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '401') {
+                        login_controller.errorOnLogin = "Usuario o Contraseña incorrectos";
+                    } else {
+                        login_controller.errorOnLogin = "Ha ocurrido un error: " + error.data.error;
+                    }
+                });
+
+            login_controller.isCheckingLogin = false;
         };
     }])
     .controller('mainController', ['$scope', '$state', 'storageService', 'ngToast', function ($scope, $state, storageService, ngToast) {
@@ -241,6 +285,16 @@ angular
                 return actualValue;
             }
         }
+
+        this.setToken = function (token) {
+            localStorageService.set('token', token);
+        }
+
+
+        this.getToken = function () {
+            return localStorageService.get('token');
+        }
+
     }])
     .directive('onEnter', function () {
         return function (scope, element, attrs) {

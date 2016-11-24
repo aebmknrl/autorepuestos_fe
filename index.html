@@ -5,37 +5,41 @@
     <title>Sistema de Auto Repuestos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="bower_components/angular-busy/angular-busy.css" rel="stylesheet">
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="bower_components/angular-bootstrap/ui-bootstrap-csp.css" rel="stylesheet">
     <link href="bower_components/ngToast/dist/ngToast.min.css" rel="stylesheet">
     <link rel="stylesheet" href="bower_components/ngToast/dist/ngToast-animations.min.css">
     <link href="css/main.css" rel="stylesheet">
-
 </head>
 
 <body>
-    <div class="container form-container" ng-controller="loginController as lc">
+    <div class="container form-container" ng-cloak ng-controller="loginController as lc" cg-busy="{promise:LoginPromise,message:'Verificando...',templateUrl:'bower_components/angular-busy/angular-busy.html'}">
         <div class="row form-title">
             <div class="col-md-12">
                 <h3>Sistema de Auto Repuestos</h3>
             </div>
         </div>
-        <form>
-            <div class="form-group">
+        <div uib-alert ng-class="{true:'alert-danger', false: 'item-no-visible'}[lc.errorOnLogin !='']" close="lc.clearErrorLogin()">{{lc.errorOnLogin}}</div>
+        <form ng-submit="lc.login()" ng-disabled="lc.isCheckingLogin" novalidate name="loginForm">
+            <div ng-class="{ 'has-error': loginForm.username.$touched && loginForm.username.$invalid}" class="form-group">
                 <label for="username">Usuario</label>
-                <input type="email" class="form-control" id="username" placeholder="Usuario">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" ng-model="lc._username" required>
+                <div class="help-block" ng-messages="loginForm.username.$error" ng-if="loginForm.username.$touched">
+                    <p ng-message="required">"Usuario" es requerido.</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password">Contrasena</label>
-                <input type="password" class="form-control" id="password" placeholder="Contrasena">
+            <div ng-class="{ 'has-error': loginForm.password.$touched && loginForm.password.$invalid}" class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" ng-model="lc._password"
+                    required>
+                <div class="help-block" ng-messages="loginForm.username.$error" ng-if="loginForm.username.$touched">
+                    <p ng-message="required">"Contraseña" es requerido.</p>
+                </div>
             </div>
-            <a class="btn btn-success" ng-click="lc.login()">Iniciar</a>
+            <button type="submit" class="btn btn-success" ng-disabled="loginForm.$invalid">Iniciar</button>
         </form>
     </div>
-
-
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -48,7 +52,9 @@
     <script type="text/javascript" src="bower_components/ngToast/dist/ngToast.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-confirm-modal/angular-confirm.js"></script>
     <script type="text/javascript" src="js/autorepuestosApp.js"></script>
-
+    <script type="text/ng-template" id="alert.html">
+        <div ng-transclude></div>
+    </script>
 </body>
 
 </html>
