@@ -14,35 +14,62 @@
 </head>
 
 <body>
-    <div class="container form-container" ng-cloak ng-controller="loginController as lc" cg-busy="{promise:LoginPromise,message:'Verificando...',templateUrl:'bower_components/angular-busy/angular-busy.html'}">
-        <div class="row form-title">
-            <div class="col-md-12">
-                <h3>Sistema de Auto Repuestos</h3>
+    <nav class="navbar navbar-default" ng-if="isAuthenticated">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="#">Sistema de Auto Repuestos</a>
             </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Link</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-        <div class="row form-title">
-            <div class="col-md-12">
-                <div uib-alert ng-class="{true:'alert-danger', false: 'item-no-visible'}[lc.errorOnLogin !='']" close="lc.clearErrorLogin()"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {{lc.errorOnLogin}}</div>
-            </div>
-        </div>
-        <form ng-submit="lc.login()" ng-disabled="lc.isCheckingLogin" novalidate name="loginForm">
-            <div ng-class="{ 'has-error': loginForm.username.$touched && loginForm.username.$invalid}" class="form-group">
-                <label for="username">Usuario</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" ng-model="lc._username" required>
-                <div class="help-block" ng-messages="loginForm.username.$error" ng-if="loginForm.username.$touched">
-                    <p ng-message="required">"Usuario" es requerido.</p>
-                </div>
-            </div>
-            <div ng-class="{ 'has-error': loginForm.password.$touched && loginForm.password.$invalid}" class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" ng-model="lc._password"
-                    required>
-                <div class="help-block" ng-messages="loginForm.username.$error" ng-if="loginForm.username.$touched">
-                    <p ng-message="required">"Contraseña" es requerido.</p>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-success" ng-disabled="loginForm.$invalid">Iniciar</button>
-        </form>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <div ui-view></div>
     </div>
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
