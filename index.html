@@ -20,7 +20,11 @@
                 <h3>Sistema de Auto Repuestos</h3>
             </div>
         </div>
-        <div uib-alert ng-class="{true:'alert-danger', false: 'item-no-visible'}[lc.errorOnLogin !='']" close="lc.clearErrorLogin()">{{lc.errorOnLogin}}</div>
+        <div class="row form-title">
+            <div class="col-md-12">
+                <div uib-alert ng-class="{true:'alert-danger', false: 'item-no-visible'}[lc.errorOnLogin !='']" close="lc.clearErrorLogin()"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {{lc.errorOnLogin}}</div>
+            </div>
+        </div>
         <form ng-submit="lc.login()" ng-disabled="lc.isCheckingLogin" novalidate name="loginForm">
             <div ng-class="{ 'has-error': loginForm.username.$touched && loginForm.username.$invalid}" class="form-group">
                 <label for="username">Usuario</label>
@@ -51,6 +55,7 @@
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script type="text/javascript" src="bower_components/ngToast/dist/ngToast.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-confirm-modal/angular-confirm.js"></script>
+    <script type="text/javascript" src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
     <script type="text/javascript" src="js/autorepuestosApp.js"></script>
     <script type="text/ng-template" id="alert.html">
         <div ng-transclude></div>
