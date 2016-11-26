@@ -1,10 +1,11 @@
 angular
     .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt'])
-    .run(function (authManager, $location, $rootScope) {
-
+    .run(function (authManager, $location, $rootScope,$state) {
+        //Work with auhtentication:
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
-
+        // To know the current route:
+        $rootScope.$state = $state;
     })
     .filter('range', function () {
         return function (input, total) {
@@ -80,7 +81,8 @@ angular
     .controller('logoutController', ['logout', function (logout) {
         logout.do();
     }])
-    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', 'jwtHelper', '$rootScope', '$timeout', 'userInfoService', function ($scope, $window, $http, endpointApiURL, storageService, $state, jwtHelper, $rootScope, $timeout, userInfoService) {
+    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', 'jwtHelper', '$rootScope', '$timeout', 'userInfoService','authManager', function ($scope, $window, $http, endpointApiURL, storageService, $state, jwtHelper, $rootScope, $timeout, userInfoService, authManager) {
+        
 
         $timeout(function () {
             console.log($rootScope.isAuthenticated); // But would be true here

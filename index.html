@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default" role="navigation" ng-if="isAuthenticated">
+    <nav class="navbar navbar-default" role="navigation" ng-if="isAuthenticated && $state.current.name != 'autorepuestos_fe'">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
@@ -28,7 +28,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
             <ul class="nav navbar-nav">
-                <li class="active"><a ui-sref='marcas'>Marcas</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'main']"><a ui-sref='main'>Inicio</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'marcas']"><a ui-sref='marcas'>Marcas</a></li>
                <!--
                 <li><a href="#">Link</a></li>
                 <li dropdown>
@@ -63,6 +64,7 @@
         </div>
         <!-- /.navbar-collapse -->
     </nav>
+
     <div class="container">
         <div ui-view></div>
     </div>
