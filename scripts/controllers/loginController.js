@@ -23,9 +23,18 @@ angular
             login_controller.errorOnLogin = "";
         };
 
+
         // function to check if the user login is valid
         login_controller.login = function () {
             login_controller.isCheckingLogin = true;
+
+            // If the loginForm is not valid, set dirty the fields.
+            if (!$scope.loginForm.$valid) {
+                login_controller.isCheckingLogin = false;
+                $scope.loginForm.username.$touched = true;
+                $scope.loginForm.password.$touched = true;
+                return false;
+            }
 
             url = endpointApiURL.url + "/login_check";
             $scope.LoginPromise = $http({
