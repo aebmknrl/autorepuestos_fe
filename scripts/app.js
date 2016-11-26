@@ -1,11 +1,20 @@
 angular
     .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt'])
-    .run(function (authManager, $location, $rootScope,$state) {
+    .run(function (authManager, $location, $rootScope, $state, storageService) {
         //Work with auhtentication:
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
+        // if token has removed, set isAuthenticated var on false
+        $rootScope.$on('$locationChangeStart', function () {
+            var existToken = storageService.getToken();
+            if (existToken == '' || existToken == null) {
+                $rootScope.isAuthenticated = false;
+            }
+        });
+
         // To know the current route:
         $rootScope.$state = $state;
+
     })
     .filter('range', function () {
         return function (input, total) {
@@ -81,8 +90,8 @@ angular
     .controller('logoutController', ['logout', function (logout) {
         logout.do();
     }])
-    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', 'jwtHelper', '$rootScope', '$timeout', 'userInfoService','authManager', function ($scope, $window, $http, endpointApiURL, storageService, $state, jwtHelper, $rootScope, $timeout, userInfoService, authManager) {
-        
+    .controller('loginController', ['$scope', '$window', '$http', 'endpointApiURL', 'storageService', '$state', 'jwtHelper', '$rootScope', '$timeout', 'userInfoService', 'authManager', function ($scope, $window, $http, endpointApiURL, storageService, $state, jwtHelper, $rootScope, $timeout, userInfoService, authManager) {
+
 
         $timeout(function () {
             console.log($rootScope.isAuthenticated); // But would be true here
@@ -97,6 +106,8 @@ angular
         login_controller._password = '';
         login_controller.isCheckingLogin = false;
         login_controller.errorOnLogin = "";
+
+
 
         login_controller.clearErrorLogin = function () {
             login_controller.errorOnLogin = "";
@@ -311,14 +322,6 @@ angular
             marcas_controller.getMarcas($scope.QtyPageTables, page);
         }
 
-        /*        marcas_controller.selectForAction = function(nombre, observaciones, id) {
-                    marcas_controller.selectedItem = {
-                        nombre: nombre,
-                        observaciones: observaciones,
-                        id: id
-                    }
-                }*/
-
 
         // The default value on load controller:
         marcas_controller.getMarcas($scope.QtyPageTables, 1);
@@ -376,15 +379,14 @@ angular
             $state.go('autorepuestos_fe');
         }
     }])
-    .service('userInfoService', function () {
-        var userInfo = [];
-        this.addUserData = function (newData) {
-            userInfo.push(newData);
-        };
-        this.getUserData = function () {
-            return userInfo;
+    .service('userInfoService', ['$rootScope', function ($rootScope) {
+        this.checkIfIsLoggedOn = function () {
+            $timeout(function () {
+                console.log('Checked by service user auth: ' + $rootScope.isAuthenticated);
+                return $rootScope.isAuthenticated;
+            });
         }
-    })
+    }])
     .directive('onEnter', function () {
         return function (scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
