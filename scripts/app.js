@@ -370,11 +370,15 @@ angular
                 return localStorageService.get('username');
             }
         }
+        this.clearAll = function () {
+            return localStorageService.clearAll();
+        }
 
     }])
     .service('logout', ['storageService', '$state', 'authManager', function (storageService, $state, authManager) {
         this.do = function () {
             storageService.removeToken();
+            storageService.clearAll();
             authManager.unauthenticate();
             $state.go('autorepuestos_fe');
         }
