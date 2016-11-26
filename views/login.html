@@ -9,7 +9,7 @@
             <div uib-alert ng-class="{true:'alert-danger', false: 'item-no-visible'}[lc.errorOnLogin !='']" close="lc.clearErrorLogin()"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {{lc.errorOnLogin}}</div>
         </div>
     </div>
-    <form ng-submit="lc.login()" ng-disabled="lc.isCheckingLogin" novalidate name="loginForm">
+    <form ng-submit="lc.login()" ng-disabled="lc.isCheckingLogin"  name="loginForm">
         <div ng-class="{ 'has-error': loginForm.username.$touched && loginForm.username.$invalid}" class="form-group">
             <label for="username">Usuario</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" ng-model="lc._username" required>
@@ -25,7 +25,7 @@
                 <p ng-message="required">"Contraseña" es requerido.</p>
             </div>
         </div>
-        <button type="submit" class="btn btn-success" ng-disabled="loginForm.$invalid">Iniciar</button>
+        <button type="submit" class="btn btn-success" >Iniciar</button>
     </form>
     <!--
     <button ng-if="isAuthenticated == false">Log In</button>
