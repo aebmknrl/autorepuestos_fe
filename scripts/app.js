@@ -50,6 +50,13 @@ angular
                     requiresLogin: true
                 }
             })
+            .state('proveedores', {
+                url: '/proveedores',
+                templateUrl: 'views/proveedores.html',
+                data: {
+                    requiresLogin: true
+                }
+            })            
             .state('logout', {
                 url: '/logout',
                 templateUrl: 'views/logout.html',

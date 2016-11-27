@@ -67,6 +67,9 @@
                          nombre: '',
                          observacion: ''
                      };
+                     $scope.newMarcaForm.nombre = false;
+                     $scope.newMarcaForm.observaciones = false;
+
                      marcas_controller.isAddNewMarca = false;
                  })
                  .catch(function (error) {

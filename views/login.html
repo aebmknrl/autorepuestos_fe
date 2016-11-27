@@ -11,7 +11,7 @@
     </div>
     <form ng-submit="lc.login()" ng-disabled="lc.isCheckingLogin"  name="loginForm" novalidate>
         <div ng-class="{ 'has-error': loginForm.username.$touched && loginForm.username.$invalid}" class="form-group">
-            <label for="username">Usuario</label> {{loginForm.username.$touched}}
+            <label for="username">Usuario</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" ng-model="lc._username" required>
             <div class="help-block" ng-messages="loginForm.username.$error" ng-if="loginForm.username.$touched">
                 <p ng-message="required">"Usuario" es requerido.</p>

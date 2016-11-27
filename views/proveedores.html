@@ -1,0 +1,185 @@
+<toast></toast>
+<div class="container" ng-controller="proveedoresController as proveedoresc" ng-cloak cg-busy="{promise:ProveedoresPromise,message:'Cargando...',templateUrl:'scripts/vendor/angular-busy/angular-busy.html'}">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Lista de Proveedores</h2>
+        </div>
+    </div>
+    <div class="row button-margin">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" ng-disabled="proveedoresc.selectedItem.id !=''" ng-click="" ng-model="proveedoresc.isAddNewProveedor"
+                uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+		        <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
+            </button>
+        </div>
+    </div>
+    <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[proveedoresc.isAddNewProveedor==true]">
+        <div class="col-md-12">
+            <form name="newProveedorForm" ng-submit="" novalidate>
+                <div ng-class="{ 'has-error': newProveedorForm.nombre.$touched && newProveedorForm.nombre.$invalid}" class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" ng-model="proveedoresc.newItem.nombre" placeholder="Nombre" required/>
+                    <div class="help-block" ng-messages="newProveedorForm.nombre.$error" ng-if="newProveedorForm.nombre.$touched">
+                        <p ng-message="required">"Nombre" es requerido.</p>
+                    </div>
+                </div>
+                <div ng-class="{ 'has-error': newProveedorForm.rif.$touched && newProveedorForm.rif.$invalid}" class="form-group">
+                    <label for="rif">RIF</label>
+                    <input type="text" name="rif" class="form-control" ng-model="proveedoresc.newItem.rif" placeholder="RIF" required/>
+                    <div class="help-block" ng-messages="newProveedorForm.rif.$error" ng-if="newProveedorForm.rif.$touched">
+                        <p ng-message="required">"RIF" es requerido.</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Dirección</label>
+                    <textarea rows="" cols="" name="direccion" class="form-control" ng-model="proveedoresc.newItem.direccion" placeholder="Dirección" required></textarea>
+                </div>
+                                <div class="form-group">
+                    <label for="observacion">Observacióm</label>
+                    <textarea rows="" cols="" name="observacion" class="form-control" ng-model="proveedoresc.newItem.observacion" placeholder="Observación" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="activo">Proveedor Activo</label><br>
+                    <input type="checkbox" name="activo" ng-model="proveedoresc.newItem.estatus">
+                </div>
+                <button type="button" class="btn btn-success" ng-click="proveedoresc.addProveedor(proveedoresc.newItem.nombre,proveedoresc.newItem.direccion,proveedoresc.newItem.rif,proveedoresc.newItem.estatus,proveedoresc.newItem.observacion)"
+                    ng-disabled="newProveedorForm.$invalid">
+			    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                <span class="button-text">Agregar</span>
+			</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar en todos los proveedores..." ng-model="proveedoresc.searchText" on-enter="proveedoresc.getProveedores(QtyPagesSelected,1,proveedoresc.searchText)">
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-class="{true:'item-visible', false: 'item-no-visible'}[proveedoresc.searchText !='']" ng-click="proveedoresc.searchText=''">
+		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-click="proveedoresc.getProveedor(QtyPagesSelected,1,proveedoresc.searchText)">
+		        	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-4">
+                <input type="text" class="form-control" id="txtFilter" placeholder="Filtro" ng-model="proveedoresc.filter">
+            </div>
+        </div>
+        <div class="row">
+            <hr>
+        </div>
+        <div class="row">
+            <table class="table table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>RIF</th>
+                        <th>Status</th>
+                        <th>Observación</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="proveedor in proveedoresc.proveedores | filter:proveedoresc.filter">
+                        <td class="">{{proveedor.provId}}</td>
+                        <td class="">{{proveedor.provNombre}}</td>
+                        <td class="">{{proveedor.provRif}}</td>
+                        <td class="">{{proveedor.provDireccion}}</td>
+                        <td class=""><span ng-class="{true:'label label-success', false: 'label label-danger'}[proveedor.provStatus == 'ACTIVO']">{{proveedor.provStatus}}</span></td>
+                        <td class="">{{proveedor.provObservacion}}</td>
+                        <td class="">
+                            <button type="button" class="btn btn-primary" ng-model="proveedoresc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="proveedor.provId"
+                                btn-checkbox-false="0" ng-click="proveedoresc.copyRowData(proveedor.provNombre,proveedor.provDireccion,proveedor.provRif,proveedor.provStatus,proveedor.provObservacion)">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                <span class="button-text">Editar</span>
+						    </button>
+                            <button type="button" class="btn btn-danger" ng-disabled="proveedoresc.selectedItem.id == proveedor.provId" ng-click="proveedoresc.removeProveedor(proveedor.provId)"
+                                confirm="¿Está seguro de eliminar el registro?. Esta acción no se puede deshacer." confirm-title="Atención"
+                                confirm-ok="Si" confirm-cancel="No">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                <span class="button-text">Eliminar</span>
+						    </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end ng-class="{true:'row-visible', false: 'row-no-visible'}[proveedoresc.selectedItem.id == proveedor.provId]">
+                        <td>
+                            <strong>Editando Proveedor ID: {{proveedor.provId}}</strong>
+                        </td>
+                        <td>
+                            <form name="updateNameForm" ng-submit="" novalidate>
+                                <div ng-class="{ 'has-error': updateNameForm.nombre.$touched && updateNameForm.nombre.$invalid}">
+                                    <input type="text" name="nombre" class="form-control" ng-model="proveedoresc.selectedItem.nombre" placeholder={{proveedoresc.provNombre}}
+                                        required/>
+                                    <div class="help-block" ng-messages="updateNameForm.nombre.$error" ng-if="updateNameForm.nombre.$touched">
+                                        <p ng-message="required">"Nombre" es requerido.</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <form name="updateRIFForm" novalidate>
+                                <div ng-class="{ 'has-error': updateRIFForm.rif.$touched && updateRIFForm.rif.$invalid}">
+                                    <input type="text" name="rif" class="form-control" ng-model="proveedoresc.selectedItem.rif" placeholder={{proveedor.provRif}}
+                                        required/>
+                                    <div class="help-block" ng-messages="updateRIFForm.rif.$error" ng-if="updateRIFForm.rif.$touched">
+                                        <p ng-message="required">"RIF" es requerido.</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <input type="text" name="direccion" class="form-control" ng-model="proveedoresc.selectedItem.observacion" placeholder={{proveedor.provObservacion}}/>
+                        </td>
+                        <td>
+                            <input type="text" name="status" class="form-control" ng-model="proveedoresc.selectedItem.estatus" placeholder={{proveedor.provStatus}}/>
+                        </td>
+                        <td>
+                            <input type="text" name="direccion" class="form-control" ng-model="proveedoresc.selectedItem.observacion" placeholder={{proveedor.provDireccion}}/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" ng-click="proveedoresc.updateProveedor(proveedor.provId,proveedoresc.selectedItem.nombre,proveedoresc.selectedItem.direccion,proveedoresc.selectedItem.rif)"
+                                ng-disabled="updateNameForm.$invalid || updateRIFForm.$invalid">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                                <span class="button-text">Guardar</span>
+				            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+        <div class="row" ng-cloak ng-show="proveedoresc.allLoad">
+            <form class="form-inline">
+                <div class="form-group">
+                    <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="proveedoresc.ChangeQtyPagesTables(QtyPagesSelected,proveedoresc.searchText)"
+                        ng-init="QtyPagesSelected=QtyPageTables">
+                        <option value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=50>50</option>
+                        <option value=100>100</option>
+                        <option value=Todos>Todos</option>
+				    </select>
+                </div>
+                <div class="form-group">
+                    <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="proveedoresc.totalProveedores"
+                        ng-model="proveedoresc.CurrentPage" ng-change="proveedoresc.setPage(proveedoresc.CurrentPage)"></ul>
+                </div>
+                <div class="form-group pull-right actual-range" ng-cloak>
+                    {{proveedoresc.actualRange}}
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>

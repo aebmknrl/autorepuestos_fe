@@ -37,7 +37,7 @@
 
          this.getUserData = function (data) {
              if (data == 'role') {
-                 return localStorageService.get('token');
+                 return localStorageService.get('user_role');
              }
              if (data == 'username') {
                  return localStorageService.get('username');
