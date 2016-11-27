@@ -20,8 +20,8 @@
     margin-bottom: 10px;
 }
 
-.max-width-10 {
-    max-width: 10px;
+.action-buttons-td {
+    min-width: 200px;
 }
 
 [ng\:cloak],

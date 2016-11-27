@@ -58,7 +58,11 @@ angular
                 proveedoresc.selectedItem.nombre = nombre;
                 proveedoresc.selectedItem.direccion = direccion;
                 proveedoresc.selectedItem.rif = rif;
-                proveedoresc.selectedItem.estatus = estatus;
+                if (estatus == 'ACTIVO') {
+                    proveedoresc.selectedItem.estatus = true;
+                } else {
+                    proveedoresc.selectedItem.estatus = false;
+                }
                 proveedoresc.selectedItem.observacion = observacion;
             }
             // Add new item
@@ -112,6 +116,13 @@ angular
             if (!id || !nombre || !rif) {
                 return false;
             }
+
+            if (estatus == true) {
+                estatus = "ACTIVO";
+            } else {
+                estatus = "INACTIVO";
+            }
+
             url = endpointApiURL.url + "/proveedor/edit/" + id;
             $scope.ProveedoresPromise = $http.post(
                     url, {
