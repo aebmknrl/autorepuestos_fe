@@ -32,11 +32,13 @@
                 </div>
                 <div class="form-group">
                     <label for="direccion">Dirección</label>
-                    <textarea rows="" cols="" name="direccion" class="form-control" ng-model="proveedoresc.newItem.direccion" placeholder="Dirección" required></textarea>
+                    <textarea rows="" cols="" name="direccion" class="form-control" ng-model="proveedoresc.newItem.direccion" placeholder="Dirección"
+                        required></textarea>
                 </div>
-                                <div class="form-group">
+                <div class="form-group">
                     <label for="observacion">Observación</label>
-                    <textarea rows="" cols="" name="observacion" class="form-control" ng-model="proveedoresc.newItem.observacion" placeholder="Observación" required></textarea>
+                    <textarea rows="" cols="" name="observacion" class="form-control" ng-model="proveedoresc.newItem.observacion" placeholder="Observación"
+                        required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="activo">Proveedor Activo</label><br>
@@ -57,7 +59,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Buscar en todos los proveedores..." ng-model="proveedoresc.searchText" on-enter="proveedoresc.getProveedores(QtyPagesSelected,1,proveedoresc.searchText)">
+                    <input type="text" class="form-control" placeholder="Buscar en todos los proveedores..." ng-model="proveedoresc.searchText"
+                        on-enter="proveedoresc.getProveedores(QtyPagesSelected,1,proveedoresc.searchText)">
                     <span class="input-group-btn">
 		        <button class="btn btn-default btn-left-margin-2" type="button" ng-class="{true:'item-visible', false: 'item-no-visible'}[proveedoresc.searchText !='']" ng-click="proveedoresc.searchText=''">
 		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -81,17 +84,27 @@
             <table class="table table-hover" ng-cloak>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>RIF</th>
-                        <th>Dirección</th>
-                        <th>Status</th>
-                        <th>Observación</th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[proveedoresc.orderBy=='provId']" ng-click="proveedoresc.changeOrderByOrDirection('provId')"><span ng-show="proveedoresc.orderBy=='provId'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[proveedoresc.orderDirection==false && proveedoresc.orderBy=='provId']"></span> ID</span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[proveedoresc.orderBy=='provNombre']" ng-click="proveedoresc.changeOrderByOrDirection('provNombre')"><span ng-show="proveedoresc.orderBy=='provNombre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[proveedoresc.orderDirection==false && proveedoresc.orderBy=='provNombre']"></span> Nombre</span>
+                        </th>
+
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[proveedoresc.orderBy=='provRif']" ng-click="proveedoresc.changeOrderByOrDirection('provRif')"><span ng-show="proveedoresc.orderBy=='provRif'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[proveedoresc.orderDirection==false && proveedoresc.orderBy=='provRif']"></span> RIF</span>
+                        </th>
+
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[proveedoresc.orderBy=='provDireccion']" ng-click="proveedoresc.changeOrderByOrDirection('provDireccion')"><span ng-show="proveedoresc.orderBy=='provDireccion'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[proveedoresc.orderDirection==false && proveedoresc.orderBy=='provDireccion']"></span> Dirección</span>
+                        </th>
+
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[proveedoresc.orderBy=='provStatus']" ng-click="proveedoresc.changeOrderByOrDirection('provStatus')"><span ng-show="proveedoresc.orderBy=='provStatus'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[proveedoresc.orderDirection==false && proveedoresc.orderBy=='provStatus']"></span> Status</span>
+                        </th>
+
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[proveedoresc.orderBy=='provObservacion']" ng-click="proveedoresc.changeOrderByOrDirection('provObservacion')"><span ng-show="proveedoresc.orderBy=='provObservacion'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[proveedoresc.orderDirection==false && proveedoresc.orderBy=='provObservacion']"></span> Observación</span>
+                        </th>
                         <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat-start="proveedor in proveedoresc.proveedores | filter:proveedoresc.filter">
+                    <tr ng-repeat-start="proveedor in proveedoresc.proveedores | orderObjectBy: proveedoresc.orderBy : proveedoresc.orderDirection | filter:proveedoresc.filter">
                         <td class="">{{proveedor.provId}}</td>
                         <td class="">{{proveedor.provNombre}}</td>
                         <td class="">{{proveedor.provRif}}</td>
@@ -141,7 +154,8 @@
                         <td>
                             <input type="text" name="direccion" class="form-control" ng-model="proveedoresc.selectedItem.direccion" placeholder={{proveedor.provDireccion}}/>
                         </td>
-                        <td><!--
+                        <td>
+                            <!--
                             <input type="text" name="status" class="form-control" ng-model="proveedoresc.selectedItem.estatus" placeholder={{proveedor.provStatus}}/>
                             -->
                             <input type="checkbox" name="activo" ng-model="proveedoresc.selectedItem.estatus"> {{proveedoresc.selectedItem.estatus===true?'Activo':'Inac.'}}
@@ -182,6 +196,5 @@
                 </div>
             </form>
         </div>
-        
     </div>
 </div>

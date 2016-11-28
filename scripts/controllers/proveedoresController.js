@@ -1,13 +1,16 @@
 angular
     .module('autorepuestosApp')
-    .controller('proveedoresController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope) {
+    .controller('proveedoresController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'NgTableParams', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, NgTableParams) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
         // Initializing vars
         var proveedoresc = this;
+
         proveedoresc.allLoad = false;
         proveedoresc.filter = "";
+        proveedoresc.orderBy = "provId";
+        proveedoresc.orderDirection = false; // False = Ascendent
         proveedoresc.searchText = "";
         proveedoresc.selectedItem = {
             id: '',
@@ -27,6 +30,16 @@ angular
         proveedoresc.isAddNewProveedor = false;
         // Obtain the items per page
         $scope.QtyPageTables = storageService.getQtyPageTables();
+
+        //Change the orderby 
+        proveedoresc.changeOrderByOrDirection = function (orderByItem) {
+            proveedoresc.orderBy = orderByItem;
+            if(proveedoresc.orderDirection == true) {
+                proveedoresc.orderDirection = false;
+            } else {
+                proveedoresc.orderDirection = true;
+            }
+        };
 
         // Remove item
         proveedoresc.removeProveedor = function (id) {
@@ -181,7 +194,8 @@ angular
                         proveedoresc.pageTo = (proveedoresc.pageFrom + proveedoresc.totalProveedoresReturned) - 1;
                         proveedoresc.actualRange = "Mostrando registros " + proveedoresc.pageFrom + " a " + proveedoresc.pageTo + " de " + proveedoresc.totalProveedores
 
-                    }
+                    };
+
                     proveedoresc.allLoad = true;
 
                 })
@@ -200,5 +214,7 @@ angular
 
         // The default value on load controller:
         proveedoresc.getProveedores($scope.QtyPageTables, 1);
+
+
 
     }])
