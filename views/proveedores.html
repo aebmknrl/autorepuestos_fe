@@ -73,7 +73,14 @@
                     </span>
                 </div>
             </div>
-            <div class="col-md-2 col-md-offset-4">
+            <div class="col-md-4">
+                    <div class="btn-group">
+        <label class="btn btn-primary" ng-click="proveedoresc.toggleFilterEstatusStrict(true)" ng-model="proveedoresc.filterEstatus" uib-btn-radio="'ACTIVO'">Activos</label>
+        <label class="btn btn-primary" ng-click="proveedoresc.toggleFilterEstatusStrict(true)" ng-model="proveedoresc.filterEstatus" uib-btn-radio="'INACTIVO'">Inactivos</label>
+        <label class="btn btn-primary" ng-click="proveedoresc.toggleFilterEstatusStrict(false)" ng-model="proveedoresc.filterEstatus" uib-btn-radio="''">Todos</label>
+    </div>
+            </div>
+            <div class="col-md-2">
                 <input type="text" class="form-control" id="txtFilter" placeholder="Filtro" ng-model="proveedoresc.filter">
             </div>
         </div>
@@ -104,7 +111,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat-start="proveedor in proveedoresc.proveedores | orderObjectBy: proveedoresc.orderBy : proveedoresc.orderDirection | filter:proveedoresc.filter">
+                    <tr ng-repeat-start="proveedor in proveedoresc.proveedores | orderObjectBy: proveedoresc.orderBy : proveedoresc.orderDirection | filter : proveedoresc.filter | filterBy: ['provStatus']: proveedoresc.filterEstatus : proveedoresc.filterEstatusStrict">
                         <td class="">{{proveedor.provId}}</td>
                         <td class="">{{proveedor.provNombre}}</td>
                         <td class="">{{proveedor.provRif}}</td>

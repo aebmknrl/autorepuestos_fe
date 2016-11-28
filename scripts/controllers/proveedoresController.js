@@ -27,14 +27,25 @@ angular
             estatus: true,
             observacion: ''
         };
+
+        proveedoresc.filterEstatus = "";
+        proveedoresc.filterEstatusStrict = false;
+
+
         proveedoresc.isAddNewProveedor = false;
         // Obtain the items per page
         $scope.QtyPageTables = storageService.getQtyPageTables();
 
+        //Toggles the filter strict on or off
+        proveedoresc.toggleFilterEstatusStrict = function (value) {
+            proveedoresc.filterEstatusStrict = value;
+
+        };
+
         //Change the orderby 
         proveedoresc.changeOrderByOrDirection = function (orderByItem) {
             proveedoresc.orderBy = orderByItem;
-            if(proveedoresc.orderDirection == true) {
+            if (proveedoresc.orderDirection == true) {
                 proveedoresc.orderDirection = false;
             } else {
                 proveedoresc.orderDirection = true;
