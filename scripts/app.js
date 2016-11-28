@@ -1,5 +1,5 @@
 angular
-    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt','ngTable','ngOrderObjectBy','angular.filter'])
+    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt', 'ngTable', 'ngOrderObjectBy', 'angular.filter'])
     .run(function (authManager, $location, $rootScope, $state, storageService) {
         //Work with auhtentication:
         authManager.checkAuthOnRefresh();
@@ -56,7 +56,7 @@ angular
                 data: {
                     requiresLogin: true
                 }
-            })            
+            })
             .state('logout', {
                 url: '/logout',
                 templateUrl: 'views/logout.html',
@@ -72,7 +72,11 @@ angular
                 return storageService.getToken();
             }],
             whiteListedDomains: ['127.0.0.1', 'localhost'],
-            unauthenticatedRedirector: ['$state', function ($state) {
+            unauthenticatedRedirector: ['$state', 'authManager', 'storageService', function ($state, authManager, storageService) {
+                alert('Su sessión ha caducado.');
+                storageService.removeToken();
+                storageService.clearAll();
+                authManager.unauthenticate();
                 $state.go('autorepuestos_fe');
             }],
             unauthenticatedRedirectPath: '/login'
@@ -83,4 +87,3 @@ angular
     .constant("endpointApiURL", {
         "url": "http://127.0.0.1/autorepuestos/web/app_dev.php/api"
     })
-   
