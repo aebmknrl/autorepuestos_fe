@@ -57,10 +57,11 @@ angular
                 url = endpointApiURL.url + "/proveedor/delete/" + id;
                 $scope.ProveedoresPromise = $http.delete(url)
                     .then(function (response) {
+                       // console.log(response.data);
                         proveedoresc.getProveedores($scope.QtyPagesSelected, proveedoresc.CurrentPage, proveedoresc.searchText);
                         ngToast.create({
                             className: 'info',
-                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.proveedorid + '</strong>'
+                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.provid + '</strong>'
                         });
                         proveedoresc.selectedItem.id = 0;
                     })
