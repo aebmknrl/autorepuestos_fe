@@ -1,0 +1,43 @@
+<toast></toast>
+<div class="container" ng-controller="modelosController as modelosc" ng-cloak cg-busy="{promise:ModelosPromise,message:'Cargando...',templateUrl:'scripts/vendor/angular-busy/angular-busy.html'}">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Lista de Modelos</h2>
+        </div>
+    </div>
+        <div class="row button-margin">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" ng-disabled="modelosc.selectedItem.id !=''" ng-click="" ng-model="modelosc.isAddNewModelo"
+                uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+		        <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
+            </button>
+        </div>
+    </div>
+
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[modelosc.isAddNewModelo==true]">
+        <div class="col-md-12">
+            <form name="newModeloForm" ng-submit="" novalidate>
+                <div ng-class="{ 'has-error': newModeloForm.nombre.$touched && newModeloForm.nombre.$invalid}" class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" ng-model="modelosc.newItem.nombre" placeholder="Nombre" required/>
+                    <div class="help-block" ng-messages="newModeloForm.nombre.$error" ng-if="newModeloForm.nombre.$touched">
+                        <p ng-message="required">"Nombre" es requerido.</p>
+                    </div>
+                </div>
+              
+
+
+
+
+
+
+
+
+                <button type="button" class="btn btn-success" ng-click="proveedoresc.addProveedor(proveedoresc.newItem.nombre,proveedoresc.newItem.direccion,proveedoresc.newItem.rif,proveedoresc.newItem.estatus,proveedoresc.newItem.observacion)"
+                    ng-disabled="newProveedorForm.$invalid">
+			    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                <span class="button-text">Agregar</span>
+			</button>
+            </form>
+        </div>
+    </div>
