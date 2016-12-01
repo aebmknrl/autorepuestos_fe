@@ -5,7 +5,7 @@
             <h2>Lista de Modelos</h2>
         </div>
     </div>
-        <div class="row button-margin">
+    <div class="row button-margin">
         <div class="col-md-12">
             <button class="btn btn-primary" type="button" ng-disabled="modelosc.selectedItem.id !=''" ng-click="" ng-model="modelosc.isAddNewModelo"
                 uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
@@ -13,8 +13,7 @@
             </button>
         </div>
     </div>
-
-        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[modelosc.isAddNewModelo==true]">
+    <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[modelosc.isAddNewModelo==true]">
         <div class="col-md-12">
             <form name="newModeloForm" ng-submit="" novalidate>
                 <div ng-class="{ 'has-error': newModeloForm.nombre.$touched && newModeloForm.nombre.$invalid}" class="form-group">
@@ -24,17 +23,15 @@
                         <p ng-message="required">"Nombre" es requerido.</p>
                     </div>
                 </div>
-              
-
-
-
-
-
-
-
-
-                <button type="button" class="btn btn-success" ng-click="proveedoresc.addProveedor(proveedoresc.newItem.nombre,proveedoresc.newItem.direccion,proveedoresc.newItem.rif,proveedoresc.newItem.estatus,proveedoresc.newItem.observacion)"
-                    ng-disabled="newProveedorForm.$invalid">
+                <div class="form-group">
+                    <label for="Observacion">Observación</label>
+                    <textarea rows="" cols="" name="observacion" class="form-control" ng-model="modelosc.newItem.observacion" placeholder="Observación"></textarea>
+                </div>
+                <select id="ProvSelector">
+                    <option ng-repeat="marca in modelosc.marcas" value="{{marca.marId}}" ng-model="modelosc.newItem.marca">{{marca.marNombre}}</option>
+                </select>
+                <button type="button" class="btn btn-success" ng-click="modelosc.addModelo(modelosc.newItem.nombre,modelosc.newItem.observacion,modelosc.newItem.modelosc.newItem.marca)"
+                    ng-disabled="newModelosForm.$invalid">
 			    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                 <span class="button-text">Agregar</span>
 			</button>

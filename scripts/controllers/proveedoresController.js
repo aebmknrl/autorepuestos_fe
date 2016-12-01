@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('proveedoresController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'NgTableParams', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, NgTableParams) {
+    .controller('proveedoresController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -57,7 +57,7 @@ angular
                 url = endpointApiURL.url + "/proveedor/delete/" + id;
                 $scope.ProveedoresPromise = $http.delete(url)
                     .then(function (response) {
-                       // console.log(response.data);
+                        // console.log(response.data);
                         proveedoresc.getProveedores($scope.QtyPagesSelected, proveedoresc.CurrentPage, proveedoresc.searchText);
                         ngToast.create({
                             className: 'info',
@@ -207,6 +207,7 @@ angular
                         proveedoresc.actualRange = "Mostrando registros " + proveedoresc.pageFrom + " a " + proveedoresc.pageTo + " de " + proveedoresc.totalProveedores
 
                     };
+                    
 
                     proveedoresc.allLoad = true;
 
