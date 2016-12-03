@@ -31,7 +31,8 @@
                 <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'main']"><a ui-sref='main'>Inicio</a></li>
                 <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'marcas']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='marcas'>Marcas</a></li>
                 <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'proveedores']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='proveedores'>Proveedores</a></li>
-               <!--
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'modelos']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='modelos'>Modelos</a></li>
+                <!--
                 <li><a href="#">Link</a></li>
                 <li dropdown>
                     <a href="#" dropdown-toggle>Dropdown <b class="caret"></b></a>
@@ -45,7 +46,7 @@
                 </li>
                 -->
             </ul>
-           <!-- 
+            <!-- 
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search">
@@ -54,7 +55,7 @@
             </form>
             -->
             <ul class="nav navbar-nav navbar-right">
-               <!-- <li><a href="#">Link</a></li> -->
+                <!-- <li><a href="#">Link</a></li> -->
                 <li dropdown uib-dropdown>
                     <a href="#" dropdown-toggle uib-dropdown-toggle><strong>Usuario: {{username}}</strong><b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -65,7 +66,6 @@
         </div>
         <!-- /.navbar-collapse -->
     </nav>
-
     <div class="container">
         <div ui-view></div>
     </div>
@@ -93,6 +93,7 @@
     <script type="text/javascript" src="scripts/controllers/mainController.js"></script>
     <script type="text/javascript" src="scripts/controllers/marcasController.js"></script>
     <script type="text/javascript" src="scripts/controllers/proveedoresController.js"></script>
+    <script type="text/javascript" src="scripts/controllers/modelosController.js"></script>
     <script type="text/javascript" src="scripts/controllers/logoutController.js"></script>
     <script type="text/ng-template" id="alert.html">
         <div ng-transclude></div>

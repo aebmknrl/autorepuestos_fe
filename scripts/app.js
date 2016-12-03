@@ -57,6 +57,13 @@ angular
                     requiresLogin: true
                 }
             })
+            .state('modelos', {
+                url: '/modelos',
+                templateUrl: 'views/modelos.html',
+                data: {
+                    requiresLogin: true
+                }
+            })
             .state('logout', {
                 url: '/logout',
                 templateUrl: 'views/logout.html',
