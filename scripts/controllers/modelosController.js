@@ -124,7 +124,6 @@ angular
             if (!id || !nombre || !marca) {
                 return false;
             }
-
             url = endpointApiURL.url + "/modelo/edit/" + id;
             $scope.ProveedoresPromise = $http.post(
                     url, {
