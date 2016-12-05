@@ -1,7 +1,9 @@
  angular
      .module('autorepuestosApp')
      .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope) {
-         $rootScope.username = storageService.getUserData('username');
+        // Set the username for the app
+        $rootScope.username = storageService.getUserData('username');
+        $rootScope.userrole = storageService.getUserData('role');
          var marcas_controller = this;
          marcas_controller.filter = "";
          marcas_controller.searchText = "";

@@ -125,11 +125,11 @@ angular
                 return false;
             }
 
-            url = endpointApiURL.url + "/marca/edit/" + id;
+            url = endpointApiURL.url + "/modelo/edit/" + id;
             $scope.ProveedoresPromise = $http.post(
                     url, {
                         "nombre": nombre,
-                        "marca": marca,
+                        "marcaid": marca,
                         "observacion": observacion
                     }
                 )

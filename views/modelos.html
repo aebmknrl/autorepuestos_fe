@@ -125,15 +125,8 @@
                         </form>
                     </td>
                     <td>
-                        <form name="updateMarcaForm" novalidate>
-                            <div ng-class="{ 'has-error': updateMarcaForm.marca.$touched && updateMarcaForm.marca.$invalid}">
-                                <input type="text" name="marca" class="form-control" ng-model="modelosc.selectedItem.marca" placeholder={{modelo.marcaMar}}
-                                    required/>
-                                <div class="help-block" ng-messages="updateMarcaForm.marca.$error" ng-if="updateMarcaForm.marca.$touched">
-                                    <p ng-message="required">"Marca" es requerido.</p>
-                                </div>
-                            </div>
-                        </form>
+                        <select id="MarcaSelector" class="form-control input-group" name="marca" ng-model="modelosc.selectedItem.marca" ng-init="modelosc.selectedItem.marca=marca.marId" ng-options="marca.marId as marca.marNombre for marca in modelosc.marcas track by marca.marId" required>
+                        </select>
                     </td>
                     <td>
                         <input type="text" name="observacion" class="form-control" ng-model="modelosc.selectedItem.observacion" placeholder={{modelo.modObservacion}}/>
