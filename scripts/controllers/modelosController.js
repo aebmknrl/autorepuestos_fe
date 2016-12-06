@@ -89,16 +89,16 @@ angular
             $scope.ModelosPromise = $http.post(
                     url, {
                         "nombre": nombre,
-                        "marcaid": marca,
+                        "marcaid": marca.marId,
                         "observacion": observacion
                     }
                 )
                 .then(function (response) {
-                    // console.log(response.data.modelo);
+                    console.log(response.data.modelos);
                     modelosc.getModelos($scope.QtyPagesSelected, modelosc.CurrentPage, modelosc.searchText);
                     ngToast.create({
                         className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.modelo[0].modelo + '</strong>'
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.modelos[0].modelo + '</strong>'
                     });
                     modelosc.selectedItem.id = 0;
                     modelosc.newItem = {
@@ -128,7 +128,7 @@ angular
             $scope.ProveedoresPromise = $http.post(
                     url, {
                         "nombre": nombre,
-                        "marcaid": marca,
+                        "marcaid": marca.marId,
                         "observacion": observacion
                     }
                 )
