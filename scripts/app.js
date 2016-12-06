@@ -79,8 +79,13 @@ angular
                 return storageService.getToken();
             }],
             whiteListedDomains: ['127.0.0.1', 'localhost'],
-            unauthenticatedRedirector: ['$state', 'authManager', 'storageService', function ($state, authManager, storageService) {
-                alert('Su sessión ha caducado.');
+            unauthenticatedRedirector: ['$state', 'authManager', 'storageService', 'jwtHelper', function ($state, authManager, storageService, jwtHelper) {
+                if (storageService.getToken() != null) {
+                    if (jwtHelper.isTokenExpired(storageService.getToken())) {
+                        alert('Su sessión ha caducado.');
+                    }
+                }
+
                 storageService.removeToken();
                 storageService.clearAll();
                 authManager.unauthenticate();
