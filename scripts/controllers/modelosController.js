@@ -49,14 +49,14 @@ angular
         };
         // Remove item
         modelosc.removeModelo = function (id) {
-            url = endpointApiURL.url + "/modelos/delete/" + id;
+            url = endpointApiURL.url + "/modelo/delete/" + id;
             $scope.ModelosPromise = $http.delete(url)
                 .then(function (response) {
                     // console.log(response.data);
                     modelosc.getModelos($scope.QtyPagesSelected, modelosc.CurrentPage, modelosc.searchText);
                     ngToast.create({
                         className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.modId + '</strong>'
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.modid + '</strong>'
                     });
                     modelosc.selectedItem.id = 0;
                 })
