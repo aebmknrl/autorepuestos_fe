@@ -64,6 +64,13 @@ angular
                     requiresLogin: true
                 }
             })
+            .state('fabricantes', {
+                url: '/fabricantes',
+                templateUrl: 'views/fabricantes.html',
+                data: {
+                    requiresLogin: true
+                }
+            })
             .state('logout', {
                 url: '/logout',
                 templateUrl: 'views/logout.html',
