@@ -4,7 +4,7 @@ angular
 
 
         $timeout(function () {
-            console.log($rootScope.isAuthenticated); // But would be true here
+            //console.log($rootScope.isAuthenticated); // But would be true here
         });
         if ($rootScope.isAuthenticated) {
             $state.go("main");

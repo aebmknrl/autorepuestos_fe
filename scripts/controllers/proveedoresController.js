@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('proveedoresController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope) {
+    .controller('proveedoresController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope','toastMsgService', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope,toastMsgService) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -121,7 +121,7 @@ angular
                         nombre: '',
                         rif: '',
                         direccion: '',
-                        estatus: '',
+                        estatus: true,
                         observacion: ''
                     };
                     $scope.newProveedorForm.nombre.$touched = false;
@@ -132,6 +132,10 @@ angular
                     console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                    if (error.status == '409') {
+                        toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+                        //console.log('Error obteniendo datos: ' + error.data.error);
                     }
                 });
         }
