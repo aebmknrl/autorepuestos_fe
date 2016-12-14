@@ -66,10 +66,7 @@ angular
                         proveedoresc.selectedItem.id = 0;
                     })
                     .catch(function (error) {
-                        console.log(error);
-                        if (error.status == '412') {
-                            console.log('Error obteniendo datos: ' + error.data.error);
-                        }
+                        toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                     });
             }
             // Change the items per page
@@ -129,14 +126,8 @@ angular
                     proveedoresc.isAddNewProveedor = false;
                 })
                 .catch(function (error) {
-                    console.log(error);
-                    if (error.status == '412') {
-                        console.log('Error obteniendo datos: ' + error.data.error);
-                    }
-                    if (error.status == '409') {
-                        toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
-                        //console.log('Error obteniendo datos: ' + error.data.error);
-                    }
+                    //console.log(error);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                 });
         }
 
@@ -172,10 +163,7 @@ angular
                     proveedoresc.selectedItem.id = 0;
                 })
                 .catch(function (error) {
-                    console.log(error);
-                    if (error.status == '412') {
-                        console.log('Error obteniendo datos: ' + error.data.error);
-                    }
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                 });
         }
 
@@ -217,10 +205,8 @@ angular
 
                 })
                 .catch(function (error) {
-                    console.log(error);
-                    if (error.status == '412') {
-                        console.log('Error obteniendo datos: ' + error.data.error);
-                    }
+                    //console.log(error);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                 });
         }
 

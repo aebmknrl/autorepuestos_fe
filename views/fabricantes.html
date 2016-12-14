@@ -89,9 +89,9 @@
                     </th>
                     <th><span class="btn" ng-class="{true:'bold-text',false:''}[fabricantesc.orderBy=='fabDescripcion']" ng-click="fabricantesc.changeOrderByOrDirection('fabDescripcion')"><span ng-show="fabricantesc.orderBy=='fabDescripcion'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[fabricantesc.orderDirection==false && fabricantesc.orderBy=='fabDescripcion']"></span>                        Descripción</span>
                     </th>
-                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[fabricantesc.orderBy=='fabPais']" ng-click="fabricantesc.changeOrderByOrDirection('fabPais')"><span ng-show="fabricantesc.orderBy=='fabPais'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[fabricantesc.orderDirection==false && fabricantesc.orderBy=='fabPais']"></span>                        Pais</span>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[fabricantesc.orderBy=='fabPais']" ng-click="fabricantesc.changeOrderByOrDirection('fabPais')"><span ng-show="fabricantesc.orderBy=='fabPais'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[fabricantesc.orderDirection==false && fabricantesc.orderBy=='fabPais']"></span>                        País</span>
                     </th>
-                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[fabricantesc.orderBy=='fabTiempo']" ng-click="fabricantesc.changeOrderByOrDirection('fabTiempo')"><span ng-show="fabricantesc.orderBy=='fabTiempo'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[fabricantesc.orderDirection==false && fabricantesc.orderBy=='fabTiempo']"></span>                        Pais</span>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[fabricantesc.orderBy=='fabTiempo']" ng-click="fabricantesc.changeOrderByOrDirection('fabTiempo')"><span ng-show="fabricantesc.orderBy=='fabTiempo'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[fabricantesc.orderDirection==false && fabricantesc.orderBy=='fabTiempo']"></span>                        Tiempo</span>
                     </th>                    
                     <th><span class="btn">Acción</span></th>
                 </tr>
@@ -124,7 +124,7 @@
                     <td>
                         <form name="updateNameForm" ng-submit="" novalidate>
                             <div ng-class="{ 'has-error': updateNameForm.nombre.$touched && updateNameForm.nombre.$invalid}">
-                                <input type="text" name="nombre" class="form-control" ng-model="fabricantesc.selectedItem.nombre" placeholder={{fabricantesc.modNombre}}
+                                <input type="text" name="nombre" class="form-control" ng-model="fabricantesc.selectedItem.nombre" placeholder={{fabricantesc.fabNombre}}
                                     required/>
                                 <div class="help-block" ng-messages="updateNameForm.nombre.$error" ng-if="updateNameForm.nombre.$touched">
                                     <p ng-message="required">"Nombre" es requerido.</p>
@@ -133,14 +133,25 @@
                         </form>
                     </td>
                     <td>
-                        <select id="MarcaSelector" class="form-control input-group" name="marca" ng-model="fabricantesc.selectedItem.marca"  ng-options="marca as marca.marNombre for marca in fabricantesc.marcas track by marca.marId" required>
+                        <form name="updateDescripcionForm" ng-submit="" novalidate>
+                            <div ng-class="{ 'has-error': updateDescripcionForm.descripcion.$touched && updateDescripcionForm.descripcion.$invalid}">
+                                <input type="text" name="descripcion" class="form-control" ng-model="fabricantesc.selectedItem.descripcion" placeholder={{fabricantesc.fabDescripcion}}
+                                    required/>
+                                <div class="help-block" ng-messages="updateDescripcionForm.descripcion.$error" ng-if="updateDescripcionForm.descripcion.$touched">
+                                    <p ng-message="required">"Descripción" es requerido.</p>
+                                </div>
+                            </div>
+                        </form>
+                    </td>                    
+                    <td>
+                         <select id="pais" class="form-control input-group" name="pais" ng-model="fabricantesc.selectedItem.pais"  ng-options="pais as pais for pais in fabricantesc.paises" required>
                         </select>
                     </td>
                     <td>
-                        <input type="text" name="observacion" class="form-control" ng-model="fabricantesc.selectedItem.observacion" placeholder={{fabricante.modObservacion}}/>
+                        <input type="text" name="tiempo" class="form-control" ng-model="fabricantesc.selectedItem.tiempo" placeholder={{fabricante.fabTiempo}}/>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success" ng-click="fabricantesc.updateFabricante(fabricante.fabId,fabricantesc.selectedItem.nombre,fabricantesc.selectedItem.marca,fabricantesc.selectedItem.observacion)"
+                        <button type="button" class="btn btn-success" ng-click="fabricantesc.updateFabricante(fabricante.fabId,fabricantesc.selectedItem.nombre,fabricantesc.selectedItem.descripcion,fabricantesc.selectedItem.pais,fabricantesc.selectedItem.tiempo)"
                             ng-disabled="updateNameForm.$invalid || updateMarcaForm.$invalid">
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                                 <span class="button-text">Guardar</span>
@@ -152,7 +163,27 @@
         <hr>
     </div>
 
-
+    <div class="row" ng-cloak ng-show="fabricantesc.allLoad">
+        <form class="form-inline">
+            <div class="form-group">
+                <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="fabricantesc.ChangeQtyPagesTables(QtyPagesSelected,fabricantesc.searchText)"
+                    ng-init="QtyPagesSelected=QtyPageTables">
+                        <option value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=50>50</option>
+                        <option value=100>100</option>
+                        <option value=Todos>Todos</option>
+				    </select>
+            </div>
+            <div class="form-group">
+                <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="fabricantesc.totalFabricantes"
+                    ng-model="fabricantesc.CurrentPage" ng-change="fabricantesc.setPage(fabricantesc.CurrentPage)"></ul>
+            </div>
+            <div class="form-group pull-right actual-range" ng-cloak>
+                {{fabricantesc.actualRange}}
+            </div>
+        </form>
+    </div>
 
 
 

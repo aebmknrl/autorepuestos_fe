@@ -1,5 +1,13 @@
 // Coloque su configuración en este archivo para sobrescribir la configuración predeterminada y de usuario.
 {
+
     // Beautify config
-     "beautify.onSave": true
+     "beautify.onSave": true,
+         // Normal indentation guides rendering width.
+    "guides.normal.width": 1,
+        // Normal indentation guides rendering style.
+    "guides.normal.style": "dashed",
+    "guides.active.style": "dashed",
+    "guides.stack.style": "dashed",
+     "guides.updateDelay": 0
 }
