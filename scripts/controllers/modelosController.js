@@ -61,10 +61,9 @@ angular
                     modelosc.selectedItem.id = 0;
                 })
                 .catch(function (error) {
-                    console.log(error);
-                    if (error.status == '412') {
-                        console.log('Error obteniendo datos: ' + error.data.error);
-                    }
+                    //console.log(error);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+
                 });
         }
 

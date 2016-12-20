@@ -71,6 +71,13 @@ angular
                     requiresLogin: true
                 }
             })
+            .state('partes', {
+                url: '/partes',
+                templateUrl: 'views/partes.html',
+                data: {
+                    requiresLogin: true
+                }
+            })            
             .state('logout', {
                 url: '/logout',
                 templateUrl: 'views/logout.html',
