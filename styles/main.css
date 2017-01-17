@@ -15,7 +15,7 @@
     text-align: center;
 }
 
-.button-margin{
+.button-margin {
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -24,7 +24,7 @@
     min-width: 200px;
 }
 
-.bold-text{
+.bold-text {
     font-weight: bold;
 }
 
@@ -49,7 +49,6 @@
 .item-no-visible {
     display: none;
 }
-
 
 .row-no-visible {
     display: none;
@@ -80,6 +79,6 @@
 }
 
 .cg-busy-default-sign {
-    	border-top-left-radius:7px;
-	border-top-right-radius:7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
