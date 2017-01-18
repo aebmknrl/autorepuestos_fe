@@ -44,11 +44,13 @@
                 </div>
                 <div class="form-group">
                     <label for="tiempo">Tiempo</label>
-                    <div date-picker>
-                        <input date-time min-date="minDate">
-                    </div>
+                        <p class="input-group col-md-3">
+                            <input type="text" class="form-control" uib-datepicker-popup='dd-MM-yyyy' ng-model="dt" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Cerrar" clear-text='Limpiar' current-text='Hoy' />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
                      <!--
-                    <div uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="options"></div>
                     <input type="text" name="tiempo" class="form-control" ng-model="fabricantesc.newItem.tiempo" placeholder="Tiempo"></input>
                     -->
                 </div>
