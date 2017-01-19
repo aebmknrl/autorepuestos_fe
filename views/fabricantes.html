@@ -44,15 +44,9 @@
                 </div>
                 <div class="form-group">
                     <label for="tiempo">Tiempo</label>
-                        <p class="input-group col-md-3">
-                            <input type="text" class="form-control" uib-datepicker-popup='dd-MM-yyyy' ng-model="dt" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Cerrar" clear-text='Limpiar' current-text='Hoy' />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                     <!--
-                    <input type="text" name="tiempo" class="form-control" ng-model="fabricantesc.newItem.tiempo" placeholder="Tiempo"></input>
-                    -->
+                    <div class="input-group">
+                        <input date-time format="YYYY" ng-model="fabricantesc.newItem.tiempo" class="form-control"view="date" min-view="year" max-view="year">
+                    </div>
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-success" ng-click="fabricantesc.addFabricante(fabricantesc.newItem.nombre,fabricantesc.newItem.descripcion,fabricantesc.newItem.pais,fabricantesc.tiempo)"
@@ -110,7 +104,7 @@
                     <td class="">{{fabricante.fabNombre}}</td>
                     <td class="">{{fabricante.fabDescripcion}}</td>
                     <td class="">{{fabricante.fabPais}}</td>
-                    <td class="">{{fabricante.fabTiempo}}</td>
+                    <td class="">{{fabricante.fabTiempo | date:'yyyy'}}</td>
                     <td class="action-buttons-td">
                         <button type="button" class="btn btn-primary" ng-model="fabricantesc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="fabricante.fabId"
                             btn-checkbox-false="0" ng-click="fabricantesc.copyRowData(fabricante.fabNombre,fabricante.fabDescripcion,fabricante.fabPais,fabricante.fabTiempo)">
@@ -156,7 +150,10 @@
                         </select>
                     </td>
                     <td>
+                        <input name="tiempo" date-time format="YYYY" ng-model="fabricantesc.selectedItem.tiempo" class="form-control"view="date" min-view="year" max-view="year">
+                        <!--
                         <input type="text" name="tiempo" class="form-control" ng-model="fabricantesc.selectedItem.tiempo" placeholder={{fabricante.fabTiempo}}/>
+                        -->
                     </td>
                     <td>
                         <button type="button" class="btn btn-success" ng-click="fabricantesc.updateFabricante(fabricante.fabId,fabricantesc.selectedItem.nombre,fabricantesc.selectedItem.descripcion,fabricantesc.selectedItem.pais,fabricantesc.selectedItem.tiempo)"

@@ -1,5 +1,5 @@
 angular
-    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt', 'ngOrderObjectBy', 'angular.filter'])
+    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt', 'ngOrderObjectBy', 'angular.filter','datePicker'])
     .run(function (authManager, $location, $rootScope, $state, storageService) {
         //Work with auhtentication:
         authManager.checkAuthOnRefresh();
