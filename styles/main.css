@@ -82,3 +82,11 @@
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
 }
+
+.table{
+    text-align: center;
+}
+
+th {
+   text-align: center; 
+}
