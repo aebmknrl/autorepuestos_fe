@@ -22,7 +22,7 @@ angular
             nombre: '',
             descripcion: '',
             pais: '',
-            tiempo: new Date(),
+            tiempo: moment(new Date()),
         };
         fabricantesc.filterEstatus = "";
         fabricantesc.filterEstatusStrict = false;
@@ -92,11 +92,11 @@ angular
                         "nombre": nombre,
                         "descripcion": descripcion,
                         "pais": pais,
-                        "tiempo": tiempo
+                        "tiempo": tiempo.format()
                     }
                 )
                 .then(function (response) {
-                    console.log(response.data.fabricantes);
+                    //console.log(response.data.fabricantes);
                     fabricantesc.getFabricantes($scope.QtyPagesSelected, fabricantesc.CurrentPage, fabricantesc.searchText);
                     ngToast.create({
                         className: 'info',
@@ -107,7 +107,7 @@ angular
                         nombre: '',
                         descripcion: '',
                         pais: '',
-                        tiempo: new Date(),
+                        tiempo: moment(new Date()),
                     };
                     $scope.newFabricanteForm.nombre.$touched = false;
                     $scope.newFabricanteForm.descripcion.$touched = false;
@@ -131,7 +131,7 @@ angular
                         "nombre": nombre,
                         "descripcion": descripcion,
                         "pais": pais,
-                        "tiempo": tiempo
+                        "tiempo": tiempo.format()
                     }
                 )
                 .then(function (response) {
