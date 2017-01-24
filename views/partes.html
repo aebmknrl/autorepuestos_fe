@@ -1,1 +1,38 @@
 <toast></toast>
+<toast></toast>
+<div class="container" ng-controller="partesController as partesc" ng-cloak cg-busy="{promise:PartesPromise,message:'Cargando...',templateUrl:'scripts/vendor/angular-busy/angular-busy.html'}">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Lista de Partes</h2>
+        </div>
+    </div>
+    <div class="row button-margin">
+        <div class="col-md-12">
+            <button class="btn btn-primary" type="button" ng-disabled="partesc.selectedItem.id !=''" ng-click="" ng-model="partesc.isAddNewParte"
+                uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+		        <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
+            </button>
+        </div>
+    </div>
+
+    <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[partesc.isAddNewParte==true]">
+        <div class="col-md-12">
+            <form name="newParteForm" ng-submit="" novalidate>
+                <div ng-class="{ 'has-error': newParteForm.nombre.$touched && newParteForm.nombre.$invalid}" class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" class="form-control" ng-model="partesc.newItem.nombre" placeholder="Nombre" required/>
+                    <div class="help-block" ng-messages="newParteForm.nombre.$error" ng-if="newParteForm.nombre.$touched">
+                        <p ng-message="required">"Nombre" es requerido.</p>
+                    </div>
+                </div>
+                <div ng-class="{ 'has-error': newParteForm.nombre.$touched && newParteForm.nombre.$invalid}" class="form-group">
+                    <label for="nombrepieza">Nombre de la Pieza</label>
+                    <input type="text" name="nombrepieza" class="form-control" ng-model="partesc.newItem.nombrepieza" placeholder="Nombre de Pieza" required/>
+                    <div class="help-block" ng-messages="newParteForm.nombrepieza.$error" ng-if="newParteForm.nombrepieza.$touched">
+                        <p ng-message="required">"Nombre de la pieza" es requerido.</p>
+                    </div>
+                </div>
+
+
+
+</div>
