@@ -25,14 +25,88 @@
                         <p ng-message="required">"Nombre" es requerido.</p>
                     </div>
                 </div>
-                <div ng-class="{ 'has-error': newParteForm.nombre.$touched && newParteForm.nombre.$invalid}" class="form-group">
+                <div ng-class="{ 'has-error': newParteForm.nombrepieza.$touched && newParteForm.nombrepieza.$invalid}" class="form-group">
                     <label for="nombrepieza">Nombre de la Pieza</label>
                     <input type="text" name="nombrepieza" class="form-control" ng-model="partesc.newItem.nombrepieza" placeholder="Nombre de Pieza" required/>
                     <div class="help-block" ng-messages="newParteForm.nombrepieza.$error" ng-if="newParteForm.nombrepieza.$touched">
                         <p ng-message="required">"Nombre de la pieza" es requerido.</p>
                     </div>
                 </div>
-
-
-
+                <div class="form-group">
+                    <label for="nombreinventario">Nombre de Inventario</label>
+                    <input type="text" name="nombreinventario" class="form-control" ng-model="partesc.newItem.nombreinventario" placeholder="Nombre de Inventario"/>
+                </div>
+                <div class="form-group">
+                    <label for="paramazon">Parte en Amazon</label>
+                    <input type="text" name="paramazon" class="form-control" ng-model="partesc.newItem.paramazon" placeholder="Parte en Amazon"/>
+                </div>
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input type="text" name="codigo" class="form-control" ng-model="partesc.newItem.codigo" placeholder="Código"/>
+                </div>
+                <div class="form-group">
+                    <label for="codigoupc">Código UPC</label>
+                    <input type="text" name="codigoupc" class="form-control" ng-model="partesc.newItem.codigoupc" placeholder="Código UPC"/>
+                </div>       
+                <div class="form-group">
+                    <label for="grupo">Grupo</label>
+                    <input type="text" name="grupo" class="form-control" ng-model="partesc.newItem.grupo" placeholder="Grupo"/>
+                </div>  
+                <div class="form-group">
+                    <label for="subgrupo">Sub Grupo</label>
+                    <input type="text" name="subgrupo" class="form-control" ng-model="partesc.newItem.subgrupo" placeholder="Sub Grupo"/>
+                </div>
+                <div class="form-group">
+                    <label for="largo">Largo</label>
+                    <input type="text" name="largo" class="form-control" ng-model="partesc.newItem.largo" placeholder="Largo"/>
+                </div>
+                <div class="form-group">
+                    <label for="ancho">Ancho</label>
+                    <input type="text" name="ancho" class="form-control" ng-model="partesc.newItem.ancho" placeholder="Ancho"/>
+                </div>
+                <div class="form-group">
+                    <label for="espesor">Espesor</label>
+                    <input type="text" name="espesor" class="form-control" ng-model="partesc.newItem.espesor" placeholder="Espesor"/>
+                </div>
+                <div class="form-group">
+                    <label for="peso">Peso</label>
+                    <input type="text" name="peso" class="form-control" ng-model="partesc.newItem.peso" placeholder="Peso"/>
+                </div>        
+                <div class="form-group">               
+                    <label for="caracteristicas">Características</label>
+                    <textarea rows="" cols="" name="caracteristicas" class="form-control" ng-model="partesc.newItem.caracteristicas" placeholder="Caracteristicas"></textarea>
+                </div>
+                <div class="form-group">               
+                    <label for="observacion">Observación</label>
+                    <textarea rows="" cols="" name="observacion" class="form-control" ng-model="partesc.newItem.observacion" placeholder="Observación"></textarea>
+                </div>    
+                <div class="form-group">
+                    <label for="kit">Kit</label>
+                    <input type="text" name="kit" class="form-control" ng-model="partesc.newItem.kit" placeholder="Kit"/>
+                </div>
+                <div class="form-group">
+                    <label for="equivalencia">Equivalencia</label>
+                    <input type="text" name="equivalencia" class="form-control" ng-model="partesc.newItem.equivalencia" placeholder="Equivalencia"/>
+                </div>
+                <div class="form-group">
+                    <label for="conjunto">Conjunto</label>
+                    <input type="text" name="conjunto" class="form-control" ng-model="partesc.newItem.conjunto" placeholder="Conjunto"/>
+                </div>   
+                <div class="input-group">
+                    <select id="FabricanteSelector" class="form-control input-group" name="fabricanteid" ng-model="partesc.newItem.fabricanteid"  ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricantes.fabId" required>
+                        <option value="">--Seleccione Fabricante--</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-click="partesc.getFabricantes()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-success" ng-click="partesc.addParte(partesc.newItem.nombreinventario,partesc.newItem.paramazon,partesc.newItem.codigo,partesc.newItem.codigoupc,partesc.newItem.grupo,partesc.newItem.subgrupo,partesc.newItem.largo,partesc.newItem.ancho,partesc.newItem.espesor,partesc.newItem.peso,partesc.newItem.caracteristicas,partesc.newItem.observacion,partesc.newItem.kit,partesc.newItem.equivalencia,partesc.newItem.conjunto,partesc.newItem.fabricanteid)"
+                        ng-disabled="newParteForm.$invalid">
+			            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                        <span class="button-text">Agregar</span>
+			        </button>
+                </div>
+            </form>
+        </div>
 </div>

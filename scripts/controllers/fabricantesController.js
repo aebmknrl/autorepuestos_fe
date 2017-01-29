@@ -18,11 +18,11 @@ angular
             pais: '',
             tiempo: '',
         };
-        fabricantesc.newItem = {
+         fabricantesc.newItem = {
             nombre: '',
             descripcion: '',
             pais: '',
-            tiempo: moment(new Date()),
+            tiempo: new Date(),
         };
         fabricantesc.filterEstatus = "";
         fabricantesc.filterEstatusStrict = false;
@@ -76,6 +76,7 @@ angular
 
         // Copy temporally item data for edit
         fabricantesc.copyRowData = function (nombre, descripcion, pais, tiempo) {
+            tiempo = new Date(tiempo);
             fabricantesc.selectedItem.nombre = nombre;
             fabricantesc.selectedItem.descripcion = descripcion;
             fabricantesc.selectedItem.pais = pais;
@@ -92,7 +93,7 @@ angular
                         "nombre": nombre,
                         "descripcion": descripcion,
                         "pais": pais,
-                        "tiempo": tiempo.format()
+                        "tiempo": tiempo,
                     }
                 )
                 .then(function (response) {
@@ -103,11 +104,12 @@ angular
                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.fabricantes[0].fabricante + '</strong>'
                     });
                     fabricantesc.selectedItem.id = 0;
+                            
                     fabricantesc.newItem = {
                         nombre: '',
                         descripcion: '',
-                        pais: '',
-                        tiempo: moment(new Date()),
+                        pais: '', 
+                        tiempo: new Date(),
                     };
                     $scope.newFabricanteForm.nombre.$touched = false;
                     $scope.newFabricanteForm.descripcion.$touched = false;
@@ -131,7 +133,7 @@ angular
                         "nombre": nombre,
                         "descripcion": descripcion,
                         "pais": pais,
-                        "tiempo": tiempo.format()
+                        "tiempo": new Date(tiempo),
                     }
                 )
                 .then(function (response) {
@@ -202,6 +204,24 @@ angular
         fabricantesc.paises = countryService.getCountrys();
 
         // Datepicket Options -----------------------------------------------------
-
+        
+        fabricantesc.opened1 = false;
+        fabricantesc.opened2 = false;
+        fabricantesc.dateOptions = {
+            formatYear: 'yyyy',
+            startingDay: 1,
+            minMode: 'year',
+            maxMode: 'year'
+        };
+        fabricantesc.closeAll = function() {
+            fabricantesc.opened1 = false;
+            fabricantesc.opened2 = false;
+        };
+          fabricantesc.open = function($event,opened) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            fabricantesc.closeAll();
+            fabricantesc[opened] = true;
+        };
 
     }])
