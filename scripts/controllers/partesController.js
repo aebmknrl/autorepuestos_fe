@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope','toastMsgService','$document', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope,toastMsgService,$document) {
+    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$q', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $q) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -112,7 +112,7 @@ angular
         }
 
         // Add item
-        partesc.addParte = function (nombre,nombrepieza,nombreinventario, paramazon, codigo, codigoupc,grupo,subgrupo,largo,ancho,espesor,peso,caracteristicas,observacion,kit,equivalencia,conjunto,fabricanteid) {
+        partesc.addParte = function (nombre, nombrepieza, nombreinventario, paramazon, codigo, codigoupc, grupo, subgrupo, largo, ancho, espesor, peso, caracteristicas, observacion, kit, equivalencia, conjunto, fabricanteid) {
 
             url = endpointApiURL.url + "/parte/add";
             $scope.FabricantesPromise = $http.post(
@@ -144,7 +144,7 @@ angular
                         className: 'info',
                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.parte[0].parte + '</strong>'
                     });
-                    partesc.selectedItem.id = 0;                   
+                    partesc.selectedItem.id = 0;
                     partesc.newItem = {
                         nombre: '',
                         nombrepieza: '',
@@ -172,13 +172,13 @@ angular
                 })
                 .catch(function (error) {
                     //console.log(error);
-                   toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                 });
         }
 
 
         // Update item
-        partesc.updateParte = function (nombre,nombrepieza,nombreinventario, paramazon, codigo, codigoupc,grupo,subgrupo,largo,ancho,espesor,peso,caracteristicas,observacion,kit,equivalencia,conjunto,fabricanteid) {
+        partesc.updateParte = function (nombre, nombrepieza, nombreinventario, paramazon, codigo, codigoupc, grupo, subgrupo, largo, ancho, espesor, peso, caracteristicas, observacion, kit, equivalencia, conjunto, fabricanteid) {
             if (!id || !nombre || !nombrepieza) {
                 return false;
             }
@@ -216,13 +216,42 @@ angular
                 })
                 .catch(function (error) {
                     //console.log(error);
-                   toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                 });
         }
 
 
-// Get items
+        // Get items
         partesc.getPartes = function (limit, page, searchText) {
+            // Dummy data to test
+            partesc.partes = [{
+                "parId": 1,
+                "parNombre": 'nombre',
+                "parNombret": 'nombrepieza',
+                "parNombrein": 'nombreinventario',
+                "parAsin": 'paramazon',
+                "parCodigo": 'codigo',
+                "parUpc": 'codigoupc',
+                "parGrupo": 'grupo',
+                "parSubgrupo": 'subgrupo',
+                "parLargo": 'largo',
+                "parAncho": 'ancho',
+                "parEspesor": 'espesor',
+                "parPeso": 'peso',
+                "parCaract": 'caracteristicas',
+                "parObservacion": 'observacion',
+                "parKit": 'kit',
+                "parEq": 'equivalencia',
+                "kit": 'conjunto',
+                "fabricanteFab": 'fabricanteid'
+            }, ]
+            partesc.totalPages = 1;
+            partesc.pageFrom = 1;
+            partesc.pageTo = 1;
+            partesc.totalPartes = 1;
+            partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
+            partesc.allLoad = true;
+            return true;
 
             if (searchText !== undefined) {
                 if (searchText !== "") {
@@ -258,10 +287,10 @@ angular
                 })
                 .catch(function (error) {
                     //console.log(error);
-                   toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
                 });
         }
-          // Set page
+        // Set page
         partesc.setPage = function (page) {
             partesc.getPartes($scope.QtyPageTables, page);
         }
@@ -272,75 +301,67 @@ angular
 
         // Get the Marcas for Modelos entity
         partesc.getFabricantes = function () {
-                var url = endpointApiURL.url + "/fabricante";
-                $scope.PartesPromise = $http.get(url)
-                    .then(function (response) {
-                        partesc.fabricantes = response.data;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                        if (error.status == '412') {
-                            console.log('Error obteniendo datos: ' + error.data.error);
-                        }
-                    });
-            }
+            var url = endpointApiURL.url + "/fabricante";
+            $scope.PartesPromise = $http.get(url)
+                .then(function (response) {
+                    partesc.fabricantes = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        }
 
         // Call get Fabricantes to populate the select
         partesc.getFabricantes();
 
 
-
-    // Modal
-    partesc.items = ['item1', 'item2', 'item3'];
-    partesc.animationsEnabled = true;
-    partesc.selected = {
-        item: partesc.items[0]
-    };
-
-    partesc.open = function () {
-      var modal =  $uibModal.open({
-            animation: partesc.animationsEnabled,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            templateUrl: 'views/partesView.html',
-            controller: 'partesController',
-            controllerAs: 'partesc',
-            size: 'sm',
-            appendTo:  undefined,
-            resolve: {
-                items: function () {
-                return partesc.items;
-                }
-            }
-        })
-    }
-
-    partesc.ok = function () {
-        modal.close(partesc.selected.item);
-    };
-
-    partesc.cancel = function () {
-        modal.dismiss('cancel');
-    };
-
-/*    partesc.open = function (size, parentSelector) {
-        var parentElem = parentSelector ? 
-        angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
-        var modalInstance = $uibModal.open({
-        animation: partesc.animationsEnabled,
-        ariaLabelledBy: 'modal-title',
-        ariaDescribedBy: 'modal-body',
-        templateUrl: 'myModalContent.html',
-        controller: 'modalInstanceController',
-        controllerAs: '$ctrl',
-        size: size,
-        appendTo: parentElem,
-        resolve: {
-            items: function () {
-            return partesc.items;
-            }
+        // Get a specific Parte
+        partesc.getParte = function (id) {
+            var url = endpointApiURL.url + "/fabricante/" + id;
+            return $http.get(url)
+                .then(function (response) {
+                    partesc.parte = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
         }
-        })
-    }
-*/
+
+        // For Edit operations using modals
+        partesc.openEdit = function (id) {
+            $scope.PartesPromise = partesc.getParte(id)
+                .then(function () {
+                    //console.log(partesc.parte);
+                    partesc.open(partesc.parte);
+                });
+        }
+
+        // Modal
+        partesc.animationsEnabled = true;
+
+        partesc.open = function (parte) {
+            var parte = parte;
+            var modal = $uibModal.open({
+                animation: partesc.animationsEnabled,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'partesView.html',
+                controller: 'modalInstanceController',
+                controllerAs: '$ctrl',
+                size: 'sm',
+                appendTo: undefined,
+                resolve: {
+                    items: function () {
+                        return parte;
+                    }
+                }
+            })
+        }
+
     }])

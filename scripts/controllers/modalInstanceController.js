@@ -1,6 +1,8 @@
 angular.module('autorepuestosApp').controller('modalInstanceController', function ($uibModalInstance, items) {
   var $ctrl = this;
   $ctrl.items = items;
+//console.log($ctrl.items);
+
   $ctrl.selected = {
     item: $ctrl.items[0]
   };
