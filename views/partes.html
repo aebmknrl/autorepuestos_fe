@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="nombreinventario">Nombre de Inventario</label>
+                    <label for="nombreinventario">Nombre Inventario</label>
                     <input type="text" name="nombreinventario" class="form-control" ng-model="partesc.newItem.nombreinventario" placeholder="Nombre de Inventario"/>
                 </div>
                 <div class="form-group">
@@ -47,11 +47,18 @@
                 <div class="form-group">
                     <label for="codigoupc">Código UPC</label>
                     <input type="text" name="codigoupc" class="form-control" ng-model="partesc.newItem.codigoupc" placeholder="Código UPC"/>
-                </div>       
+                </div>  
                 <div class="form-group">
                     <label for="grupo">Grupo</label>
-                    <input type="text" name="grupo" class="form-control" ng-model="partesc.newItem.grupo" placeholder="Grupo"/>
-                </div>  
+                    <div class="input-group">
+                        <select id="grupoSelector" class="form-control input-group" name="grupo" ng-model="partesc.newItem.grupo"  ng-options="grupo as grupo.grupoNombre for grupo in partesc.grupos track by grupo.id">
+                            <option value="">--Seleccione Grupo--</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="partesc.getGrupos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                        </span>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="subgrupo">Sub Grupo</label>
                     <input type="text" name="subgrupo" class="form-control" ng-model="partesc.newItem.subgrupo" placeholder="Sub Grupo"/>
@@ -81,27 +88,44 @@
                     <textarea rows="" cols="" name="observacion" class="form-control" ng-model="partesc.newItem.observacion" placeholder="Observación"></textarea>
                 </div>    
                 <div class="form-group">
-                    <label for="kit">Kit</label>
-                    <input type="text" name="kit" class="form-control" ng-model="partesc.newItem.kit" placeholder="Kit"/>
+                    <label for="kit">Parte de un Kit</label><br>
+                    <input type="checkbox" name="kit" ng-model="partesc.newItem.kit">
                 </div>
                 <div class="form-group">
                     <label for="equivalencia">Equivalencia</label>
-                    <input type="text" name="equivalencia" class="form-control" ng-model="partesc.newItem.equivalencia" placeholder="Equivalencia"/>
+                    <div class="input-group">
+                        <select id="equivalenciaSelector" class="form-control input-group" name="equivalencia" ng-model="partesc.newItem.equivalencia"  ng-options="equivalencia as equivalencia.equivalenciaRef for equivalencia in partesc.equivalencias track by equivalencia.id">
+                            <option value="">--Seleccione Equivalencia--</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="partesc.getEquivalencias()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="conjunto">Conjunto</label>
-                    <input type="text" name="conjunto" class="form-control" ng-model="partesc.newItem.conjunto" placeholder="Conjunto"/>
-                </div>   
-                <div class="input-group">
-                    <select id="FabricanteSelector" class="form-control input-group" name="fabricanteid" ng-model="partesc.newItem.fabricanteid"  ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricantes.fabId" required>
-                        <option value="">--Seleccione Fabricante--</option>
-                    </select>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" ng-click="partesc.getFabricantes()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
-                    </span>
+                    <label for="conjunto">Conjunto (Kit)</label>
+                    <div class="input-group">
+                        <select id="ConjuntoSelector" class="form-control input-group" name="conjunto" ng-model="partesc.newItem.conjunto"  ng-options="conjunto as conjunto.kitRef for conjunto in partesc.conjuntos track by conjuntos.id">
+                            <option value="">--Seleccione Conjunto--</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="partesc.getFabricantes()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-success" ng-click="partesc.addParte(partesc.newItem.nombreinventario,partesc.newItem.paramazon,partesc.newItem.codigo,partesc.newItem.codigoupc,partesc.newItem.grupo,partesc.newItem.subgrupo,partesc.newItem.largo,partesc.newItem.ancho,partesc.newItem.espesor,partesc.newItem.peso,partesc.newItem.caracteristicas,partesc.newItem.observacion,partesc.newItem.kit,partesc.newItem.equivalencia,partesc.newItem.conjunto,partesc.newItem.fabricanteid)"
+                    <label for="fabricanteid">Fabricante</label>
+                    <div class="input-group">
+                        <select id="FabricanteSelector" class="form-control input-group" name="fabricanteid" ng-model="partesc.newItem.fabricanteid"  ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricantes.fabId">
+                            <option value="">--Seleccione Fabricante--</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="partesc.getFabricantes()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-success" ng-click="partesc.addParte(partesc.newItem.nombre,partesc.newItem.nombrepieza,partesc.newItem.nombreinventario,partesc.newItem.paramazon,partesc.newItem.codigo,partesc.newItem.codigoupc,partesc.newItem.grupo,partesc.newItem.subgrupo,partesc.newItem.largo,partesc.newItem.ancho,partesc.newItem.espesor,partesc.newItem.peso,partesc.newItem.caracteristicas,partesc.newItem.observacion,partesc.newItem.kit,partesc.newItem.equivalencia,partesc.newItem.conjunto,partesc.newItem.fabricanteid)"
                         ng-disabled="newParteForm.$invalid">
 			            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                         <span class="button-text">Agregar</span>
@@ -109,4 +133,96 @@
                 </div>
             </form>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar en todos las Partes..." ng-model="partesc.searchText"
+                    on-enter="partesc.getPartes(QtyPagesSelected,1,partesc.searchText)">
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-class="{true:'item-visible', false: 'item-no-visible'}[partesc.searchText !='']" ng-click="partesc.searchText=''">
+		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-click="partesc.getPartes(QtyPagesSelected,1,partesc.searchText)">
+		        	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+            </div>
+        </div>
+        <div class="col-md-2 col-md-offset-4">
+            <input type="text" class="form-control" id="txtFilter" placeholder="Filtro" ng-model="partesc.filter">
+        </div>
+    </div>
+    <div class="row">
+        <hr>
+    </div>
+     <div class="row">
+        <table class="table table-hover" ng-cloak>
+            <thead>
+                <tr>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[partesc.orderBy=='parId']" ng-click="partesc.changeOrderByOrDirection('parId')"><span ng-show="partesc.orderBy=='parId'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[partesc.orderDirection==false && partesc.orderBy=='parId']"></span>                        ID</span>
+                    </th>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[partesc.orderBy=='parNombre']" ng-click="partesc.changeOrderByOrDirection('parNombre')"><span ng-show="partesc.orderBy=='parNombre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[partesc.orderDirection==false && partesc.orderBy=='parNombre']"></span>                        Nombre de la Parte</span>
+                    </th>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[partesc.orderBy=='parNombret']" ng-click="partesc.changeOrderByOrDirection('parNombret')"><span ng-show="partesc.orderBy=='parNombret'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[partesc.orderDirection==false && partesc.orderBy=='parNombret']"></span>                        Nombre de la Pieza</span>
+                    </th>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[partesc.orderBy=='parNombrein']" ng-click="partesc.changeOrderByOrDirection('parNombrein')"><span ng-show="partesc.orderBy=='parNombrein'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[partesc.orderDirection==false && partesc.orderBy=='parNombrein']"></span>                       Nombre Inventario</span>
+                    </th>
+                    <th><span class="btn" ng-class="{true:'bold-text',false:''}[partesc.orderBy=='parAsin']" ng-click="partesc.changeOrderByOrDirection('parAsin')"><span ng-show="partesc.orderBy=='parAsin'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[partesc.orderDirection==false && partesc.orderBy=='parAsin']"></span>                       Parte en Amazon</span>
+                    </th>
+                    <th><span class="btn">Acción</span></th>
+                </tr>
+            </thead>
+             <tbody>
+                <tr ng-repeat="parte in partesc.partes | orderObjectBy: partesc.orderBy : partesc.orderDirection | filter : partesc.filter">
+                    <td class="">{{parte.parId}}</td>
+                    <td class="">{{parte.parNombre}}</td>
+                    <td class="">{{parte.parNombret}}</td>
+                    <td class="">{{parte.parNombrein}}</td>
+                    <td class="">{{parte.parAsin}}</td>
+                    <td class="action-buttons-td">
+                        <button type="button" class="btn btn-primary" ng-model="partesc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="partesc.parId"
+                            btn-checkbox-false="0" ng-click="partesc.copyRowData(parte.parNombre,parte.parNombret,parte.parNombrein,parte.parAsin)">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            <span class="button-text">Editar</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" ng-disabled="partesc.selectedItem.id == parte.parId" ng-click="partesc.removeParte(parte.parId)"
+                                confirm="¿Está seguro de eliminar el registro?. Esta acción no se puede deshacer." confirm-title="Atención"
+                                confirm-ok="Si" confirm-cancel="No">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                <span class="button-text">Eliminar</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+            <hr>
+    </div>
+    <div class="row" ng-cloak ng-show="partesc.allLoad">
+        <form class="form-inline">
+            <div class="form-group">
+                <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="partesc.ChangeQtyPagesTables(QtyPagesSelected,partesc.searchText)"
+                    ng-init="QtyPagesSelected=QtyPageTables">
+                    <option value=10>10</option>
+                    <option value=20>20</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                    <option value=Todos>Todos</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="partesc.totalFabricantes"
+                    ng-model="partesc.CurrentPage" ng-change="partesc.setPage(partesc.CurrentPage)"></ul>
+            </div>
+            <div class="form-group pull-right actual-range" ng-cloak>
+                {{partesc.actualRange}}
+            </div>
+        </form>
+    </div>
+
+<!-- PRUEBAS modal  -->
+<div class="demo-modal" id="demo-modal"></div>
+<button type="button" class="btn btn-default" ng-click="partesc.open()">Open me!</button>
 </div>
