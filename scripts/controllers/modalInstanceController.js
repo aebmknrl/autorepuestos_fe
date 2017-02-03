@@ -1,17 +1,17 @@
 angular.module('autorepuestosApp').controller('modalInstanceController', function ($uibModalInstance, items) {
   var $ctrl = this;
-  $ctrl.items = items;
-//console.log($ctrl.items);
-
-  $ctrl.selected = {
-    item: $ctrl.items[0]
-  };
+  $ctrl.items = items[0];
+  $ctrl.data = items[1];
+  //console.log($ctrl.data.action);
+  //  $ctrl.selected = {
+  //    item: $ctrl.items[0]
+  //  };
 
   $ctrl.ok = function () {
-    $uibModalInstance.close($ctrl.selected.item);
+    $uibModalInstance.close('okey');
   };
 
   $ctrl.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
+    $uibModalInstance.dismiss('cancelar');
   };
 });

@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$q', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $q) {
+    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -251,6 +251,8 @@ angular
             partesc.totalPartes = 1;
             partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
             partesc.allLoad = true;
+            // End of dummy data
+
             return true;
 
             if (searchText !== undefined) {
@@ -323,6 +325,32 @@ angular
             var url = endpointApiURL.url + "/fabricante/" + id;
             return $http.get(url)
                 .then(function (response) {
+                    // Dummy data to test
+                    var dummyPartes = [{
+                        "parId": 1,
+                        "parNombre": 'nombre',
+                        "parNombret": 'nombrepieza',
+                        "parNombrein": 'nombreinventario',
+                        "parAsin": 'paramazon',
+                        "parCodigo": 'codigo',
+                        "parUpc": 'codigoupc',
+                        "parGrupo": 'grupo',
+                        "parSubgrupo": 'subgrupo',
+                        "parLargo": 'largo',
+                        "parAncho": 'ancho',
+                        "parEspesor": 'espesor',
+                        "parPeso": 'peso',
+                        "parCaract": 'caracteristicas',
+                        "parObservacion": 'observacion',
+                        "parKit": 'kit',
+                        "parEq": 'equivalencia',
+                        "kit": 'conjunto',
+                        "fabricanteFab": 'fabricanteid'
+                    }, ]
+                    partesc.parte = dummyPartes;
+                    return true;
+                    //end of dummy data
+
                     partesc.parte = response.data;
                 })
                 .catch(function (error) {
@@ -333,20 +361,27 @@ angular
                 });
         }
 
+
+        // This var lets to know if the user hits editar, eliminar or ver
+        partesc.selectedItemAction = '';
+
         // For Edit operations using modals
-        partesc.openEdit = function (id) {
+        partesc.openModalViewEdit = function (id,action) {
             $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     //console.log(partesc.parte);
-                    partesc.open(partesc.parte);
+                    partesc.open(partesc.parte,action);
                 });
         }
 
         // Modal
         partesc.animationsEnabled = true;
 
-        partesc.open = function (parte) {
+        partesc.open = function (parte,action) {
             var parte = parte;
+            parte.push({
+                action: action,
+            });
             var modal = $uibModal.open({
                 animation: partesc.animationsEnabled,
                 ariaLabelledBy: 'modal-title',
@@ -354,14 +389,24 @@ angular
                 templateUrl: 'partesView.html',
                 controller: 'modalInstanceController',
                 controllerAs: '$ctrl',
-                size: 'sm',
                 appendTo: undefined,
                 resolve: {
                     items: function () {
                         return parte;
                     }
                 }
+            });
+            modal.result.then(function (selectedItem) {
+                // This part is used when user hits ok button
+                partesc.selected = selectedItem;
+                // Clear this variable to enable "Elmininar", "Nuevo" buttons again
+                partesc.selectedItemAction = '';
+                //console.log( partesc.selected);
+            }, function () {
+                // This part is used when user hits cancelar button
+                // Clear this variable to enable "Elmininar", "Nuevo" buttons again
+                partesc.selectedItemAction = '';
+                //$log.info('Modal dismissed at: ' + new Date());
             })
         }
-
     }])
