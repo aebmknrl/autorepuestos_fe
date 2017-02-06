@@ -12,46 +12,25 @@ angular
         partesc.orderBy = "parId";
         partesc.orderDirection = false; // False = Ascendent
         partesc.searchText = "";
-        partesc.selectedItem = {
-            id: '',
-            nombre: '',
-            nombrepieza: '',
-            nombreinventario: '',
-            paramazon: '',
-            codigo: '',
-            codigoupc: '',
-            grupo: '',
-            subgrupo: '',
-            largo: '',
-            ancho: '',
-            espesor: '',
-            peso: '',
-            caracteristicas: '',
-            observacion: '',
-            kit: '',
-            equivalencia: '',
-            conjunto: '',
-            fabricanteid: ''
-        };
+
+        //Vacío por ahora
+        partesc.selectedItem = {};
+        //
         partesc.newItem = {
-            nombre: '',
-            nombrepieza: '',
-            nombreinventario: '',
-            paramazon: '',
-            codigo: '',
-            codigoupc: '',
-            grupo: '',
-            subgrupo: '',
-            largo: '',
-            ancho: '',
-            espesor: '',
-            peso: '',
-            caracteristicas: '',
-            observacion: '',
-            kit: '',
-            equivalencia: '',
-            conjunto: '',
-            fabricanteid: ''
+            parCodigo: '',
+            fabricanteFab: '',
+            parNombre: '',
+            parGrupo: '',
+            parUpc: '',
+            parSku: '',
+            parLargo: '',
+            parAncho: '',
+            parEspesor: '',
+            parPeso: '',
+            parOripar: '',
+            parCaract: '',
+            parObservacion: '',
+            parKit: '' //falta imagenes
         };
 
         partesc.filterEstatus = "";
@@ -107,34 +86,34 @@ angular
 
         // Copy temporally item data for edit
         // This method appears not apply to Partes
-        partesc.copyRowData = function (data) {
-            // partesc.selectedItem.nombre = data;
+        partesc.copyRowData = function (id) {
+             $scope.PartesPromise = partesc.getParte(id)
+                .then(function () {
+                    console.log(partesc.parte);
+                    partesc.selectedItem = partesc.parte;
+                });
         }
 
         // Add item
-        partesc.addParte = function (nombre, nombrepieza, nombreinventario, paramazon, codigo, codigoupc, grupo, subgrupo, largo, ancho, espesor, peso, caracteristicas, observacion, kit, equivalencia, conjunto, fabricanteid) {
+        partesc.addParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
 
             url = endpointApiURL.url + "/parte/add";
             $scope.FabricantesPromise = $http.post(
                     url, {
-                        "nombre": nombre,
-                        "nombrepieza": nombrepieza,
-                        "nombreinventario": nombreinventario,
-                        "paramazon": paramazon,
-                        "codigo": codigo,
-                        "codigoupc": codigoupc,
-                        "grupo": grupo,
-                        "subgrupo": subgrupo,
-                        "largo": largo,
-                        "ancho": ancho,
-                        "espesor": espesor,
-                        "peso": peso,
-                        "caracteristicas": caracteristicas,
-                        "observacion": observacion,
-                        "kit": kit,
-                        "equivalencia": equivalencia,
-                        "conjunto": conjunto,
-                        "fabricanteid": fabricanteid
+                        parCodigo: parCodigo,
+                        fabricanteFab: fabricanteFab,
+                        parNombre: parNombre,
+                        parGrupo: parGrupo,
+                        parUpc: parUpc,
+                        parSku: parSku,
+                        parLargo: parLargo,
+                        parAncho: parAncho,
+                        parEspesor: parEspesor,
+                        parPeso: parPeso,
+                        parOripar: parOripar,
+                        parCaract: parCaract,
+                        parObservacion: parObservacion,
+                        parKit: parKit //falta imagenes
                     }
                 )
                 .then(function (response) {
@@ -146,28 +125,25 @@ angular
                     });
                     partesc.selectedItem.id = 0;
                     partesc.newItem = {
-                        nombre: '',
-                        nombrepieza: '',
-                        nombreinventario: '',
-                        paramazon: '',
-                        codigo: '',
-                        codigoupc: '',
-                        grupo: '',
-                        subgrupo: '',
-                        largo: '',
-                        ancho: '',
-                        espesor: '',
-                        peso: '',
-                        caracteristicas: '',
-                        observacion: '',
-                        kit: '',
-                        equivalencia: '',
-                        conjunto: '',
-                        fabricanteid: ''
+                        parCodigo: '',
+                        fabricanteFab: '',
+                        parNombre: '',
+                        parGrupo: '',
+                        parUpc: '',
+                        parSku: '',
+                        parLargo: '',
+                        parAncho: '',
+                        parEspesor: '',
+                        parPeso: '',
+                        parOripar: '',
+                        parCaract: '',
+                        parObservacion: '',
+                        parKit: '' //falta imagenes
                     };
 
-                    $scope.newParteForm.nombre.$touched = false;
-                    $scope.newParteForm.nombrepieza.$touched = false;
+                    $scope.newParteForm.parCodigo.$touched = false;
+                    $scope.newParteForm.fabricanteFab.$touched = false;
+                    $scope.newParteForm.parNombre.$touched = false;
                     partesc.isAddNewParte = false;
                 })
                 .catch(function (error) {
@@ -178,31 +154,27 @@ angular
 
 
         // Update item
-        partesc.updateParte = function (nombre, nombrepieza, nombreinventario, paramazon, codigo, codigoupc, grupo, subgrupo, largo, ancho, espesor, peso, caracteristicas, observacion, kit, equivalencia, conjunto, fabricanteid) {
+        partesc.updateParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
             if (!id || !nombre || !nombrepieza) {
                 return false;
             }
             url = endpointApiURL.url + "/parte/edit/" + id;
             $scope.PartesPromise = $http.post(
                     url, {
-                        "nombre": nombre,
-                        "nombrepieza": nombrepieza,
-                        "nombreinventario": nombreinventario,
-                        "paramazon": paramazon,
-                        "codigo": codigo,
-                        "codigoupc": codigoupc,
-                        "grupo": grupo,
-                        "subgrupo": subgrupo,
-                        "largo": largo,
-                        "ancho": ancho,
-                        "espesor": espesor,
-                        "peso": peso,
-                        "caracteristicas": caracteristicas,
-                        "observacion": observacion,
-                        "kit": kit,
-                        "equivalencia": equivalencia,
-                        "conjunto": conjunto,
-                        "fabricanteid": fabricanteid
+                        parCodigo: parCodigo,
+                        fabricanteFab: fabricanteFab,
+                        parNombre: parNombre,
+                        parGrupo: parGrupo,
+                        parUpc: parUpc,
+                        parSku: parSku,
+                        parLargo: parLargo,
+                        parAncho: parAncho,
+                        parEspesor: parEspesor,
+                        parPeso: parPeso,
+                        parOripar: parOripar,
+                        parCaract: parCaract,
+                        parObservacion: parObservacion,
+                        parKit: parKit //falta imagenes
                     }
                 )
                 .then(function (response) {
@@ -223,76 +195,150 @@ angular
 
         // Get items
         partesc.getPartes = function (limit, page, searchText) {
-            // Dummy data to test
-            partesc.partes = [{
-                "parId": 1,
-                "parNombre": 'nombre',
-                "parNombret": 'nombrepieza',
-                "parNombrein": 'nombreinventario',
-                "parAsin": 'paramazon',
-                "parCodigo": 'codigo',
-                "parUpc": 'codigoupc',
-                "parGrupo": 'grupo',
-                "parSubgrupo": 'subgrupo',
-                "parLargo": 'largo',
-                "parAncho": 'ancho',
-                "parEspesor": 'espesor',
-                "parPeso": 'peso',
-                "parCaract": 'caracteristicas',
-                "parObservacion": 'observacion',
-                "parKit": 'kit',
-                "parEq": 'equivalencia',
-                "kit": 'conjunto',
-                "fabricanteFab": 'fabricanteid'
-            }, ]
-            partesc.totalPages = 1;
-            partesc.pageFrom = 1;
-            partesc.pageTo = 1;
-            partesc.totalPartes = 1;
-            partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
-            partesc.allLoad = true;
-            // End of dummy data
+                // Dummy data to test
+                partesc.partes = [{
+                        parId: '1',
+                        parCodigo: 'T312',
+                        fabricanteFab: {
+                            fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
+                        },
+                        parNombre: {
+                            nombreNom: 'CORREA A TIEMPO',
+                            nombreIng: 'TIMING BELT',
+                            nombreNomt: 'BANDA DE TIEMPO, CORREA DE TIEMPO, CORREA DENTADA, CORREA DE LOS TIEMPOS, BANDA DE LOS TIEMPOS',
+                            nombreGru: {
+                                grupoNom: 'MOTOR',
+                                grupoPad: '',
+                                grupoDes: ''
+                            }
+                        },
+                        parGrupo: '',
+                        parUpc: '072053548969',
+                        parSku: 'GATES-T312',
+                        parLargo: '10.10',
+                        parAncho: '6.70',
+                        parEspesor: '1.60',
+                        parPeso: '0.40',
+                        parOripar: 'USA',
+                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+                        parKit: '0', //falta imagenes
+                        kit: []
 
-            return true;
+                    }, {
+                        parId: '2',
+                        parCodigo: 'T43175',
+                        fabricanteFab: {
+                            fabNombre: 'GATES'
+                        },
+                        parNombre: {
+                            nombreNom: 'TENSOR TIEMPO',
+                            nombreIng: 'TIMING TENSOR',
+                            nombreNomt: 'TENSOR DE LOS TIEMPOS',
+                            nombreGru: {
+                                grupoNom: 'MOTOR',
+                                grupoPad: '',
+                                grupoDes: ''
+                            }
+                        },
+                        parGrupo: '',
+                        parUpc: '0587878774',
+                        parSku: 'GATES-T43175',
+                        parLargo: '10.10',
+                        parAncho: '6.70',
+                        parEspesor: '1.60',
+                        parPeso: '0.40',
+                        parOripar: 'JAPON',
+                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+                        parKit: '0', //falta imagenes
+                        kit: []
 
-            if (searchText !== undefined) {
-                if (searchText !== "") {
-                    var url = endpointApiURL.url + "/parte/" + limit + "/" + page + "/" + searchText;
+                    }, {
+                        parId: '3',
+                        parCodigo: 'TCK312',
+                        fabricanteFab: {
+                            fabNombre: 'GATES'
+                        },
+                        parNombre: {
+                            nombreNom: 'KIT CORREA TIEMPO',
+                            nombreIng: 'TIMING BELT KIT',
+                            nombreNomt: 'KIT DE CORREA DE TIEMPOS',
+                            nombreGru: {
+                                grupoNom: 'MOTOR',
+                                grupoPad: '',
+                                grupoDes: ''
+                            }
+                        },
+                        parGrupo: '',
+                        parUpc: '',
+                        parSku: 'GATES-TCK312',
+                        parLargo: '13.70',
+                        parAncho: '7.00',
+                        parEspesor: '2.80',
+                        parPeso: '1.50',
+                        parOripar: 'MULTINACIÓN',
+                        parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
+                        parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
+                        parKit: '1', //falta imagenes
+                        kit: [{
+                            id: 1,
+                            parKitId: 'TCK312',
+                            parId: 'T43175'
+                        }, {
+                            id: 2,
+                            parKitId: 'TCK312',
+                            parId: 'T312'
+                        }, ]
+                    }];
+                partesc.totalPages = 1;
+                partesc.pageFrom = 1;
+                partesc.pageTo = 1;
+                partesc.totalPartes = 1;
+                partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
+                partesc.allLoad = true;
+                // End of dummy data
+
+                return true;
+
+                if (searchText !== undefined) {
+                    if (searchText !== "") {
+                        var url = endpointApiURL.url + "/parte/" + limit + "/" + page + "/" + searchText;
+                    } else {
+                        var url = endpointApiURL.url + "/parte/" + limit + "/" + page;
+                    }
+
                 } else {
                     var url = endpointApiURL.url + "/parte/" + limit + "/" + page;
                 }
+                //console.log('The parameters send are: URL=' + url);
+                $scope.PartesPromise = $http.get(url)
+                    .then(function (response) {
+                        //console.log(response.data.fabricantes);
+                        partesc.allLoad = false;
+                        partesc.CurrentPage = page;
+                        partesc.partes = response.data.partes;
+                        partesc.totalPartes = response.data.totalPartes;
+                        partesc.totalPartesReturned = response.data.totalPartesReturned;
+                        if ((limit == 'todos') || (limit == 'Todos')) {
+                            partesc.totalPages = 1;
+                            partesc.actualRange = "Mostrando todos los registros (" + partesc.totalPartesReturned + ")";
+                        } else {
+                            partesc.totalPages = Math.ceil(partesc.totalPartes / limit);
+                            partesc.pageFrom = (limit * page) - (limit - 1);
+                            partesc.pageTo = (partesc.pageFrom + partesc.totalPartesReturned) - 1;
+                            partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
 
-            } else {
-                var url = endpointApiURL.url + "/parte/" + limit + "/" + page;
+                        };
+                        partesc.allLoad = true;
+
+                    })
+                    .catch(function (error) {
+                        //console.log(error);
+                        toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+                    });
             }
-            //console.log('The parameters send are: URL=' + url);
-            $scope.PartesPromise = $http.get(url)
-                .then(function (response) {
-                    //console.log(response.data.fabricantes);
-                    partesc.allLoad = false;
-                    partesc.CurrentPage = page;
-                    partesc.partes = response.data.partes;
-                    partesc.totalPartes = response.data.totalPartes;
-                    partesc.totalPartesReturned = response.data.totalPartesReturned;
-                    if ((limit == 'todos') || (limit == 'Todos')) {
-                        partesc.totalPages = 1;
-                        partesc.actualRange = "Mostrando todos los registros (" + partesc.totalPartesReturned + ")";
-                    } else {
-                        partesc.totalPages = Math.ceil(partesc.totalPartes / limit);
-                        partesc.pageFrom = (limit * page) - (limit - 1);
-                        partesc.pageTo = (partesc.pageFrom + partesc.totalPartesReturned) - 1;
-                        partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
-
-                    };
-                    partesc.allLoad = true;
-
-                })
-                .catch(function (error) {
-                    //console.log(error);
-                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
-                });
-        }
-        // Set page
+            // Set page
         partesc.setPage = function (page) {
             partesc.getPartes($scope.QtyPageTables, page);
         }
@@ -327,27 +373,101 @@ angular
                 .then(function (response) {
                     // Dummy data to test
                     var dummyPartes = [{
-                        "parId": 1,
-                        "parNombre": 'nombre',
-                        "parNombret": 'nombrepieza',
-                        "parNombrein": 'nombreinventario',
-                        "parAsin": 'paramazon',
-                        "parCodigo": 'codigo',
-                        "parUpc": 'codigoupc',
-                        "parGrupo": 'grupo',
-                        "parSubgrupo": 'subgrupo',
-                        "parLargo": 'largo',
-                        "parAncho": 'ancho',
-                        "parEspesor": 'espesor',
-                        "parPeso": 'peso',
-                        "parCaract": 'caracteristicas',
-                        "parObservacion": 'observacion',
-                        "parKit": 'kit',
-                        "parEq": 'equivalencia',
-                        "kit": 'conjunto',
-                        "fabricanteFab": 'fabricanteid'
-                    }, ]
-                    partesc.parte = dummyPartes;
+                        parId: '1',
+                        parCodigo: 'T312',
+                        fabricanteFab: {
+                            fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
+                        },
+                        parNombre: {
+                            nombreNom: 'CORREA A TIEMPO',
+                            nombreIng: 'TIMING BELT',
+                            nombreNomt: 'BANDA DE TIEMPO, CORREA DE TIEMPO, CORREA DENTADA, CORREA DE LOS TIEMPOS, BANDA DE LOS TIEMPOS',
+                            nombreGru: {
+                                grupoNom: 'MOTOR',
+                                grupoPad: '',
+                                grupoDes: ''
+                            }
+                        },
+                        parGrupo: '',
+                        parUpc: '072053548969',
+                        parSku: 'GATES-T312',
+                        parLargo: '10.10',
+                        parAncho: '6.70',
+                        parEspesor: '1.60',
+                        parPeso: '0.40',
+                        parOripar: 'USA',
+                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+                        parKit: '0', //falta imagenes
+                        kit: []
+
+                    }, {
+                        parId: '2',
+                        parCodigo: 'T43175',
+                        fabricanteFab: {
+                            fabNombre: 'GATES'
+                        },
+                        parNombre: {
+                            nombreNom: 'TENSOR TIEMPO',
+                            nombreIng: 'TIMING TENSOR',
+                            nombreNomt: 'TENSOR DE LOS TIEMPOS',
+                            nombreGru: {
+                                grupoNom: 'MOTOR',
+                                grupoPad: '',
+                                grupoDes: ''
+                            }
+                        },
+                        parGrupo: '',
+                        parUpc: '0587878774',
+                        parSku: 'GATES-T43175',
+                        parLargo: '10.10',
+                        parAncho: '6.70',
+                        parEspesor: '1.60',
+                        parPeso: '0.40',
+                        parOripar: 'JAPON',
+                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+                        parKit: '0', //falta imagenes
+                        kit: []
+
+                    }, {
+                        parId: '3',
+                        parCodigo: 'TCK312',
+                        fabricanteFab: {
+                            fabNombre: 'GATES'
+                        },
+                        parNombre: {
+                            nombreNom: 'KIT CORREA TIEMPO',
+                            nombreIng: 'TIMING BELT KIT',
+                            nombreNomt: 'KIT DE CORREA DE TIEMPOS',
+                            nombreGru: {
+                                grupoNom: 'MOTOR',
+                                grupoPad: '',
+                                grupoDes: ''
+                            }
+                        },
+                        parGrupo: '',
+                        parUpc: '',
+                        parSku: 'GATES-TCK312',
+                        parLargo: '13.70',
+                        parAncho: '7.00',
+                        parEspesor: '2.80',
+                        parPeso: '1.50',
+                        parOripar: 'MULTINACIÓN',
+                        parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
+                        parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
+                        parKit: '1', //falta imagenes
+                        kit: [{
+                            id: 1,
+                            parKitId: 'TCK312',
+                            parId: 'T43175'
+                        }, {
+                            id: 2,
+                            parKitId: 'TCK312',
+                            parId: 'T312'
+                        }, ]
+                    }]
+                    partesc.parte = dummyPartes[id - 1];
                     return true;
                     //end of dummy data
 
@@ -366,22 +486,28 @@ angular
         partesc.selectedItemAction = '';
 
         // For Edit operations using modals
-        partesc.openModalViewEdit = function (id,action) {
+        partesc.openModalViewEdit = function (id, action) {
             $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     //console.log(partesc.parte);
-                    partesc.open(partesc.parte,action);
+                    partesc.open(partesc.parte, action);
                 });
         }
 
         // Modal
         partesc.animationsEnabled = true;
 
-        partesc.open = function (parte,action) {
+        partesc.open = function (parte, action) {
+            // Setup the data that will be passed to modal
             var parte = parte;
-            parte.push({
-                action: action,
-            });
+            parte.action = action; // add the action that the modal will do
+            parte.getFabricantes = function(){
+               var prueba =  partesc.getFabricantes();
+                 console.log('Llamaron a obtener fabricantes');
+            }
+
+
+
             var modal = $uibModal.open({
                 animation: partesc.animationsEnabled,
                 ariaLabelledBy: 'modal-title',
@@ -409,4 +535,9 @@ angular
                 //$log.info('Modal dismissed at: ' + new Date());
             })
         }
+
+        // Crear:
+
+        // partesc.getNombres() para obtener nombres de nueva tabla nombre de partes
+        // partesc.paises obtener paises par partes
     }])

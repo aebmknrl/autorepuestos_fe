@@ -88,6 +88,7 @@ angular
         fabricantesc.addFabricante = function (nombre, descripcion, pais, tiempo) {
 
             url = endpointApiURL.url + "/fabricante/add";
+            console.log(tiempo);
             $scope.FabricantesPromise = $http.post(
                     url, {
                         "nombre": nombre,
