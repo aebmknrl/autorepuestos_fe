@@ -12,7 +12,7 @@ angular
         partesc.orderBy = "parId";
         partesc.orderDirection = false; // False = Ascendent
         partesc.searchText = "";
-
+        partesc.selectedItemAllLoaded = false;
         //Vacío por ahora
         partesc.selectedItem = {};
         //
@@ -89,8 +89,8 @@ angular
         partesc.copyRowData = function (id) {
              $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
-                    console.log(partesc.parte);
                     partesc.selectedItem = partesc.parte;
+                    partesc.selectedItemAllLoaded = true;
                 });
         }
 
@@ -200,6 +200,7 @@ angular
                         parId: '1',
                         parCodigo: 'T312',
                         fabricanteFab: {
+                            fabid: 34,                            
                             fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
                         },
                         parNombre: {
@@ -229,6 +230,7 @@ angular
                         parId: '2',
                         parCodigo: 'T43175',
                         fabricanteFab: {
+                            fabId: 34,
                             fabNombre: 'GATES'
                         },
                         parNombre: {
@@ -258,6 +260,7 @@ angular
                         parId: '3',
                         parCodigo: 'TCK312',
                         fabricanteFab: {
+                            fabId: 34,
                             fabNombre: 'GATES'
                         },
                         parNombre: {
@@ -353,6 +356,7 @@ angular
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
                     partesc.fabricantes = response.data;
+                    console.log(partesc.fabricantes);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -376,6 +380,7 @@ angular
                         parId: '1',
                         parCodigo: 'T312',
                         fabricanteFab: {
+                            fabId: 34,
                             fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
                         },
                         parNombre: {
@@ -405,6 +410,7 @@ angular
                         parId: '2',
                         parCodigo: 'T43175',
                         fabricanteFab: {
+                            fabId: 34,
                             fabNombre: 'GATES'
                         },
                         parNombre: {
@@ -434,6 +440,7 @@ angular
                         parId: '3',
                         parCodigo: 'TCK312',
                         fabricanteFab: {
+                            fabId: 34,
                             fabNombre: 'GATES'
                         },
                         parNombre: {
