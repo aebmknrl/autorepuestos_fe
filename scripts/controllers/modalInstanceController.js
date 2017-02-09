@@ -2,7 +2,7 @@ angular.module('autorepuestosApp').controller('modalInstanceController', functio
   var $ctrl = this;
   $ctrl.items = items;
   
-  console.log($ctrl.items);
+  //console.log($ctrl.items);
 
   //  $ctrl.data = items[1];
   //console.log();

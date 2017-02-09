@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log) {
+    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log','countryService', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log,countryService) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -12,7 +12,8 @@ angular
         partesc.orderBy = "parId";
         partesc.orderDirection = false; // False = Ascendent
         partesc.searchText = "";
-        partesc.selectedItemAllLoaded = false;
+        partesc.editing = false;
+        partesc.loadingEditing = false;
         //Vacío por ahora
         partesc.selectedItem = {};
         //
@@ -87,10 +88,20 @@ angular
         // Copy temporally item data for edit
         // This method appears not apply to Partes
         partesc.copyRowData = function (id) {
+            partesc.editing = true;
+            partesc.loadingEditing = true;
              $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     partesc.selectedItem = partesc.parte;
-                    partesc.selectedItemAllLoaded = true;
+
+                    // Transform value for CheckBox "¿Es un Kit?"
+                    if (partesc.selectedItem.parKit == 1) {
+                        partesc.selectedItem.parKit = true;
+                    } else {
+                        partesc.selectedItem.parKit = false;
+                    }
+
+                    partesc.loadingEditing = false;
                 });
         }
 
@@ -280,7 +291,7 @@ angular
                         parAncho: '7.00',
                         parEspesor: '2.80',
                         parPeso: '1.50',
-                        parOripar: 'MULTINACIÓN',
+                        parOripar: 'Multinación',
                         parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
                         parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
                         parKit: '1', //falta imagenes
@@ -356,7 +367,7 @@ angular
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
                     partesc.fabricantes = response.data;
-                    console.log(partesc.fabricantes);
+                    //console.log(partesc.fabricantes);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -460,7 +471,7 @@ angular
                         parAncho: '7.00',
                         parEspesor: '2.80',
                         parPeso: '1.50',
-                        parOripar: 'MULTINACIÓN',
+                        parOripar: 'Multinación',
                         parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
                         parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
                         parKit: '1', //falta imagenes
@@ -491,6 +502,21 @@ angular
 
         // This var lets to know if the user hits editar, eliminar or ver
         partesc.selectedItemAction = '';
+
+partesc.cancelAndBackFromEdit = function(){
+    partesc.editing = false;
+    partesc.loadingEditing = false;
+    partesc.selectedItem = {};
+
+}
+
+  // Get list of countrys
+    var paises = countryService.getCountrys();
+    paises.push("Multinación");      
+    partesc.paises = paises;
+
+// *************** MODAL OPERATIONS *********************************
+
 
         // For Edit operations using modals
         partesc.openModalViewEdit = function (id, action) {
@@ -546,5 +572,5 @@ angular
         // Crear:
 
         // partesc.getNombres() para obtener nombres de nueva tabla nombre de partes
-        // partesc.paises obtener paises par partes
+
     }])
