@@ -74,6 +74,14 @@
 .list-outside {
     list-style-position: outside;
 }
+.margin-top-70 {
+    margin-top: 70px;
+}
+/* Fix for multiselect angular control, to hide horizontal scrollbars */
+.multiselect-parent .dropdown-menu { 
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    }
 
 /* Overrides */
 

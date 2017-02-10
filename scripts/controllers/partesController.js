@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log','countryService', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log,countryService) {
+    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -17,6 +17,109 @@ angular
         //Vacío por ahora
         partesc.selectedItem = {};
         //
+
+
+        //*************DUMMY DATA*************/
+
+        var dummyData = [{
+            parId: '1',
+            parCodigo: 'T312',
+            fabricanteFab: {
+                fabId: 34,
+                fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
+            },
+            parNombre: {
+                nombreNom: 'CORREA A TIEMPO',
+                nombreIng: 'TIMING BELT',
+                nombreNomt: 'BANDA DE TIEMPO, CORREA DE TIEMPO, CORREA DENTADA, CORREA DE LOS TIEMPOS, BANDA DE LOS TIEMPOS',
+                nombreGru: {
+                    grupoNom: 'MOTOR',
+                    grupoPad: '',
+                    grupoDes: ''
+                }
+            },
+            parGrupo: '',
+            parUpc: '072053548969',
+            parSku: 'GATES-T312',
+            parLargo: '10.10',
+            parAncho: '6.70',
+            parEspesor: '1.60',
+            parPeso: '0.40',
+            parOripar: 'USA',
+            parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+            parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+            parKit: '0', //falta imagenes
+            kit: []
+
+        }, {
+            parId: '2',
+            parCodigo: 'T43175',
+            fabricanteFab: {
+                fabId: 34,
+                fabNombre: 'GATES'
+            },
+            parNombre: {
+                nombreNom: 'TENSOR TIEMPO',
+                nombreIng: 'TIMING TENSOR',
+                nombreNomt: 'TENSOR DE LOS TIEMPOS',
+                nombreGru: {
+                    grupoNom: 'MOTOR',
+                    grupoPad: '',
+                    grupoDes: ''
+                }
+            },
+            parGrupo: '',
+            parUpc: '0587878774',
+            parSku: 'GATES-T43175',
+            parLargo: '10.10',
+            parAncho: '6.70',
+            parEspesor: '1.60',
+            parPeso: '0.40',
+            parOripar: 'JAPON',
+            parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+            parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+            parKit: '0', //falta imagenes
+            kit: []
+
+        }, {
+            parId: '3',
+            parCodigo: 'TCK312',
+            fabricanteFab: {
+                fabId: 34,
+                fabNombre: 'GATES'
+            },
+            parNombre: {
+                nombreNom: 'KIT CORREA TIEMPO',
+                nombreIng: 'TIMING BELT KIT',
+                nombreNomt: 'KIT DE CORREA DE TIEMPOS',
+                nombreGru: {
+                    grupoNom: 'MOTOR',
+                    grupoPad: '',
+                    grupoDes: ''
+                }
+            },
+            parGrupo: '',
+            parUpc: '',
+            parSku: 'GATES-TCK312',
+            parLargo: '13.70',
+            parAncho: '7.00',
+            parEspesor: '2.80',
+            parPeso: '1.50',
+            parOripar: 'Multinación',
+            parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
+            parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
+            parKit: '1', //falta imagenes
+            kit: [{
+                id: 1,
+                parKitId: 'TCK312',
+                parId: 'T43175'
+            }, {
+                id: 2,
+                parKitId: 'TCK312',
+                parId: 'T312'
+            }, ]
+        }];
+
         partesc.newItem = {
             parCodigo: '',
             fabricanteFab: '',
@@ -90,7 +193,7 @@ angular
         partesc.copyRowData = function (id) {
             partesc.editing = true;
             partesc.loadingEditing = true;
-             $scope.PartesPromise = partesc.getParte(id)
+            $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     partesc.selectedItem = partesc.parte;
 
@@ -206,153 +309,56 @@ angular
 
         // Get items
         partesc.getPartes = function (limit, page, searchText) {
-                // Dummy data to test
-                partesc.partes = [{
-                        parId: '1',
-                        parCodigo: 'T312',
-                        fabricanteFab: {
-                            fabid: 34,                            
-                            fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
-                        },
-                        parNombre: {
-                            nombreNom: 'CORREA A TIEMPO',
-                            nombreIng: 'TIMING BELT',
-                            nombreNomt: 'BANDA DE TIEMPO, CORREA DE TIEMPO, CORREA DENTADA, CORREA DE LOS TIEMPOS, BANDA DE LOS TIEMPOS',
-                            nombreGru: {
-                                grupoNom: 'MOTOR',
-                                grupoPad: '',
-                                grupoDes: ''
-                            }
-                        },
-                        parGrupo: '',
-                        parUpc: '072053548969',
-                        parSku: 'GATES-T312',
-                        parLargo: '10.10',
-                        parAncho: '6.70',
-                        parEspesor: '1.60',
-                        parPeso: '0.40',
-                        parOripar: 'USA',
-                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-                        parKit: '0', //falta imagenes
-                        kit: []
+            // Dummy data to test
+            partesc.partes = dummyData;
+            partesc.totalPages = 1;
+            partesc.pageFrom = 1;
+            partesc.pageTo = 1;
+            partesc.totalPartes = 1;
+            partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
+            partesc.allLoad = true;
+            // End of dummy data
 
-                    }, {
-                        parId: '2',
-                        parCodigo: 'T43175',
-                        fabricanteFab: {
-                            fabId: 34,
-                            fabNombre: 'GATES'
-                        },
-                        parNombre: {
-                            nombreNom: 'TENSOR TIEMPO',
-                            nombreIng: 'TIMING TENSOR',
-                            nombreNomt: 'TENSOR DE LOS TIEMPOS',
-                            nombreGru: {
-                                grupoNom: 'MOTOR',
-                                grupoPad: '',
-                                grupoDes: ''
-                            }
-                        },
-                        parGrupo: '',
-                        parUpc: '0587878774',
-                        parSku: 'GATES-T43175',
-                        parLargo: '10.10',
-                        parAncho: '6.70',
-                        parEspesor: '1.60',
-                        parPeso: '0.40',
-                        parOripar: 'JAPON',
-                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-                        parKit: '0', //falta imagenes
-                        kit: []
+            return true;
 
-                    }, {
-                        parId: '3',
-                        parCodigo: 'TCK312',
-                        fabricanteFab: {
-                            fabId: 34,
-                            fabNombre: 'GATES'
-                        },
-                        parNombre: {
-                            nombreNom: 'KIT CORREA TIEMPO',
-                            nombreIng: 'TIMING BELT KIT',
-                            nombreNomt: 'KIT DE CORREA DE TIEMPOS',
-                            nombreGru: {
-                                grupoNom: 'MOTOR',
-                                grupoPad: '',
-                                grupoDes: ''
-                            }
-                        },
-                        parGrupo: '',
-                        parUpc: '',
-                        parSku: 'GATES-TCK312',
-                        parLargo: '13.70',
-                        parAncho: '7.00',
-                        parEspesor: '2.80',
-                        parPeso: '1.50',
-                        parOripar: 'Multinación',
-                        parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
-                        parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
-                        parKit: '1', //falta imagenes
-                        kit: [{
-                            id: 1,
-                            parKitId: 'TCK312',
-                            parId: 'T43175'
-                        }, {
-                            id: 2,
-                            parKitId: 'TCK312',
-                            parId: 'T312'
-                        }, ]
-                    }];
-                partesc.totalPages = 1;
-                partesc.pageFrom = 1;
-                partesc.pageTo = 1;
-                partesc.totalPartes = 1;
-                partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
-                partesc.allLoad = true;
-                // End of dummy data
-
-                return true;
-
-                if (searchText !== undefined) {
-                    if (searchText !== "") {
-                        var url = endpointApiURL.url + "/parte/" + limit + "/" + page + "/" + searchText;
-                    } else {
-                        var url = endpointApiURL.url + "/parte/" + limit + "/" + page;
-                    }
-
+            if (searchText !== undefined) {
+                if (searchText !== "") {
+                    var url = endpointApiURL.url + "/parte/" + limit + "/" + page + "/" + searchText;
                 } else {
                     var url = endpointApiURL.url + "/parte/" + limit + "/" + page;
                 }
-                //console.log('The parameters send are: URL=' + url);
-                $scope.PartesPromise = $http.get(url)
-                    .then(function (response) {
-                        //console.log(response.data.fabricantes);
-                        partesc.allLoad = false;
-                        partesc.CurrentPage = page;
-                        partesc.partes = response.data.partes;
-                        partesc.totalPartes = response.data.totalPartes;
-                        partesc.totalPartesReturned = response.data.totalPartesReturned;
-                        if ((limit == 'todos') || (limit == 'Todos')) {
-                            partesc.totalPages = 1;
-                            partesc.actualRange = "Mostrando todos los registros (" + partesc.totalPartesReturned + ")";
-                        } else {
-                            partesc.totalPages = Math.ceil(partesc.totalPartes / limit);
-                            partesc.pageFrom = (limit * page) - (limit - 1);
-                            partesc.pageTo = (partesc.pageFrom + partesc.totalPartesReturned) - 1;
-                            partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
 
-                        };
-                        partesc.allLoad = true;
-
-                    })
-                    .catch(function (error) {
-                        //console.log(error);
-                        toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
-                    });
+            } else {
+                var url = endpointApiURL.url + "/parte/" + limit + "/" + page;
             }
-            // Set page
+            //console.log('The parameters send are: URL=' + url);
+            $scope.PartesPromise = $http.get(url)
+                .then(function (response) {
+                    //console.log(response.data.fabricantes);
+                    partesc.allLoad = false;
+                    partesc.CurrentPage = page;
+                    partesc.partes = response.data.partes;
+                    partesc.totalPartes = response.data.totalPartes;
+                    partesc.totalPartesReturned = response.data.totalPartesReturned;
+                    if ((limit == 'todos') || (limit == 'Todos')) {
+                        partesc.totalPages = 1;
+                        partesc.actualRange = "Mostrando todos los registros (" + partesc.totalPartesReturned + ")";
+                    } else {
+                        partesc.totalPages = Math.ceil(partesc.totalPartes / limit);
+                        partesc.pageFrom = (limit * page) - (limit - 1);
+                        partesc.pageTo = (partesc.pageFrom + partesc.totalPartesReturned) - 1;
+                        partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
+
+                    };
+                    partesc.allLoad = true;
+
+                })
+                .catch(function (error) {
+                    //console.log(error);
+                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+                });
+        }
+        // Set page
         partesc.setPage = function (page) {
             partesc.getPartes($scope.QtyPageTables, page);
         }
@@ -380,111 +386,55 @@ angular
         // Call get Fabricantes to populate the select
         partesc.getFabricantes();
 
-
-        // Get a specific Parte
-        partesc.getParte = function (id) {
-            var url = endpointApiURL.url + "/fabricante/" + id;
+        // Get all partes
+        partesc.getAllPartes = function () {
+            var url = endpointApiURL.url + "/fabricante"; // cambiar a partes despues
             return $http.get(url)
                 .then(function (response) {
                     // Dummy data to test
-                    var dummyPartes = [{
-                        parId: '1',
-                        parCodigo: 'T312',
-                        fabricanteFab: {
-                            fabId: 34,
-                            fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
-                        },
-                        parNombre: {
-                            nombreNom: 'CORREA A TIEMPO',
-                            nombreIng: 'TIMING BELT',
-                            nombreNomt: 'BANDA DE TIEMPO, CORREA DE TIEMPO, CORREA DENTADA, CORREA DE LOS TIEMPOS, BANDA DE LOS TIEMPOS',
-                            nombreGru: {
-                                grupoNom: 'MOTOR',
-                                grupoPad: '',
-                                grupoDes: ''
-                            }
-                        },
-                        parGrupo: '',
-                        parUpc: '072053548969',
-                        parSku: 'GATES-T312',
-                        parLargo: '10.10',
-                        parAncho: '6.70',
-                        parEspesor: '1.60',
-                        parPeso: '0.40',
-                        parOripar: 'USA',
-                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-                        parKit: '0', //falta imagenes
-                        kit: []
+                    var dummyPartes = dummyData;
+                    return dummyPartes;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        }
 
-                    }, {
-                        parId: '2',
-                        parCodigo: 'T43175',
-                        fabricanteFab: {
-                            fabId: 34,
-                            fabNombre: 'GATES'
-                        },
-                        parNombre: {
-                            nombreNom: 'TENSOR TIEMPO',
-                            nombreIng: 'TIMING TENSOR',
-                            nombreNomt: 'TENSOR DE LOS TIEMPOS',
-                            nombreGru: {
-                                grupoNom: 'MOTOR',
-                                grupoPad: '',
-                                grupoDes: ''
-                            }
-                        },
-                        parGrupo: '',
-                        parUpc: '0587878774',
-                        parSku: 'GATES-T43175',
-                        parLargo: '10.10',
-                        parAncho: '6.70',
-                        parEspesor: '1.60',
-                        parPeso: '0.40',
-                        parOripar: 'JAPON',
-                        parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-                        parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-                        parKit: '0', //falta imagenes
-                        kit: []
-
-                    }, {
-                        parId: '3',
-                        parCodigo: 'TCK312',
-                        fabricanteFab: {
-                            fabId: 34,
-                            fabNombre: 'GATES'
-                        },
-                        parNombre: {
-                            nombreNom: 'KIT CORREA TIEMPO',
-                            nombreIng: 'TIMING BELT KIT',
-                            nombreNomt: 'KIT DE CORREA DE TIEMPOS',
-                            nombreGru: {
-                                grupoNom: 'MOTOR',
-                                grupoPad: '',
-                                grupoDes: ''
-                            }
-                        },
-                        parGrupo: '',
-                        parUpc: '',
-                        parSku: 'GATES-TCK312',
-                        parLargo: '13.70',
-                        parAncho: '7.00',
-                        parEspesor: '2.80',
-                        parPeso: '1.50',
-                        parOripar: 'Multinación',
-                        parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
-                        parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
-                        parKit: '1', //falta imagenes
-                        kit: [{
-                            id: 1,
-                            parKitId: 'TCK312',
-                            parId: 'T43175'
-                        }, {
-                            id: 2,
-                            parKitId: 'TCK312',
-                            parId: 'T312'
-                        }, ]
-                    }]
+        //Populate Multiselect 
+        partesc.populateMultiselect = function (parteAExcluir) {
+            var partes = [];
+            var list = [];
+            var parteAExcluir = parteAExcluir;
+            $scope.PartesPromise = partesc.getAllPartes()
+                .then(function (response) {
+                    partes = response;
+                    partes.forEach(function (element) {
+                        if(element.parId != parteAExcluir){
+                            list.push({
+                                id: element.parId,
+                                label: element.parCodigo
+                            })
+                        }
+                    }, this);
+                    partesc.listaPartes = list;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        }
+        // Get a specific Parte
+        partesc.getParte = function (id) {
+            var url = endpointApiURL.url + "/fabricante/" + id; //cambiar a partes despues
+            return $http.get(url)
+                .then(function (response) {
+                    // Dummy data to test
+                    var dummyPartes = dummyData;
                     partesc.parte = dummyPartes[id - 1];
                     return true;
                     //end of dummy data
@@ -503,19 +453,19 @@ angular
         // This var lets to know if the user hits editar, eliminar or ver
         partesc.selectedItemAction = '';
 
-partesc.cancelAndBackFromEdit = function(){
-    partesc.editing = false;
-    partesc.loadingEditing = false;
-    partesc.selectedItem = {};
+        partesc.cancelAndBackFromEdit = function () {
+            partesc.editing = false;
+            partesc.loadingEditing = false;
+            partesc.selectedItem = {};
 
-}
+        }
 
-  // Get list of countrys
-    var paises = countryService.getCountrys();
-    paises.push("Multinación");      
-    partesc.paises = paises;
+        // Get list of countrys
+        var paises = countryService.getCountrys();
+        paises.push("Multinación");
+        partesc.paises = paises;
 
-// *************** MODAL OPERATIONS *********************************
+        // *************** MODAL OPERATIONS *********************************
 
 
         // For Edit operations using modals
@@ -534,12 +484,10 @@ partesc.cancelAndBackFromEdit = function(){
             // Setup the data that will be passed to modal
             var parte = parte;
             parte.action = action; // add the action that the modal will do
-            parte.getFabricantes = function(){
-               var prueba =  partesc.getFabricantes();
-                 console.log('Llamaron a obtener fabricantes');
+            parte.getFabricantes = function () {
+                var prueba = partesc.getFabricantes();
+                console.log('Llamaron a obtener fabricantes');
             }
-
-
 
             var modal = $uibModal.open({
                 animation: partesc.animationsEnabled,
@@ -568,6 +516,23 @@ partesc.cancelAndBackFromEdit = function(){
                 //$log.info('Modal dismissed at: ' + new Date());
             })
         }
+
+
+        //***************** MULTI SELECT  */
+        partesc.example1model = [];
+        partesc.multiselectConfig = {
+            enableSearch: true,
+            scrollable: true,
+            styleActive: true
+        };
+        partesc.translatedText = {
+            buttonDefaultText: 'Seleccione Partes',
+            searchPlaceholder: 'Buscar...',
+            checkAll: 'Seleccionar todos',
+            uncheckAll: 'Desmarcar todos',
+            dynamicButtonTextSuffix : 'Parte(s) Seleccionada(s)'
+        }
+
 
         // Crear:
 
