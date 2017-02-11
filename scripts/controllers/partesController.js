@@ -14,6 +14,7 @@ angular
         partesc.searchText = "";
         partesc.editing = false;
         partesc.loadingEditing = false;
+        partesc.multiselectData = [];
         //Vacío por ahora
         partesc.selectedItem = {};
         //
@@ -412,7 +413,7 @@ angular
                 .then(function (response) {
                     partes = response;
                     partes.forEach(function (element) {
-                        if(element.parId != parteAExcluir){
+                        if (element.parId != parteAExcluir) {
                             list.push({
                                 id: element.parId,
                                 label: element.parCodigo
@@ -420,6 +421,22 @@ angular
                         }
                     }, this);
                     partesc.listaPartes = list;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+            // Code for mark the parts that haves a Kit
+            $scope.PartesPromise = partesc.getParte(parteAExcluir)
+                .then(function (response) {
+                    partesc.parte.kit.forEach(function (parte) {
+                        partesc.multiselectData.push({
+                            id: String(parte.id)
+                        })
+                    }, this);
+                    console.log(partesc.multiselectData);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -518,8 +535,8 @@ angular
         }
 
 
-        //***************** MULTI SELECT  */
-        partesc.example1model = [];
+        //***************** MULTI SELECT  ********************/
+
         partesc.multiselectConfig = {
             enableSearch: true,
             scrollable: true,
@@ -530,7 +547,7 @@ angular
             searchPlaceholder: 'Buscar...',
             checkAll: 'Seleccionar todos',
             uncheckAll: 'Desmarcar todos',
-            dynamicButtonTextSuffix : 'Parte(s) Seleccionada(s)'
+            dynamicButtonTextSuffix: 'Parte(s) Seleccionada(s)'
         }
 
 
