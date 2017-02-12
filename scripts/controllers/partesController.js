@@ -436,7 +436,7 @@ angular
                             id: String(parte.id)
                         })
                     }, this);
-                    console.log(partesc.multiselectData);
+                    //console.log(partesc.multiselectData);
                 })
                 .catch(function (error) {
                     console.log(error);
