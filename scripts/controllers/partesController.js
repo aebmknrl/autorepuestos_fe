@@ -14,7 +14,8 @@ angular
         partesc.searchText = "";
         partesc.editing = false;
         partesc.loadingEditing = false;
-        partesc.multiselectData = [];
+        partesc.multiselectData = []; // For edit kits
+        partesc.multiselectDataNew = [] // For new items
         //Vacío por ahora
         partesc.selectedItem = {};
         //
@@ -420,6 +421,7 @@ angular
                             })
                         }
                     }, this);
+
                     partesc.listaPartes = list;
                 })
                 .catch(function (error) {
@@ -428,23 +430,28 @@ angular
                         console.log('Error obteniendo datos: ' + error.data.error);
                     }
                 });
-            // Code for mark the parts that haves a Kit
-            $scope.PartesPromise = partesc.getParte(parteAExcluir)
-                .then(function (response) {
-                    partesc.parte.kit.forEach(function (parte) {
-                        partesc.multiselectData.push({
-                            id: String(parte.id)
-                        })
-                    }, this);
-                    //console.log(partesc.multiselectData);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    if (error.status == '412') {
-                        console.log('Error obteniendo datos: ' + error.data.error);
-                    }
-                });
+            if (parteAExcluir != undefined) {
+                // Code for mark the parts that haves a Kit
+                $scope.PartesPromise = partesc.getParte(parteAExcluir)
+                    .then(function (response) {
+                        partesc.parte.kit.forEach(function (parte) {
+                            partesc.multiselectData.push({
+                                id: String(parte.id)
+                            })
+                        }, this);
+                        //console.log(partesc.multiselectData);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        if (error.status == '412') {
+                            console.log('Error obteniendo datos: ' + error.data.error);
+                        }
+                    });
+            }
+
         }
+
+
         // Get a specific Parte
         partesc.getParte = function (id) {
             var url = endpointApiURL.url + "/fabricante/" + id; //cambiar a partes despues

@@ -9,7 +9,7 @@
         <div class="row button-margin">
             <div class="col-md-12">
                 <button class="btn btn-primary" type="button" ng-disabled="(partesc.selectedItemAction == 'edit') || (partesc.selectedItemAction == 'view')"
-                    ng-click="" ng-model="partesc.isAddNewParte" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                    ng-click="partesc.isAddNewParte ? partesc.populateMultiselect() : ''" ng-model="partesc.isAddNewParte" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" >
                     <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
                     </button>
             </div>
@@ -116,9 +116,21 @@
                         <label for="parObservacion">Observaciones</label>
                         <textarea rows="" cols="" name="parObservacion" class="form-control" ng-model="partesc.newItem.parObservacion" placeholder="Observaciones"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="parKit">Esta parte es un Kit</label><br>
-                        <input type="checkbox" name="parKit" ng-model="partesc.newItem.parKit">
+                    <div class="form-group" ng-class="newParteForm.kitParts.$invalid ? 'has-error' : ''">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="parKit">Esta parte es un Kit</label><br>
+                                <input type="checkbox" name="parKit" ng-model="partesc.newItem.parKit">
+                            </div>
+                            <div class="col-md-10" ng-if="partesc.newItem.parKit">
+                                <label>Componentes del Kit:</label><br>
+                                <ng-dropdown-multiselect name="kitParts" options="partesc.listaPartes" ng-model="partesc.multiselectDataNew" selected-model="partesc.multiselectDataNew" extra-settings="partesc.multiselectConfig"
+                                    translation-texts="partesc.translatedText" checkboxes="true" ng-customdir="{{partesc.multiselectDataNew.length}}"></ng-dropdown-multiselect>
+                            </div>
+                        </div>
+                        <div class="help-block" ng-messages="newParteForm.kitParts.$error" ng-if="newParteForm.kitParts.$error">
+                            <p ng-message="customdir">Debe elejir al menos 1 parte para el Kit.</p>
+                        </div>
                     </div>
                     <!--
 
