@@ -33,7 +33,15 @@
                 <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'proveedores']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='proveedores'>Proveedores</a></li>
                 <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'modelos']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='modelos'>Modelos</a></li>
                 <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'fabricantes']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='fabricantes'>Fabricantes</a></li>
-                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'partes']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='partes'>Partes</a></li>
+                <li class="dropdown" uib-dropdown ng-class="{true:'active', false: 'none'}[$state.current.name == 'partes']" ng-if="userrole=='ROLE_ADMIN'">
+                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Partes <span class="caret"></span></a>
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li ><a ui-sref='partes'>Agregar/Listar/Editar</a></li>
+                        <li><a href="#">Agregar/Listar Nombres</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Agregar/Listar Grupos</a></li>
+                    </ul>
+                </li>
                 <!--
                 <li><a href="#">Link</a></li>
                 <li dropdown>
@@ -90,7 +98,7 @@
     <script type="text/javascript" src="scripts/vendor/angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js"></script>
     <script type="text/javascript" src="scripts/app.js"></script>
     <script type="text/javascript" src="scripts/directives/onEnterDirective.js"></script>
-    <script type="text/javascript" src="scripts/directives/customValidationsDirectives.js"></script>    
+    <script type="text/javascript" src="scripts/directives/customValidationsDirectives.js"></script>
     <script type="text/javascript" src="scripts/filters/rangeFilter.js"></script>
     <script type="text/javascript" src="scripts/services/storageService.js"></script>
     <script type="text/javascript" src="scripts/services/logoutService.js"></script>
