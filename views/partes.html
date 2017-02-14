@@ -435,7 +435,7 @@
                     <b>Componentes del Kit:</b> {{$ctrl.items.kit == '' ? 'N/A':''}}
                     <!-- $ctrl.items.kit -->
                     <ul ng-class="$ctrl.items.kit == '' ? 'item-no-visible' : 'item-visible'" class="list-inside">
-                        <li ng-repeat="kitComponent in $ctrl.items.kit">{{kitComponent.parId}}</li>
+                        <li ng-repeat="kitComponent in $ctrl.items.kit">{{kitComponent.parte.parCodigo}}</li>
                     </ul>
                 </li>
                 <!--

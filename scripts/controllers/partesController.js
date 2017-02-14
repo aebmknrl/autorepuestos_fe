@@ -113,13 +113,49 @@ angular
             parKit: '1', //falta imagenes
             kit: [{
                 id: 1,
-                parKitId: 'TCK312',
-                parId: 'T43175'
+                parKitId: 3, //TCK312
+                parte: {
+                    parId: 2,
+                    parCodigo: 'T43175'
+                }
             }, {
                 id: 2,
-                parKitId: 'TCK312',
-                parId: 'T312'
+                parKitId: 3, //TCK312
+                parte: {
+                    parId: 1,
+                    parCodigo: 'T312'
+                }
             }, ]
+        }, {
+            parId: '4',
+            parCodigo: 'T444444',
+            fabricanteFab: {
+                fabId: 34,
+                fabNombre: 'GATES'
+            },
+            parNombre: {
+                nombreNom: 'TENSOR TIEMPO',
+                nombreIng: 'TIMING TENSOR',
+                nombreNomt: 'TENSOR DE LOS TIEMPOS',
+                nombreGru: {
+                    grupoNom: 'MOTOR',
+                    grupoPad: '',
+                    grupoDes: ''
+                }
+            },
+            parGrupo: '',
+            parUpc: '044444444',
+            parSku: 'GATES-T444444',
+            parLargo: '10.10',
+            parAncho: '6.70',
+            parEspesor: '1.60',
+            parPeso: '0.40',
+            parOripar: 'JAPON',
+            parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
+            parObservacion: 'POWERGRIP PREMIUM Equipo Original',
+            parKit: '0', //falta imagenes
+            kit: []
+
         }];
 
         partesc.newItem = {
@@ -436,7 +472,7 @@ angular
                     .then(function (response) {
                         partesc.parte.kit.forEach(function (parte) {
                             partesc.multiselectData.push({
-                                id: String(parte.id)
+                                id: String(parte.parte.parId)
                             })
                         }, this);
                         //console.log(partesc.multiselectData);
