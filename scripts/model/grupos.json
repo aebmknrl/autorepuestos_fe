@@ -1,0 +1,52 @@
+[
+  {
+    id : 1,
+    grupoNombre : 'Grupo 1',
+    descripcion: 'Descripcion 1',
+    grupoPadre: null
+  },
+   {
+    id : 2,
+    grupoNombre : 'Grupo 2',
+    descripcion: 'Descripcion 2',
+    grupoPadre: null
+  },
+    {
+    id : 3,
+    grupoNombre : 'Grupo 3',
+    descripcion: 'Descripcion 3',
+    grupoPadre: {
+          id : 1,
+          grupoNombre : 'Grupo 1',
+          descripcion: 'Descripcion 1',
+          grupoPadre: null
+    }
+  },
+    {
+    id : 4,
+    grupoNombre : 'Grupo 4',
+    descripcion: 'Descripcion 4',
+    grupoPadre: {
+          id : 1,
+          grupoNombre : 'Grupo 1',
+          descripcion: 'Descripcion 1',
+          grupoPadre: null
+    }
+  },
+    {
+    id : 5,
+    grupoNombre : 'Grupo 5',
+    descripcion: 'Descripcion 5',
+    grupoPadre: {
+          id : 4,
+          grupoNombre : 'Grupo 4',
+          descripcion: 'Descripcion 4',
+          grupoPadre: {
+                id : 1,
+                grupoNombre : 'Grupo 1',
+                descripcion: 'Descripcion 1',
+                grupoPadre: null
+          }
+    }
+  }
+  ]

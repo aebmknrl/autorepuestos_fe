@@ -1,0 +1,172 @@
+<toast></toast>
+<div class="container" ng-controller="gruposController as gruposc" ng-cloak cg-busy="{promise:GruposPromise,message:'Cargando...',templateUrl:'scripts/vendor/angular-busy/angular-busy.html'}">
+    <div ng-class="gruposc.editing == true  ? 'item-no-visible' : 'item-visible'">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Lista de Grupos</h2>
+            </div>
+        </div>
+        <div class="row button-margin">
+            <div class="col-md-12">
+                <button class="btn btn-primary" type="button" ng-disabled="(gruposc.selectedItemAction == 'edit') || (gruposc.selectedItemAction == 'view')"
+                    ng-click="gruposc.isAddNewGrupo ? gruposc.populateMultiselect() : ''" ng-model="gruposc.isAddNewGrupo" uib-btn-checkbox
+                    btn-checkbox-true="true" btn-checkbox-false="false">
+                    <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
+                    </button>
+            </div>
+        </div>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[gruposc.isAddNewGrupo==true]">
+            <div class="col-md-12">
+                <form name="newGrupoForm" ng-submit="" novalidate>
+                    <div ng-class="{ 'has-error': newGrupoForm.grupoNombre.$touched && newGrupoForm.grupoNombre.$invalid}" class="form-group">
+                        <label for="grupoNombre">Nombre del Grupo</label>
+                        <input type="text" name="grupoNombre" class="form-control" ng-model="gruposc.newItem.grupoNombre" placeholder="Nombre del Grupo"
+                            required/>
+                        <div class="help-block" ng-messages="newGrupoForm.grupoNombre.$error" ng-if="newGrupoForm.grupoNombre.$touched">
+                            <p ng-message="required">"Nombre del Grupo" es requerido.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="grupoPadre">Grupo Padre</label>
+                        <div class="input-group">
+                            <select id="GrupoSelector" class="form-control input-group" name="grupoPadre" ng-model="gruposc.newItem.grupoPadre" ng-options="grupo as grupo.grupoPadre for grupo in gruposc.grupos track by grupos.id"
+                                required>
+                                <option value="">--Seleccione Grupo Padre--</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="gruposc.getGrupos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripcion</label>
+                        <textarea rows="" cols="" name="descripcion" class="form-control" ng-model="gruposc.newItem.descripcion" placeholder="Descripcion"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" ng-click="gruposc.addGrupo(gruposc.newItem.grupoNombre,gruposc.newItem.grupoPadre,gruposc.newItem.descripcion)"
+                            ng-disabled="(newGrupoForm.$invalid) || (gruposc.selectedItemAction == 'edit') || (gruposc.selectedItemAction == 'view')">
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            <span class="button-text">Agregar</span>
+                            </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar en todos los Grupos..." ng-model="gruposc.searchText" on-enter="gruposc.getGrupos(QtyPagesSelected,1,gruposc.searchText)">
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-class="{true:'item-visible', false: 'item-no-visible'}[gruposc.searchText !='']" ng-click="gruposc.searchText=''">
+		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-click="gruposc.getGrupos(QtyPagesSelected,1,gruposc.searchText)">
+		        	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-4">
+                <input type="text" class="form-control" id="txtFilter" placeholder="Filtro" ng-model="gruposc.filter">
+            </div>
+        </div>
+        <div class="row">
+            <hr>
+        </div>
+        <div class="row">
+            <table class="table table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[gruposc.orderBy=='id']" ng-click="gruposc.changeOrderByOrDirection('id')"><span ng-show="gruposc.orderBy=='id'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[gruposc.orderDirection==false && gruposc.orderBy=='id']"></span>ID</span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[gruposc.orderBy=='grupoNombre']" ng-click="gruposc.changeOrderByOrDirection('grupoNombre')"><span ng-show="gruposc.orderBy=='grupoNombre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[gruposc.orderDirection==false && gruposc.orderBy=='grupoNombre']"></span>Nombre
+                            del Grupo</span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[gruposc.orderBy=='grupoPadre']" ng-click="gruposc.changeOrderByOrDirection('grupoPadre')"><span ng-show="gruposc.orderBy=='grupoPadre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[gruposc.orderDirection==false && gruposc.orderBy=='grupoPadre']"></span>Grupo
+                            Padre
+                            </span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[gruposc.orderBy=='descripcion']" ng-click="gruposc.changeOrderByOrDirection('descripcion')"><span ng-show="gruposc.orderBy=='grupoPadre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[gruposc.orderDirection==false && gruposc.orderBy=='descripcion']"></span>Descripción</span>
+                        </th>
+                        <th><span class="btn">Acción</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="grupo in gruposc.grupos | orderObjectBy: gruposc.orderBy : gruposc.orderDirection | filter : gruposc.filter">
+                        <td class="">{{grupo.id}}</td>
+                        <td class="">{{grupo.grupoNombre}}</td>
+                        <td class="">{{grupo.grupoPadre}}</td>
+                        <td class="">{{grupo.descripcion}}</td>
+                        <td class="action-buttons-td">
+                            <button type="button" class="btn btn-primary" ng-model="gruposc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="grupo.id"
+                                btn-checkbox-false="0" ng-click="gruposc.copyRowData(grupo.grupoNombre,grupo.grupoPadre,grupo.descripcion)">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                <span class="button-text">Editar</span>
+						    </button>
+                            <button type="button" class="btn btn-danger" ng-disabled="gruposc.selectedItem.id == grupo.id" ng-click="gruposc.removeGrupo(grupo.id)"
+                                confirm="¿Está seguro de eliminar el registro?. Esta acción no se puede deshacer." confirm-title="Atención"
+                                confirm-ok="Si" confirm-cancel="No">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                <span class="button-text">Eliminar</span>
+						    </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end ng-class="{true:'row-visible', false: 'row-no-visible'}[gruposc.selectedItem.id == grupo.id]">
+                        <td>
+                            <strong>Editando Grupo ID: {{grupo.id}}</strong>
+                        </td>
+                        <td>
+                            <form name="updategrupoNombreForm" ng-submit="" novalidate>
+                                <div ng-class="{ 'has-error': updategrupoNombreForm.grupoNombre.$touched && updategrupoNombreForm.grupoNombre.$invalid}">
+                                    <input type="text" name="grupoNombre" class="form-control" ng-model="gruposc.selectedItem.grupoNombre" placeholder={{grupo.grupoNombre}}
+                                        required/>
+                                    <div class="help-block" ng-messages="updategrupoNombreForm.grupoNombre.$error" ng-if="updategrupoNombreForm.grupoNombre.$touched">
+                                        <p ng-message="required">"Nombre del Grupo" es requerido.</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <select id="GrupoSelector" class="form-control input-group" name="grupoPadre" ng-model="gruposc.selectedItem.grupoPadre"
+                                ng-options="grupo as grupo.grupoPadre for grupo in gruposc.grupos track by grupos.id" required>
+                        </select>
+                        </td>
+                        <td>
+                            <input type="text" name="descripcion" class="form-control" ng-model="gruposc.selectedItem.descripcion" placeholder={{grupo.descripcion}}/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" ng-click="gruposc.updateGrupo(grupo.id,modelosc.selectedItem.grupoNombre,gruposc.selectedItem.grupoPadre,gruposc.selectedItem.descripcion)"
+                                ng-disabled="updategrupoNombreForm.$invalid || updategrupoNombreForm.$invalid">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                                <span class="button-text">Guardar</span>
+				            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+        <div class="row" ng-cloak ng-show="gruposc.allLoad">
+            <form class="form-inline">
+                <div class="form-group">
+                    <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="gruposc.ChangeQtyPagesTables(QtyPagesSelected,gruposc.searchText)"
+                        ng-init="QtyPagesSelected=QtyPageTables">
+                        <option value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=50>50</option>
+                        <option value=100>100</option>
+                        <option value=Todos>Todos</option>
+				    </select>
+                </div>
+                <div class="form-group">
+                    <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="gruposc.totalGrupos"
+                        ng-model="gruposc.CurrentPage" ng-change="gruposc.setPage(gruposc.CurrentPage)"></ul>
+                </div>
+                <div class="form-group pull-right actual-range" ng-cloak>
+                    {{gruposc.actualRange}}
+                </div>
+            </form>
+        </div>
+    </div>
