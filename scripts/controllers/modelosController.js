@@ -164,7 +164,7 @@ angular
             //console.log('The parameters send are: URL=' + url);
             $scope.ModelosPromise = $http.get(url)
                 .then(function (response) {
-                    //console.log(response.data.modelos);
+                    //console.log(response.data);
                     modelosc.allLoad = false;
                     modelosc.CurrentPage = page;
                     modelosc.modelos = response.data.modelos;

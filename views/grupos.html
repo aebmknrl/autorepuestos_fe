@@ -8,8 +8,7 @@
         </div>
         <div class="row button-margin">
             <div class="col-md-12">
-                <button class="btn btn-primary" type="button" ng-disabled="gruposc.selectedItem.id"
-                    ng-model="gruposc.isAddNewGrupo" uib-btn-checkbox
+                <button class="btn btn-primary" type="button" ng-disabled="gruposc.selectedItem.id" ng-model="gruposc.isAddNewGrupo" uib-btn-checkbox
                     btn-checkbox-true="true" btn-checkbox-false="false">
                     <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
                     </button>
@@ -29,8 +28,7 @@
                     <div class="form-group">
                         <label for="grupoPadre">Grupo Padre</label>
                         <div class="input-group">
-                            <select id="GrupoSelector" class="form-control input-group" name="grupoPadre" ng-model="gruposc.newItem.grupoPadre" ng-options="grupo as grupo.label for grupo in gruposc.listaGrupos track by grupo.id"
-                                required>
+                            <select id="GrupoSelector" class="form-control input-group" name="grupoPadre" ng-model="gruposc.newItem.grupoPadre" ng-options="grupo as grupo.label for grupo in gruposc.listaGrupos track by grupo.id">
                                 <option value="">--Seleccione Grupo Padre--</option>
                             </select>
                             <span class="input-group-btn">
@@ -130,8 +128,9 @@
                         </td>
                         <td>
                             <select id="GrupoSelector" class="form-control input-group" name="grupoPadre" ng-model="gruposc.selectedItem.grupoPadre"
-                                ng-options="gp as gp.label for gp in gruposc.getGruposPadreForItem(grupo.id) track by gp.id" required>
-                                <option value="">--Seleccione Grupo Padre--</option>
+                                ng-options="gp as gp.label for gp in gruposc.getGruposPadreForItem(grupo.id) track by gp.id"
+                                required>
+                                <option value="">--Sin Grupo Padre--</option>
                         </select>
                         </td>
                         <td>
@@ -170,5 +169,31 @@
                 </div>
             </form>
         </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <h2>Vista de Jerarquía de Grupos</h2>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <ul class="tree">
+                <li>
+                    <a>Grupos</a>
+                    <ul>
+                        <li ng-repeat="(key, value) in gruposc.gruposHierarchy"><a>{{key == 'undefined'? 'Sin grupo Padre' : key}}</a>
+                            <ul>
+                                <li ng-repeat="grupo in value"><a>{{grupo.grupoNombre}}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4"></div>
     </div>
 </div>

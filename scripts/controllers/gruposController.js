@@ -48,12 +48,17 @@ angular
                     gruposc.getGrupos($scope.QtyPagesSelected, gruposc.CurrentPage, gruposc.searchText);
                     ngToast.create({
                         className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.modid + '</strong>'
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.id + '</strong>'
                     });
                     gruposc.selectedItem.id = 0;
                 })
                 .catch(function (error) {
                     //console.log(error);
+                    if (error.status == '500') {
+                         toastMsgService.showMsg('Error: no se puede eliminar un registro asociado a otro elemento. Compruebe que no exista relación entre este elemento con otro e intente nuevamente.','danger');
+                         //console.log('Error 500: ' + error.data.error);
+                         return;
+                     }
                     toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
 
                 });
@@ -80,12 +85,12 @@ angular
             $scope.GruposPromise = $http.post(
                     url, {
                         "nombre": grupoNombre,
-                        "grupoPadre": grupoPadre,
+                        "grupoPadre": grupoPadre.id,
                         "descripcion": descripcion
                     }
                 )
                 .then(function (response) {
-                    console.log(response.data.grupos);
+                    //console.log(response.data.grupos);
                     gruposc.getGrupos($scope.QtyPagesSelected, gruposc.CurrentPage, gruposc.searchText);
                     ngToast.create({
                         className: 'info',
@@ -93,8 +98,8 @@ angular
                     });
                     gruposc.selectedItem.id = 0;
                     gruposc.newItem = {};
-                    $scope.newGrupoForm.nombre.$touched = false;
-                    $scope.newGrupoForm.marca.$touched = false;
+                    $scope.newGrupoForm.grupoNombre.$touched = false;
+                    $scope.newGrupoForm.grupoPadre.$touched = false;
                     gruposc.isAddNewGrupo = false;
                 })
                 .catch(function (error) {
@@ -109,6 +114,11 @@ angular
         gruposc.updateGrupo = function (id, grupoNombre, grupoPadre, descripcion) {
             if (!id || !grupoNombre) {
                 return false;
+            }
+            if (typeof grupoPadre !== 'undefined') {
+                grupoPadre = grupoPadre.id;
+            } else {
+                grupoPadre = null;
             }
             url = endpointApiURL.url + "/grupo/edit/" + id;
             $scope.GruposPromise = $http.post(
@@ -171,6 +181,16 @@ angular
                     gruposc.allLoad = true;
                     // Refresh select Grupo Padre
                     gruposc.populateGrupoPadreSelect();
+
+
+                    // To show Grupos by hierarchy
+                    gruposc.gruposHierarchy = _.groupBy(gruposc.grupos, function (b) {
+                        if (b.grupoPadre != null) {
+                            return b.grupoPadre.grupoNombre
+                        }
+                    })
+
+
                 })
                 .catch(function (error) {
                     console.log(error);
