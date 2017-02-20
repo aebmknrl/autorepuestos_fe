@@ -55,10 +55,10 @@ angular
                 .catch(function (error) {
                     //console.log(error);
                     if (error.status == '500') {
-                         toastMsgService.showMsg('Error: no se puede eliminar un registro asociado a otro elemento. Compruebe que no exista relación entre este elemento con otro e intente nuevamente.','danger');
-                         //console.log('Error 500: ' + error.data.error);
-                         return;
-                     }
+                        toastMsgService.showMsg('Error: no se puede eliminar un registro asociado a otro elemento. Compruebe que no exista relación entre este elemento con otro e intente nuevamente.', 'danger');
+                        //console.log('Error 500: ' + error.data.error);
+                        return;
+                    }
                     toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
 
                 });
@@ -80,12 +80,19 @@ angular
 
         // Add item
         gruposc.addGrupo = function (grupoNombre, grupoPadre, descripcion) {
-
+            if (!grupoNombre) {
+                return false;
+            }
+            if (typeof grupoPadre !== 'undefined') {
+                grupoPadre = grupoPadre.id;
+            } else {
+                grupoPadre = null;
+            }
             url = endpointApiURL.url + "/grupo/add";
             $scope.GruposPromise = $http.post(
                     url, {
                         "nombre": grupoNombre,
-                        "grupoPadre": grupoPadre.id,
+                        "grupoPadre": grupoPadre,
                         "descripcion": descripcion
                     }
                 )
@@ -103,9 +110,14 @@ angular
                     gruposc.isAddNewGrupo = false;
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    //console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                     if (error.status == '409') {
+                        toastMsgService.showMsg('Error: El grupo que desea crear ya existe con éste nombre.', 'danger');
+                        //console.log('Error 500: ' + error.data.error);
+                        return;
                     }
                 });
         }

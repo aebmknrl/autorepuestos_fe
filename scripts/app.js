@@ -78,13 +78,20 @@ angular
                     requiresLogin: true
                 }
             })
+            .state('partesNombres', {
+                url: '/partesNombres',
+                templateUrl: 'views/partesNombres.html',
+                data: {
+                    requiresLogin: true
+                }
+            }) 
             .state('grupos', {
                 url: '/grupos',
                 templateUrl: 'views/grupos.html',
                 data: {
                     requiresLogin: true
                 }
-            })            
+            })    
             .state('logout', {
                 url: '/logout',
                 templateUrl: 'views/logout.html',

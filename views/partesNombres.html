@@ -1,0 +1,191 @@
+<toast></toast>
+<div class="container" ng-controller="pnombresController as pnombresc" ng-cloak cg-busy="{promise:pnombresPromise,message:'Cargando...',templateUrl:'scripts/vendor/angular-busy/angular-busy.html'}">
+    <div ng-class="pnombresc.editing == true  ? 'item-no-visible' : 'item-visible'">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Lista de Nombres de Partes</h2>
+            </div>
+        </div>
+        <div class="row button-margin">
+            <div class="col-md-12">
+                <button class="btn btn-primary" type="button" ng-disabled="pnombresc.selectedItem.id" ng-model="pnombresc.isAddNewPartesNombre" uib-btn-checkbox
+                    btn-checkbox-true="true" btn-checkbox-false="false">
+                    <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
+                    </button>
+            </div>
+        </div>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[pnombresc.isAddNewPartesNombre==true]">
+            <div class="col-md-12">
+                <form name="newPnombreForm" ng-submit="" novalidate>
+                    <div ng-class="{ 'has-error': newPnombreForm.parNombre.$touched && newPnombreForm.parNombre.$invalid}" class="form-group">
+                        <label for="parNombre">Nombre</label>
+                        <input type="text" name="parNombre" class="form-control" ng-model="pnombresc.newItem.parNombre" placeholder="Nombre"
+                            required/>
+                        <div class="help-block" ng-messages="newPnombreForm.parNombre.$error" ng-if="newPnombreForm.parNombre.$touched">
+                            <p ng-message="required">"Nombre" es requerido.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="parNombreIngles">Nombre Inglés</label>
+                        <input type="text" name="parNombreIngles" class="form-control" ng-model="pnombresc.newItem.parNombreIngles" placeholder="Nombre Inglés"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="parNombreOtros">Nombre Tropical o Sinónimos</label>
+                        <textarea rows="" cols="" name="parNombreOtros" class="form-control" ng-model="pnombresc.newItem.parNombreOtros" placeholder="Nombre Tropical"></textarea>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': newPnombreForm.parGrupoId.$touched && newPnombreForm.parGrupoId.$invalid}">
+                        <label for="parGrupoId">Grupo</label>
+                        <div class="input-group">
+                            <select id="grupoSelector" class="form-control input-group" name="parGrupoId" ng-model="pnombresc.newItem.parGrupoId" ng-options="grupo as grupo.grupoNombre for grupos in pnombresc.grupos track by grupos.id">
+                                <option value="">--Seleccione Grupo--</option>
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="pnombresc.getGrupos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" ng-click="pnombresc.addNombre(pnombresc.newItem.parNombre,pnombresc.newItem.parNombreIngles,pnombresc.newItem.parNombreOtros,pnombresc.newItem.parGrupoId)"
+                            ng-disabled="(newPnombreForm.$invalid) || (pnombresc.selectedItemAction == 'edit') || (pnombresc.selectedItemAction == 'view')">
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            <span class="button-text">Agregar</span>
+                            </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar en todos los pnombres..." ng-model="pnombresc.searchText" on-enter="pnombresc.getpnombres(QtyPagesSelected,1,pnombresc.searchText)">
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-class="{true:'item-visible', false: 'item-no-visible'}[pnombresc.searchText !='']" ng-click="pnombresc.searchText=''">
+		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-click="pnombresc.getpnombres(QtyPagesSelected,1,pnombresc.searchText)">
+		        	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-4">
+                <input type="text" class="form-control" id="txtFilter" placeholder="Filtro" ng-model="pnombresc.filter">
+            </div>
+        </div>
+        <div class="row">
+            <hr>
+        </div>
+        <div class="row">
+            <table class="table table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[pnombresc.orderBy=='id']" ng-click="pnombresc.changeOrderByOrDirection('id')"><span ng-show="pnombresc.orderBy=='id'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[pnombresc.orderDirection==false && pnombresc.orderBy=='id']"></span>ID</span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[pnombresc.orderBy=='pnombreNombre']" ng-click="pnombresc.changeOrderByOrDirection('pnombreNombre')"><span ng-show="pnombresc.orderBy=='pnombreNombre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[pnombresc.orderDirection==false && pnombresc.orderBy=='pnombreNombre']"></span>Nombre
+                            del pnombre</span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[pnombresc.orderBy=='pnombrePadre']" ng-click="pnombresc.changeOrderByOrDirection('pnombrePadre')"><span ng-show="pnombresc.orderBy=='pnombrePadre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[pnombresc.orderDirection==false && pnombresc.orderBy=='pnombrePadre']"></span>pnombre
+                            Padre
+                            </span>
+                        </th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[pnombresc.orderBy=='descripcion']" ng-click="pnombresc.changeOrderByOrDirection('descripcion')"><span ng-show="pnombresc.orderBy=='pnombrePadre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[pnombresc.orderDirection==false && pnombresc.orderBy=='descripcion']"></span>Descripción</span>
+                        </th>
+                        <th><span class="btn">Acción</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="pnombre in pnombresc.pnombres | orderObjectBy: pnombresc.orderBy : pnombresc.orderDirection | filter : pnombresc.filter">
+                        <td class="">{{pnombre.id}}</td>
+                        <td class="">{{pnombre.pnombreNombre}}</td>
+                        <td class="">{{pnombre.pnombrePadre == null ? 'N/A' : pnombre.pnombrePadre.pnombreNombre}}</td>
+                        <td class="">{{pnombre.descripcion}}</td>
+                        <td class="action-buttons-td">
+                            <button type="button" class="btn btn-primary" ng-model="pnombresc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="pnombre.id"
+                                btn-checkbox-false="0" ng-click="pnombresc.copyRowData(pnombre.pnombreNombre,pnombre.pnombrePadre,pnombre.descripcion); pnombresc.getpnombresPadreForItem(pnombre.id);">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                <span class="button-text">Editar</span>
+						    </button>
+                            <button type="button" class="btn btn-danger" ng-disabled="pnombresc.selectedItem.id == pnombre.id" ng-click="pnombresc.removepnombre(pnombre.id)"
+                                confirm="¿Está seguro de eliminar el registro?. Esta acción no se puede deshacer." confirm-title="Atención"
+                                confirm-ok="Si" confirm-cancel="No">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                <span class="button-text">Eliminar</span>
+						    </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end ng-class="{true:'row-visible', false: 'row-no-visible'}[pnombresc.selectedItem.id == pnombre.id]">
+                        <td>
+                            <strong>Editando pnombre ID: {{pnombre.id}}</strong>
+                        </td>
+                        <td>
+                            <form name="updatepnombreNombreForm" ng-submit="" novalidate>
+                                <div ng-class="{ 'has-error': updatepnombreNombreForm.pnombreNombre.$touched && updatepnombreNombreForm.pnombreNombre.$invalid}">
+                                    <input type="text" name="pnombreNombre" class="form-control" ng-model="pnombresc.selectedItem.pnombreNombre" placeholder={{pnombre.pnombreNombre}}
+                                        required/>
+                                    <div class="help-block" ng-messages="updatepnombreNombreForm.pnombreNombre.$error" ng-if="updatepnombreNombreForm.pnombreNombre.$touched">
+                                        <p ng-message="required">"Nombre del pnombre" es requerido.</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <select id="pnombreSelector" class="form-control input-group" name="pnombrePadre" ng-model="pnombresc.selectedItem.pnombrePadre"
+                                ng-options="gp as gp.label for gp in pnombresc.getpnombresPadreForItem(pnombre.id) track by gp.id"
+                                required>
+                                <option value="">--Sin pnombre Padre--</option>
+                        </select>
+                        </td>
+                        <td>
+                            <input type="text" name="descripcion" class="form-control" ng-model="pnombresc.selectedItem.descripcion" placeholder={{pnombre.descripcion}}/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" ng-click="pnombresc.updatepnombre(pnombre.id,pnombresc.selectedItem.pnombreNombre,pnombresc.selectedItem.pnombrePadre,pnombresc.selectedItem.descripcion)"
+                                ng-disabled="updatepnombreNombreForm.$invalid || updatepnombreNombreForm.$invalid">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
+                                <span class="button-text">Guardar</span>
+				            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+        <div class="row" ng-cloak ng-show="pnombresc.allLoad">
+            <form class="form-inline">
+                <div class="form-group">
+                    <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="pnombresc.ChangeQtyPagesTables(QtyPagesSelected,pnombresc.searchText)"
+                        ng-init="QtyPagesSelected=QtyPageTables">
+                        <option value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=50>50</option>
+                        <option value=100>100</option>
+                        <option value=Todos>Todos</option>
+				    </select>
+                </div>
+                <div class="form-group">
+                    <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="pnombresc.totalpnombres"
+                        ng-model="pnombresc.CurrentPage" ng-change="pnombresc.setPage(pnombresc.CurrentPage)"></ul>
+                </div>
+                <div class="form-group pull-right actual-range" ng-cloak>
+                    {{pnombresc.actualRange}}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
