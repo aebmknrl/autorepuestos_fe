@@ -46,11 +46,11 @@ angular
             pnombresc.getNombres(Qty, 1, searchText);
         }
         // Copy temporally item data for edit
-        pnombresc.copyRowData = function (parNombre, parNombreIngles, parNombreOtros, parGrupoId) {
+        pnombresc.copyRowData = function (parNombre, parNombreIngles, parNombreOtros, parGrupo) {
             pnombresc.selectedItem.parNombre = parNombre;
             pnombresc.selectedItem.parNombreIngles = parNombreIngles;
             pnombresc.selectedItem.parNombreOtros = parNombreOtros;
-            pnombresc.selectedItem.parGrupoId = parGrupoId;
+            pnombresc.selectedItem.parGrupo = parGrupo;
         }
 
         // Remove item
@@ -79,8 +79,8 @@ angular
         }
 
         // Add item
-        pnombresc.addNombre = function (parNombre, parNombreIngles, parNombreOtros, parGrupoId) {
-            if (!parNombre || !parGrupoId) {
+        pnombresc.addNombre = function (parNombre, parNombreIngles, parNombreOtros, parGrupo) {
+            if (!parNombre || !parGrupo) {
                 return false;
             }
             url = endpointApiURL.url + "/nombre_parte/add";
@@ -89,7 +89,7 @@ angular
                         "parNombre": parNombre,
                         "parNombreIngles": parNombreIngles,
                         "parNombreOtros": parNombreOtros,
-                        "parGrupo": parGrupoId.id
+                        "parGrupo": parGrupo.id
                     }
                 )
                 .then(function (response) {
@@ -102,16 +102,16 @@ angular
                     pnombresc.selectedItem.parNombreId = 0;
                     pnombresc.newItem = {};
                     $scope.newPnombreForm.parNombre.$touched = false;
-                    $scope.newPnombreForm.parGrupoId.$touched = false;
+                    $scope.newPnombreForm.parGrupo.$touched = false;
                     pnombresc.isAddNewPartesNombre = false;
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    //console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
                     }
                     if (error.status == '409') {
-                        toastMsgService.showMsg('Error: El nombre que desea crear ya existe.', 'danger');
+                        toastMsgService.showMsg('Error: El nombre de la parte ya esxiste para el grupo indicado.', 'danger');
                         //console.log('Error 500: ' + error.data.error);
                         return;
                     }
@@ -119,8 +119,8 @@ angular
         }
 
         // Update item
-        pnombresc.updateNombre = function (parNombreId, parNombre, parNombreIngles, parNombreOtros, parGrupoId) {
-            if (!parNombreId || !parNombre || !parGrupoId) {
+        pnombresc.updateNombre = function (parNombreId, parNombre, parNombreIngles, parNombreOtros, parGrupo) {
+            if (!parNombreId || !parNombre || !parGrupo) {
                 return false;
             }
             url = endpointApiURL.url + "/nombre_parte/edit/" + parNombreId;
@@ -129,7 +129,7 @@ angular
                         "parNombre": parNombre,
                         "parNombreIngles": parNombreIngles,
                         "parNombreOtros": parNombreOtros,
-                        "parGrupo": parGrupoId.id
+                        "parGrupo": parGrupo.id
                     }
                 )
                 .then(function (response) {
@@ -142,9 +142,14 @@ angular
                     pnombresc.selectedItem.parNombreId = 0;
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    //console.log(error);
                     if (error.status == '412') {
                         console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                    if (error.status == '409') {
+                        toastMsgService.showMsg('Error: El nombre de la parte ya esxiste para el grupo indicado.', 'danger');
+                        //console.log('Error 500: ' + error.data.error);
+                        return;
                     }
                 });
         }

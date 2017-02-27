@@ -33,10 +33,10 @@
                         <label for="parNombreOtros">Nombre Tropical o Sinónimos</label>
                         <textarea rows="" cols="" name="parNombreOtros" class="form-control" ng-model="pnombresc.newItem.parNombreOtros" placeholder="Nombre Tropical"></textarea>
                     </div>
-                    <div class="form-group" ng-class="{ 'has-error': newPnombreForm.parGrupoId.$touched && newPnombreForm.parGrupoId.$invalid}">
-                        <label for="parGrupoId">Grupo</label>
+                    <div class="form-group" ng-class="{ 'has-error': newPnombreForm.parGrupo.$touched && newPnombreForm.parGrupo.$invalid}">
+                        <label for="parGrupo">Grupo</label>
                         <div class="input-group">
-                            <select id="grupoSelector" class="form-control input-group" name="parGrupoId" ng-model="pnombresc.newItem.parGrupoId" ng-options="grupos as grupos.grupoNombre for grupos in pnombresc.grupos track by grupos.id"
+                            <select id="grupoSelector" class="form-control input-group" name="parGrupo" ng-model="pnombresc.newItem.parGrupo" ng-options="grupos as grupos.grupoNombre for grupos in pnombresc.grupos track by grupos.id"
                                 required>
                                 <option value="">--Seleccione Grupo--</option>
                             </select>
@@ -44,12 +44,12 @@
                                 <button class="btn btn-default" type="button" ng-click="pnombresc.getGrupos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
                             </span>
                         </div>
-                        <div class="help-block" ng-messages="newPnombreForm.parGrupoId.$error" ng-if="newPnombreForm.parGrupoId.$touched">
+                        <div class="help-block" ng-messages="newPnombreForm.parGrupo.$error" ng-if="newPnombreForm.parGrupo.$touched">
                             <p ng-message="required">"Grupo" es requerido.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-success" ng-click="pnombresc.addNombre(pnombresc.newItem.parNombre,pnombresc.newItem.parNombreIngles,pnombresc.newItem.parNombreOtros,pnombresc.newItem.parGrupoId)"
+                        <button type="button" class="btn btn-success" ng-click="pnombresc.addNombre(pnombresc.newItem.parNombre,pnombresc.newItem.parNombreIngles,pnombresc.newItem.parNombreOtros,pnombresc.newItem.parGrupo)"
                             ng-disabled="(newPnombreForm.$invalid) || (pnombresc.selectedItemAction == 'edit') || (pnombresc.selectedItemAction == 'view')">
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             <span class="button-text">Agregar</span>
@@ -97,7 +97,7 @@
                             Tropical
                             </span>
                         </th>
-                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[pnombresc.orderBy=='parGrupoId']" ng-click="pnombresc.changeOrderByOrDirection('parGrupoId')"><span ng-show="pnombresc.orderBy=='parGrupoId'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[pnombresc.orderDirection==false && pnombresc.orderBy=='parGrupoId']"></span>Grupo</span>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[pnombresc.orderBy=='parGrupo']" ng-click="pnombresc.changeOrderByOrDirection('parGrupo')"><span ng-show="pnombresc.orderBy=='parGrupo'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[pnombresc.orderDirection==false && pnombresc.orderBy=='parGrupo']"></span>Grupo</span>
                         </th>
                         <th><span class="btn">Acción</span></th>
                     </tr>
@@ -108,10 +108,10 @@
                         <td class="">{{nombre.parNombre}}</td>
                         <td class="">{{nombre.parNombreIngles}}</td>
                         <td class="">{{nombre.parNombreOtros}}</td>
-                        <td class="">{{nombre.parGrupoId}}</td>
+                        <td class="">{{nombre.parGrupo.grupoNombre}}</td>
                         <td class="action-buttons-td">
                             <button type="button" class="btn btn-primary" ng-model="pnombresc.selectedItem.parNombreId" uib-btn-checkbox btn-checkbox-true="nombre.parNombreId"
-                                btn-checkbox-false="0" ng-click="pnombresc.copyRowData(nombre.parNombre,nombre.parNombreIngles,nombre.parNombreOtros,nombre.parGrupoId);">
+                                btn-checkbox-false="0" ng-click="pnombresc.copyRowData(nombre.parNombre,nombre.parNombreIngles,nombre.parNombreOtros,nombre.parGrupo);">
                                 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 <span class="button-text">Editar</span>
 						    </button>
@@ -145,12 +145,12 @@
                             <input type="text" name="parNombreOtros" class="form-control" ng-model="pnombresc.selectedItem.parNombreOtros" placeholder={{nombre.parNombreOtros}}/>
                         </td>
                         <td>
-                            <select id="grupoSelector" class="form-control input-group" name="parGrupoId" ng-model="pnombresc.selectedItem.parGrupoId"
+                            <select id="grupoSelector" class="form-control input-group" name="parGrupo" ng-model="pnombresc.selectedItem.parGrupo"
                                 ng-options="grupos as grupos.grupoNombre for grupos in pnombresc.grupos track by grupos.id" required>
                             </select>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-success" ng-click="pnombresc.updateNombre(nombre.parNombreId,pnombresc.selectedItem.parNombre,pnombresc.selectedItem.parNombreIngles,pnombresc.selectedItem.parNombreOtros,pnombresc.selectedItem.parGrupoId)"
+                            <button type="button" class="btn btn-success" ng-click="pnombresc.updateNombre(nombre.parNombreId,pnombresc.selectedItem.parNombre,pnombresc.selectedItem.parNombreIngles,pnombresc.selectedItem.parNombreOtros,pnombresc.selectedItem.parGrupo)"
                                 ng-disabled="updateNombreForm.$invalid || updateNombreForm.$invalid">
                                 <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                                 <span class="button-text">Guardar</span>
