@@ -29,7 +29,7 @@
                         <label for="fabricanteFab">Fabricante</label>
                         <div class="input-group">
                             <select id="FabricanteSelector" class="form-control input-group" name="fabricanteFab" ng-model="partesc.newItem.fabricanteFab"
-                                ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricantes.fabId"
+                                ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricante.fabId"
                                 required>
                                 <option value="">--Seleccione Fabricante--</option>
                                 </select>
@@ -41,11 +41,11 @@
                             <p ng-message="required">"Fabricante" es requerido.</p>
                         </div>
                     </div>
-                    <div class="form-group" "{ 'has-error': newParteForm.parNombre.$touched && newParteForm.parNombre.$invalid}">
+                    <div class="form-group" ng-class="{ 'has-error': newParteForm.parNombre.$touched && newParteForm.parNombre.$invalid}">
                         <label for="parNombre">Nombre</label>
                         <div class="input-group">
-                            <select id="grupoSelector" class="form-control input-group" name="parNombre" ng-model="partesc.newItem.parNombre" ng-options="nombre as nombre.nombreNombre for nombre in partesc.nombres track by nombre.id"
-                                required>
+                            <select id="grupoSelector" class="form-control input-group" name="parNombre" ng-model="partesc.newItem.parNombre" ng-options="nombres as nombres.parNombre for nombres in partesc.nombres track by nombres.parNombreId"
+                                ng-change="partesc.updateAsociatedNameGroup(partesc.newItem.parNombre)" required>
                                 <option value="">--Seleccione Nombre--</option>
                                 </select>
                             <span class="input-group-btn">
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label for="parGrupo">Grupo</label>
                         <div class="input-group">
-                            <input type="text" name="parGrupo" class="form-control" ng-model="partesc.newItem.nombre.parGrupo" placeholder="Grupo" readonly/>
+                            <input type="text" name="parGrupo" class="form-control" ng-model="partesc.newItem.parGrupo.grupoNombre" placeholder="Seleccione un nombre de parte" readonly/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -396,7 +396,7 @@
                     </div>
                 </div>
                 <div class="form-group margin-top-70">
-                    <button type="button" class="btn btn-success" ng-click="partesc.updateParte(partesc.selectedItem.parCodigo,partesc.selectedItem.fabricanteFab,partesc.selectedItem.parNombre,partesc.selectedItem.parGrupo,partesc.selectedItem.parUpc,partesc.selectedItem.parSku,partesc.selectedItem.parLargo,partesc.selectedItem.parAncho,partesc.selectedItem.parEspesor,partesc.selectedItem.parPeso,partesc.selectedItem.parOripar,partesc.selectedItem.parCaract,partesc.selectedItem.parObservacion,partesc.selectedItem.parKit)"
+                    <button type="button" class="btn btn-success" ng-click="partesc.updateParte(partesc.selectedItem.parId, partesc.selectedItem.parCodigo,partesc.selectedItem.fabricanteFab,partesc.selectedItem.parNombre,partesc.selectedItem.parGrupo,partesc.selectedItem.parUpc,partesc.selectedItem.parSku,partesc.selectedItem.parLargo,partesc.selectedItem.parAncho,partesc.selectedItem.parEspesor,partesc.selectedItem.parPeso,partesc.selectedItem.parOripar,partesc.selectedItem.parCaract,partesc.selectedItem.parObservacion,partesc.selectedItem.parKit)"
                         ng-disabled="(editParteForm.$invalid)">
                         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                         <span class="button-text">Guardar Cambios</span>

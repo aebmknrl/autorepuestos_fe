@@ -231,10 +231,10 @@ angular
         partesc.copyRowData = function (id) {
             partesc.editing = true;
             partesc.loadingEditing = true;
+            partesc.selectedItem.parId = id;
             $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     partesc.selectedItem = partesc.parte;
-
                     // Transform value for CheckBox "¿Es un Kit?"
                     if (partesc.selectedItem.parKit == 1) {
                         partesc.selectedItem.parKit = true;
@@ -248,24 +248,24 @@ angular
 
         // Add item
         partesc.addParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
-
+            console.log(parNombre.parNombreId);
+            return false;
             url = endpointApiURL.url + "/parte/add";
             $scope.FabricantesPromise = $http.post(
                     url, {
-                        parCodigo: parCodigo,
-                        fabricanteFab: fabricanteFab,
-                        parNombre: parNombre,
-                        parGrupo: parGrupo,
-                        parUpc: parUpc,
-                        parSku: parSku,
-                        parLargo: parLargo,
-                        parAncho: parAncho,
-                        parEspesor: parEspesor,
-                        parPeso: parPeso,
-                        parOripar: parOripar,
-                        parCaract: parCaract,
-                        parObservacion: parObservacion,
-                        parKit: parKit //falta imagenes
+                        parCodigo: parCodigo, 
+                        fabricanteFab: fabricanteFab.fabId, 
+                        parNombre: parNombre.parNombreId, 
+                        parUpc: parUpc, 
+                        parSku: parSku, 
+                        parLargo: parLargo, 
+                        parAncho: parAncho, 
+                        parEspesor: parEspesor, 
+                        parPeso: parPeso, 
+                        parteOrigen: parOripar, 
+                        parCaract: parCaract, 
+                        parObservacion: parObservacion, 
+                        parKit: parKit //falta imagenes, parSubgrupo, parAsin, parEq
                     }
                 )
                 .then(function (response) {
@@ -306,27 +306,27 @@ angular
 
 
         // Update item
-        partesc.updateParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
+        partesc.updateParte = function (parId, parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
             if (!id || !nombre || !nombrepieza) {
                 return false;
             }
             url = endpointApiURL.url + "/parte/edit/" + id;
             $scope.PartesPromise = $http.post(
                     url, {
-                        parCodigo: parCodigo,
-                        fabricanteFab: fabricanteFab,
-                        parNombre: parNombre,
-                        parGrupo: parGrupo,
-                        parUpc: parUpc,
-                        parSku: parSku,
-                        parLargo: parLargo,
-                        parAncho: parAncho,
-                        parEspesor: parEspesor,
-                        parPeso: parPeso,
-                        parOripar: parOripar,
-                        parCaract: parCaract,
-                        parObservacion: parObservacion,
-                        parKit: parKit //falta imagenes
+                        parId: parId,
+                        parCodigo: parCodigo, 
+                        fabricanteFab: fabricanteFab.fabId, 
+                        parNombre: parNombre.parNombreId, 
+                        parUpc: parUpc, 
+                        parSku: parSku, 
+                        parLargo: parLargo, 
+                        parAncho: parAncho, 
+                        parEspesor: parEspesor, 
+                        parPeso: parPeso, 
+                        parteOrigen: parOripar, 
+                        parCaract: parCaract, 
+                        parObservacion: parObservacion, 
+                        parKit: parKit //falta imagenes, parSubgrupo, parAsin, parEq
                     }
                 )
                 .then(function (response) {
@@ -347,6 +347,8 @@ angular
 
         // Get items
         partesc.getPartes = function (limit, page, searchText) {
+
+            /*
             // Dummy data to test
             partesc.partes = dummyData;
             partesc.totalPages = 1;
@@ -358,7 +360,7 @@ angular
             // End of dummy data
 
             return true;
-
+            */
             if (searchText !== undefined) {
                 if (searchText !== "") {
                     var url = endpointApiURL.url + "/parte/" + limit + "/" + page + "/" + searchText;
@@ -372,7 +374,7 @@ angular
             //console.log('The parameters send are: URL=' + url);
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
-                    //console.log(response.data.fabricantes);
+                    console.log(response.data.partes);
                     partesc.allLoad = false;
                     partesc.CurrentPage = page;
                     partesc.partes = response.data.partes;
@@ -426,12 +428,14 @@ angular
 
         // Get all partes
         partesc.getAllPartes = function () {
-            var url = endpointApiURL.url + "/fabricante"; // cambiar a partes despues
+            var url = endpointApiURL.url + "/parte"; // cambiar a partes despues
             return $http.get(url)
                 .then(function (response) {
                     // Dummy data to test
-                    var dummyPartes = dummyData;
-                    return dummyPartes;
+                    //var dummyPartes = dummyData;
+                    //return dummyPartes;
+                    //console.log("GET ALL PARTES--> " + response);
+                    return response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -490,12 +494,14 @@ angular
 
         // Get a specific Parte
         partesc.getParte = function (id) {
-            var url = endpointApiURL.url + "/fabricante/" + id; //cambiar a partes despues
+            var url = endpointApiURL.url + "/parte/" + id; //cambiar a partes despues
             return $http.get(url)
                 .then(function (response) {
                     // Dummy data to test
-                    var dummyPartes = dummyData;
-                    partesc.parte = dummyPartes[id - 1];
+                    //var dummyPartes = dummyData;
+                    //partesc.parte = dummyPartes[id - 1];
+                    console.log("GET PARTE--> " + response);
+                    partesc.parte = response.data;
                     return true;
                     //end of dummy data
 
@@ -597,5 +603,30 @@ angular
         // Crear:
 
         // partesc.getNombres() para obtener nombres de nueva tabla nombre de partes
+        partesc.getNombres = function () {
+            var url = endpointApiURL.url + "/nombre_parte";
+            $scope.PartesPromise = $http.get(url)
+                .then(function (response) {
+                    partesc.nombres = response.data;
+                    //console.log(partesc.fabricantes);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
+        //Ask for partes nombres
+        partesc.getNombres();
+
+        //Update Grupo when Nombre is change
+        partesc.updateAsociatedNameGroup = function (grupo) {
+            if (grupo != undefined) {
+                partesc.newItem.parGrupo = grupo.parGrupo;
+            } else {
+                partesc.newItem.parGrupo = "";
+            }
+        };
 
     }])
