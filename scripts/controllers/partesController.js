@@ -248,8 +248,13 @@ angular
 
         // Add item
         partesc.addParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
-            console.log(parNombre.parNombreId);
-            return false;
+
+            if(parKit == ""){
+                parKit = 0;
+            } else {
+                parKit = 1;
+            }
+
             url = endpointApiURL.url + "/parte/add";
             $scope.FabricantesPromise = $http.post(
                     url, {
@@ -270,7 +275,7 @@ angular
                 )
                 .then(function (response) {
                     //console.log(response.data.fabricantes);
-                    partesc.getFabricantes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                    partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
                     ngToast.create({
                         className: 'info',
                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.parte[0].parte + '</strong>'
@@ -307,13 +312,20 @@ angular
 
         // Update item
         partesc.updateParte = function (parId, parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
-            if (!id || !nombre || !nombrepieza) {
+            if (!parId || !parNombre || !parCodigo) {
                 return false;
             }
-            url = endpointApiURL.url + "/parte/edit/" + id;
+
+            if(parKit == ""){
+                parKit = 0;
+            } else {
+                parKit = 1;
+            }
+
+            url = endpointApiURL.url + "/parte/edit/" + parId;
             $scope.PartesPromise = $http.post(
                     url, {
-                        parId: parId,
+                        parteid: parId,
                         parCodigo: parCodigo, 
                         fabricanteFab: fabricanteFab.fabId, 
                         parNombre: parNombre.parNombreId, 
@@ -337,6 +349,8 @@ angular
                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
                     });
                     partesc.selectedItem.id = 0;
+                    // Redirect once the edit ends
+                    $state.go('partes', {}, {reload: true});
                 })
                 .catch(function (error) {
                     //console.log(error);
@@ -374,7 +388,7 @@ angular
             //console.log('The parameters send are: URL=' + url);
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
-                    console.log(response.data.partes);
+                    //console.log(response.data.partes);
                     partesc.allLoad = false;
                     partesc.CurrentPage = page;
                     partesc.partes = response.data.partes;
@@ -390,8 +404,8 @@ angular
                         partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
 
                     };
+                    
                     partesc.allLoad = true;
-
                 })
                 .catch(function (error) {
                     //console.log(error);
@@ -500,8 +514,9 @@ angular
                     // Dummy data to test
                     //var dummyPartes = dummyData;
                     //partesc.parte = dummyPartes[id - 1];
-                    console.log("GET PARTE--> " + response);
+                    //console.log("GET PARTE--> " + response);
                     partesc.parte = response.data;
+                    partesc.parte.kit = [];
                     return true;
                     //end of dummy data
 

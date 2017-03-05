@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt', 'ngOrderObjectBy', 'angular.filter', 'ngScrollTo','angularjs-dropdown-multiselect'])
-    .run(function (authManager, $location, $rootScope, $state, storageService) {
+    .run(function (authManager, $location, $rootScope, $state, storageService,$uibModalStack) {
         //Work with auhtentication:
         authManager.checkAuthOnRefresh();
         authManager.redirectWhenUnauthenticated();
@@ -9,6 +9,8 @@ angular
             var existToken = storageService.getToken();
             if (existToken == '' || existToken == null) {
                 $rootScope.isAuthenticated = false;
+                //Closes all modals on unAuthenticate
+                $uibModalStack.dismissAll();
             }
         });
 

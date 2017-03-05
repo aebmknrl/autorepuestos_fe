@@ -240,9 +240,9 @@
                     <tr ng-repeat="parte in partesc.partes | orderObjectBy: partesc.orderBy : partesc.orderDirection | filter : partesc.filter">
                         <td class="">{{parte.parId}}</td>
                         <td class="">{{parte.parCodigo}}</td>
-                        <td class="">{{parte.parNombre.nombreNom}}</td>
+                        <td class="">{{parte.parNombre.parNombre}}</td>
                         <td class="">{{parte.fabricanteFab.fabNombre}}</td>
-                        <td class="">{{parte.parNombre.nombreGru.grupoNom}}</td>
+                        <td class="">{{parte.parNombre.parGrupo.grupoNombre}}</td>
                         <td class="">{{parte.parKit == 1 ? 'Sí' : 'No'}}</td>
                         <td class="action-buttons-td">
                             <button type="button" class="btn btn-primary" ng-click="partesc.openModalViewEdit(parte.parId,'view'); partesc.selectedItemAction='view';">
@@ -316,7 +316,7 @@
                 <div class="form-group">
                     <label for="parNombre">Nombre</label>
                     <div class="input-group">
-                        <select id="grupoSelector" class="form-control input-group" name="parNombre" ng-model="partesc.selectedItem.parNombre" ng-options="nombre as nombre.nombreNombre for nombre in partesc.nombres track by nombre.id"
+                        <select id="grupoSelector" class="form-control input-group" name="parNombre" ng-model="partesc.selectedItem.parNombre" ng-options="nombres as nombres.parNombre for nombres in partesc.nombres track by nombres.parNombreId"
                             required>
                             </select>
                     </div>
@@ -324,7 +324,7 @@
                 <div class="form-group">
                     <label for="parGrupo">Grupo</label>
                     <div class="input-group">
-                        <input type="text" name="parGrupo" class="form-control" ng-model="partesc.selectedItem.nombre.parGrupo" placeholder="Grupo"
+                        <input type="text" name="parGrupo" class="form-control" ng-model="partesc.selectedItem.parNombre.parGrupo.grupoNombre" placeholder="Grupo"
                             readonly/>
                     </div>
                 </div>
@@ -419,20 +419,20 @@
                 <li><b>id:</b> {{$ctrl.items.parId}}</li>
                 <li><b>Código Comercial:</b> {{$ctrl.items.parCodigo}}</li>
                 <li><b>Fabricante:</b> {{$ctrl.items.fabricanteFab.fabNombre}}</li>
-                <li><b>Nombre:</b> {{$ctrl.items.parNombre.nombreNom}}</li>
-                <li><b>Grupo:</b> {{$ctrl.items.parNombre.nombreGru.grupoNom}}</li>
+                <li><b>Nombre:</b> {{$ctrl.items.parNombre.parNombre}}</li>
+                <li><b>Grupo:</b> {{$ctrl.items.parNombre.parGrupo.grupoNombre}}</li>
                 <li><b>Código UPC:</b> {{$ctrl.items.parUpc}}</li>
                 <li><b>SKU:</b> {{$ctrl.items.parSku}}</li>
                 <li><b>Largo:</b> {{$ctrl.items.parLargo}}</li>
                 <li><b>Ancho:</b> {{$ctrl.items.parAncho}}</li>
                 <li><b>Espesor:</b> {{$ctrl.items.parEspesor}}</li>
                 <li><b>Peso:</b> {{$ctrl.items.parPeso}}</li>
-                <li><b>Origen de la Parte:</b> {{$ctrl.items.parOripar}}</li>
+                <li><b>Origen de la Parte:</b> {{$ctrl.items.parteOrigen}}</li>
                 <li><b>Características:</b> {{$ctrl.items.parCaract}}</li>
                 <li><b>Observación:</b> {{$ctrl.items.parObservacion}}</li>
                 <li><b>Es Kit:</b> {{$ctrl.items.parKit == 1 ? 'Sí' : 'No'}}</li>
                 <li>
-                    <b>Componentes del Kit:</b> {{$ctrl.items.kit == '' ? 'N/A':''}}
+                    <b>Componentes del Kit:</b> {{$ctrl.items.parKit == 0 ? 'N/A':''}}
                     <!-- $ctrl.items.kit -->
                     <ul ng-class="$ctrl.items.kit == '' ? 'item-no-visible' : 'item-visible'" class="list-inside">
                         <li ng-repeat="kitComponent in $ctrl.items.kit">{{kitComponent.parte.parCodigo}}</li>
