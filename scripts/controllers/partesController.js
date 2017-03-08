@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService) {
+    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', '$window','$httpParamSerializerJQLike', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService, $window,$httpParamSerializerJQLike) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -227,7 +227,6 @@ angular
         }
 
         // Copy temporally item data for edit
-        // This method appears not apply to Partes
         partesc.copyRowData = function (id) {
             partesc.editing = true;
             partesc.loadingEditing = true;
@@ -235,6 +234,7 @@ angular
             $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     partesc.selectedItem = partesc.parte;
+                    //console.log(partesc.selectedItem);
                     // Transform value for CheckBox "¿Es un Kit?"
                     if (partesc.selectedItem.parKit == 1) {
                         partesc.selectedItem.parKit = true;
@@ -247,9 +247,11 @@ angular
         }
 
         // Add item
-        partesc.addParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
+        partesc.addParte = function (parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit, kitParts) {
+            // Scroll to top of the page when save
+            $window.scrollTo(0, 0);
 
-            if(parKit == ""){
+            if (parKit == "") {
                 parKit = 0;
             } else {
                 parKit = 1;
@@ -258,23 +260,28 @@ angular
             url = endpointApiURL.url + "/parte/add";
             $scope.FabricantesPromise = $http.post(
                     url, {
-                        parCodigo: parCodigo, 
-                        fabricanteFab: fabricanteFab.fabId, 
-                        parNombre: parNombre.parNombreId, 
-                        parUpc: parUpc, 
-                        parSku: parSku, 
-                        parLargo: parLargo, 
-                        parAncho: parAncho, 
-                        parEspesor: parEspesor, 
-                        parPeso: parPeso, 
-                        parteOrigen: parOripar, 
-                        parCaract: parCaract, 
-                        parObservacion: parObservacion, 
+                        parCodigo: parCodigo,
+                        fabricanteFab: fabricanteFab.fabId,
+                        parNombre: parNombre.parNombreId,
+                        parUpc: parUpc,
+                        parSku: parSku,
+                        parLargo: parLargo,
+                        parAncho: parAncho,
+                        parEspesor: parEspesor,
+                        parPeso: parPeso,
+                        parteOrigen: parOripar,
+                        parCaract: parCaract,
+                        parObservacion: parObservacion,
                         parKit: parKit //falta imagenes, parSubgrupo, parAsin, parEq
                     }
                 )
                 .then(function (response) {
                     //console.log(response.data.fabricantes);
+                    // Add kit if this new Parte has a kit:
+                    if (parKit == 1) {
+                        console.log(kitParts);
+                    }
+
                     partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
                     ngToast.create({
                         className: 'info',
@@ -311,12 +318,15 @@ angular
 
 
         // Update item
-        partesc.updateParte = function (parId, parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit) {
+        partesc.updateParte = function (parId, parCodigo, fabricanteFab, parNombre, parGrupo, parUpc, parSku, parLargo, parAncho, parEspesor, parPeso, parOripar, parCaract, parObservacion, parKit, kitParts) {
+            // Scroll to top of the page when save
+            $window.scrollTo(0, 0);
+
             if (!parId || !parNombre || !parCodigo) {
                 return false;
             }
 
-            if(parKit == ""){
+            if (parKit == "") {
                 parKit = 0;
             } else {
                 parKit = 1;
@@ -326,23 +336,48 @@ angular
             $scope.PartesPromise = $http.post(
                     url, {
                         parteid: parId,
-                        parCodigo: parCodigo, 
-                        fabricanteFab: fabricanteFab.fabId, 
-                        parNombre: parNombre.parNombreId, 
-                        parUpc: parUpc, 
-                        parSku: parSku, 
-                        parLargo: parLargo, 
-                        parAncho: parAncho, 
-                        parEspesor: parEspesor, 
-                        parPeso: parPeso, 
-                        parteOrigen: parOripar, 
-                        parCaract: parCaract, 
-                        parObservacion: parObservacion, 
+                        parCodigo: parCodigo,
+                        fabricanteFab: fabricanteFab.fabId,
+                        parNombre: parNombre.parNombreId,
+                        parUpc: parUpc,
+                        parSku: parSku,
+                        parLargo: parLargo,
+                        parAncho: parAncho,
+                        parEspesor: parEspesor,
+                        parPeso: parPeso,
+                        parteOrigen: parOripar,
+                        parCaract: parCaract,
+                        parObservacion: parObservacion,
                         parKit: parKit //falta imagenes, parSubgrupo, parAsin, parEq
                     }
                 )
                 .then(function (response) {
-                    //console.log(response.data);
+                    console.log(parId);
+
+                    // Add Conjunto if this new Parte has a kit:
+                    if (parKit == 1) {
+                        //console.log(kitParts);
+                        //Create a dynamic object to send to Conjuntos
+                        partesDelKit = {};
+                        for (i = 0; i < kitParts.length; i++) {
+                            partesDelKit['parte' + i] = kitParts[i].id;
+                        }
+
+                        console.log(partesDelKit);
+
+                        url = endpointApiURL.url + "/conjunto/add/" + parId;
+                        $scope.PartesPromise = $http({
+                            url: url,
+                            method: 'POST',
+                            data: partesDelKit
+                        }).then(function (response) {
+                            console.log(response.data);
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
+                    }
+
+
                     partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
                     ngToast.create({
                         className: 'info',
@@ -350,7 +385,9 @@ angular
                     });
                     partesc.selectedItem.id = 0;
                     // Redirect once the edit ends
-                    $state.go('partes', {}, {reload: true});
+                    $state.go('partes', {}, {
+                        reload: true
+                    });
                 })
                 .catch(function (error) {
                     //console.log(error);
@@ -404,7 +441,7 @@ angular
                         partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
 
                     };
-                    
+
                     partesc.allLoad = true;
                 })
                 .catch(function (error) {

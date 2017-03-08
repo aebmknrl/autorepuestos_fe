@@ -185,7 +185,7 @@
                 </div>
             -->
                     <div class="form-group">
-                        <button type="button" class="btn btn-success" ng-click="partesc.addParte(partesc.newItem.parCodigo,partesc.newItem.fabricanteFab,partesc.newItem.parNombre,partesc.newItem.parGrupo,partesc.newItem.parUpc,partesc.newItem.parSku,partesc.newItem.parLargo,partesc.newItem.parAncho,partesc.newItem.parEspesor,partesc.newItem.parPeso,partesc.newItem.parOripar,partesc.newItem.parCaract,partesc.newItem.parObservacion,partesc.newItem.parKit)"
+                        <button type="button" class="btn btn-success" ng-click="partesc.addParte(partesc.newItem.parCodigo,partesc.newItem.fabricanteFab,partesc.newItem.parNombre,partesc.newItem.parGrupo,partesc.newItem.parUpc,partesc.newItem.parSku,partesc.newItem.parLargo,partesc.newItem.parAncho,partesc.newItem.parEspesor,partesc.newItem.parPeso,partesc.newItem.parOripar,partesc.newItem.parCaract,partesc.newItem.parObservacion,partesc.newItem.parKit,partesc.multiselectDataNew)"
                             ng-disabled="(newParteForm.$invalid) || (partesc.selectedItemAction == 'edit') || (partesc.selectedItemAction == 'view')">
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             <span class="button-text">Agregar</span>
@@ -370,7 +370,7 @@
                 </div>
                 <div class="form-group">
                     <label for="origenParte">Origen de la Parte</label>
-                    <select id="pais" class="form-control input-group" name="pais" ng-model="partesc.selectedItem.parOripar" ng-options="pais as pais for pais in partesc.paises">
+                    <select id="pais" class="form-control input-group" name="pais" ng-model="partesc.selectedItem.parteOrigen" ng-options="pais as pais for pais in partesc.paises">
                         <option value="">--Seleccione País--</option>
                     </select>
                 </div>
@@ -382,7 +382,7 @@
                     <label for="parObservacion">Observaciones</label>
                     <textarea rows="" cols="" name="parObservacion" class="form-control" ng-model="partesc.selectedItem.parObservacion" placeholder="Observaciones"></textarea>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="editParteForm.kitParts.$invalid ? 'has-error' : ''">
                     <div class="row">
                         <div class="col-md-2">
                             <label for="parKit">Esta parte es un Kit</label><br>
@@ -390,13 +390,16 @@
                         </div>
                         <div class="col-md-10" ng-if="partesc.selectedItem.parKit">
                             <label>Componentes del Kit:</label><br>
-                            <div ng-dropdown-multiselect="" options="partesc.listaPartes" selected-model="partesc.multiselectData" extra-settings="partesc.multiselectConfig"
-                                translation-texts="partesc.translatedText" checkboxes="true"></div>
+                            <div ng-dropdown-multiselect="" name="kitParts" options="partesc.listaPartes" ng-model="partesc.multiselectData" selected-model="partesc.multiselectData" extra-settings="partesc.multiselectConfig"
+                                translation-texts="partesc.translatedText" ng-customdir="{{partesc.multiselectData.length}}" checkboxes="true"></div>
                         </div>
                     </div>
+                        <div class="help-block" ng-messages="newParteForm.kitParts.$error" ng-if="newParteForm.kitParts.$error">
+                            <p ng-message="customdir">Debe elejir al menos 1 parte para el Kit.</p>
+                        </div>
                 </div>
                 <div class="form-group margin-top-70">
-                    <button type="button" class="btn btn-success" ng-click="partesc.updateParte(partesc.selectedItem.parId, partesc.selectedItem.parCodigo,partesc.selectedItem.fabricanteFab,partesc.selectedItem.parNombre,partesc.selectedItem.parGrupo,partesc.selectedItem.parUpc,partesc.selectedItem.parSku,partesc.selectedItem.parLargo,partesc.selectedItem.parAncho,partesc.selectedItem.parEspesor,partesc.selectedItem.parPeso,partesc.selectedItem.parOripar,partesc.selectedItem.parCaract,partesc.selectedItem.parObservacion,partesc.selectedItem.parKit)"
+                    <button type="button" class="btn btn-success" ng-click="partesc.updateParte(partesc.selectedItem.parId, partesc.selectedItem.parCodigo,partesc.selectedItem.fabricanteFab,partesc.selectedItem.parNombre,partesc.selectedItem.parGrupo,partesc.selectedItem.parUpc,partesc.selectedItem.parSku,partesc.selectedItem.parLargo,partesc.selectedItem.parAncho,partesc.selectedItem.parEspesor,partesc.selectedItem.parPeso,partesc.selectedItem.parteOrigen,partesc.selectedItem.parCaract,partesc.selectedItem.parObservacion,partesc.selectedItem.parKit,partesc.multiselectData)"
                         ng-disabled="(editParteForm.$invalid)">
                         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                         <span class="button-text">Guardar Cambios</span>
