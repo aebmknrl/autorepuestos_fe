@@ -232,8 +232,9 @@ angular
             partesc.loadingEditing = true;
             partesc.selectedItem.parId = id;
             $scope.PartesPromise = partesc.getParte(id)
-                .then(function () {
+                .then(function (response) {
                     partesc.selectedItem = partesc.parte;
+                    partesc.selectedItem.kitParts = response.data;
                     //console.log(partesc.selectedItem);
                     // Transform value for CheckBox "¿Es un Kit?"
                     if (partesc.selectedItem.parKit == 1) {
@@ -241,7 +242,6 @@ angular
                     } else {
                         partesc.selectedItem.parKit = false;
                     }
-
                     partesc.loadingEditing = false;
                 });
         }
@@ -406,6 +406,17 @@ angular
                         }).catch(function (error) {
                             //console.log(error);
                         })
+                    } else {
+                        partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                        ngToast.create({
+                            className: 'info',
+                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
+                        });
+                        partesc.selectedItem.id = 0;
+                        // Redirect once the edit ends
+                        $state.go('partes', {}, {
+                            reload: true
+                        });
                     }
                 })
                 .catch(function (error) {
@@ -445,7 +456,7 @@ angular
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
                     //console.log(response.data.partes);
-                    
+
                     partesc.allLoad = false;
                     partesc.CurrentPage = page;
                     partesc.partes = response.data.partes;
@@ -520,6 +531,7 @@ angular
         partesc.populateMultiselect = function (parteAExcluir) {
             var partes = [];
             var list = [];
+            partesc.multiselectData = [];
             var parteAExcluir = parteAExcluir;
             $scope.PartesPromise = partesc.getAllPartes()
                 .then(function (response) {
@@ -541,16 +553,30 @@ angular
                         console.log('Error obteniendo datos: ' + error.data.error);
                     }
                 });
-            if (parteAExcluir != undefined) {
+            var parte = parteAExcluir;
+            if (parte != undefined) {
                 // Code for mark the parts that haves a Kit
-                $scope.PartesPromise = partesc.getParte(parteAExcluir)
+                $scope.PartesPromise = partesc.getParte(parte)
                     .then(function (response) {
-                        partesc.parte.kit.forEach(function (parte) {
-                            partesc.multiselectData.push({
-                                id: String(parte.parte.parId)
-                            })
-                        }, this);
-                        //console.log(partesc.multiselectData);
+                        url = endpointApiURL.url + "/conjunto/bypart/" + parte;
+                        $scope.PartesPromise = $http.get(url)
+                            .then(function (response) {
+                                //console.log(response.data);
+                                response.data.forEach(function (parte) {
+                                    //console.log(parte.partePar.parId);
+                                 partesc.multiselectData.push({
+                                        'id':parte.partePar.parId
+                                    })
+                            }, this);
+                            /*
+                                partesc.parte.kit.forEach(function (parte) {
+                                    partesc.multiselectData.push({
+                                        id: String(parte.parte.parId)
+                                    })
+                                }, this);
+                            */
+                                //console.log(partesc.multiselectData);
+                            });
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -612,12 +638,12 @@ angular
                 .then(function () {
                     //console.log(partesc.parte);
                     url = endpointApiURL.url + "/conjunto/bypart/" + id;
-                            $scope.PartesPromise = $http.get(url)
-                                .then(function(response){
-                                    partesc.parte.kitParts = response.data;
-                                    partesc.open(partesc.parte, action);
-                                    console.log(partesc.parte);
-                                });
+                    $scope.PartesPromise = $http.get(url)
+                        .then(function (response) {
+                            partesc.parte.kitParts = response.data;
+                            partesc.open(partesc.parte, action);
+                            //console.log(partesc.parte);
+                        });
                 });
         }
 
