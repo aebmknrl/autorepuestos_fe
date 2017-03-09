@@ -20,144 +20,6 @@ angular
         partesc.selectedItem = {};
         //
 
-
-        //*************DUMMY DATA*************/
-
-        var dummyData = [{
-            parId: '1',
-            parCodigo: 'T312',
-            fabricanteFab: {
-                fabId: 34,
-                fabNombre: 'GATES' //fabricante tiene otros campos que devuelve la API que obvié
-            },
-            parNombre: {
-                nombreNom: 'CORREA A TIEMPO',
-                nombreIng: 'TIMING BELT',
-                nombreNomt: 'BANDA DE TIEMPO, CORREA DE TIEMPO, CORREA DENTADA, CORREA DE LOS TIEMPOS, BANDA DE LOS TIEMPOS',
-                nombreGru: {
-                    grupoNom: 'MOTOR',
-                    grupoPad: '',
-                    grupoDes: ''
-                }
-            },
-            parGrupo: '',
-            parUpc: '072053548969',
-            parSku: 'GATES-T312',
-            parLargo: '10.10',
-            parAncho: '6.70',
-            parEspesor: '1.60',
-            parPeso: '0.40',
-            parOripar: 'USA',
-            parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-            parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-            parKit: '0', //falta imagenes
-            kit: []
-
-        }, {
-            parId: '2',
-            parCodigo: 'T43175',
-            fabricanteFab: {
-                fabId: 34,
-                fabNombre: 'GATES'
-            },
-            parNombre: {
-                nombreNom: 'TENSOR TIEMPO',
-                nombreIng: 'TIMING TENSOR',
-                nombreNomt: 'TENSOR DE LOS TIEMPOS',
-                nombreGru: {
-                    grupoNom: 'MOTOR',
-                    grupoPad: '',
-                    grupoDes: ''
-                }
-            },
-            parGrupo: '',
-            parUpc: '0587878774',
-            parSku: 'GATES-T43175',
-            parLargo: '10.10',
-            parAncho: '6.70',
-            parEspesor: '1.60',
-            parPeso: '0.40',
-            parOripar: 'JAPON',
-            parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-            parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-            parKit: '0', //falta imagenes
-            kit: []
-
-        }, {
-            parId: '3',
-            parCodigo: 'TCK312',
-            fabricanteFab: {
-                fabId: 34,
-                fabNombre: 'GATES'
-            },
-            parNombre: {
-                nombreNom: 'KIT CORREA TIEMPO',
-                nombreIng: 'TIMING BELT KIT',
-                nombreNomt: 'KIT DE CORREA DE TIEMPOS',
-                nombreGru: {
-                    grupoNom: 'MOTOR',
-                    grupoPad: '',
-                    grupoDes: ''
-                }
-            },
-            parGrupo: '',
-            parUpc: '',
-            parSku: 'GATES-TCK312',
-            parLargo: '13.70',
-            parAncho: '7.00',
-            parEspesor: '2.80',
-            parPeso: '1.50',
-            parOripar: 'Multinación',
-            parCaract: '2 COMPONENTES (1 BANDA, 1 TENSOR)',
-            parObservacion: 'POWERGRIP PREMIUM Equipo Original juego de componentes de Correa de Tiempo. El tensor incluye resorte.',
-            parKit: '1', //falta imagenes
-            kit: [{
-                id: 1,
-                parKitId: 3, //TCK312
-                parte: {
-                    parId: 2,
-                    parCodigo: 'T43175'
-                }
-            }, {
-                id: 2,
-                parKitId: 3, //TCK312
-                parte: {
-                    parId: 1,
-                    parCodigo: 'T312'
-                }
-            }, ]
-        }, {
-            parId: '4',
-            parCodigo: 'T444444',
-            fabricanteFab: {
-                fabId: 34,
-                fabNombre: 'GATES'
-            },
-            parNombre: {
-                nombreNom: 'TENSOR TIEMPO',
-                nombreIng: 'TIMING TENSOR',
-                nombreNomt: 'TENSOR DE LOS TIEMPOS',
-                nombreGru: {
-                    grupoNom: 'MOTOR',
-                    grupoPad: '',
-                    grupoDes: ''
-                }
-            },
-            parGrupo: '',
-            parUpc: '044444444',
-            parSku: 'GATES-T444444',
-            parLargo: '10.10',
-            parAncho: '6.70',
-            parEspesor: '1.60',
-            parPeso: '0.40',
-            parOripar: 'JAPON',
-            parCaract: '7/8 pulgadas x 39 pulgadas(104 Dientes)',
-            parObservacion: 'POWERGRIP PREMIUM Equipo Original',
-            parKit: '0', //falta imagenes
-            kit: []
-
-        }];
-
         partesc.newItem = {
             parCodigo: '',
             fabricanteFab: '',
@@ -201,22 +63,30 @@ angular
 
         // Remove item
         partesc.removeParte = function (id) {
-            url = endpointApiURL.url + "/parte/delete/" + id;
-            $scope.PartesPromise = $http.delete(url)
-                .then(function (response) {
-                    // console.log(response.data);
-                    partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
-                    ngToast.create({
-                        className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.parnombreid + '</strong>'
-                    });
-                    partesc.selectedItem.id = 0;
-                })
-                .catch(function (error) {
-                    //console.log(error);
-                    toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
+            //First, remove all references on conjuntos (removes the kit reference)
+            url = endpointApiURL.url + "/conjunto/delete/allPartsOfKit/" + id;
+            $scope.PartesPromise = $http({
+                url: url,
+                method: 'DELETE'
+            }).then(function (response) {
+                // Then, remove the part
+                url = endpointApiURL.url + "/parte/delete/" + id;
+                $scope.PartesPromise = $http.delete(url)
+                    .then(function (response) {
+                        // console.log(response.data);
+                        partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                        ngToast.create({
+                            className: 'info',
+                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.parnombreid + '</strong>'
+                        });
+                        partesc.selectedItem.id = 0;
+                    })
+                    .catch(function (error) {
+                        //console.log(error);
+                        toastMsgService.showMsg('Error cód.: ' + error.data.error.code + ' Mensaje: ' + error.data.error.message + ': ' + error.data.error.exception[0].message, 'danger', 10000);
 
-                });
+                    });
+            })
         }
 
         // Change the items per page
@@ -377,22 +247,53 @@ angular
                     //console.log(parId);
 
                     // Add Conjunto if this new Parte has a kit:
+                    // 1) Is checked 'Esta parte es un Kit'?
                     if (parKit == 1) {
-                        //console.log(kitParts);
-                        //Create a dynamic object to send to Conjuntos
-                        partesDelKit = {};
-                        for (i = 0; i < kitParts.length; i++) {
-                            partesDelKit['parte' + i] = kitParts[i].id;
-                        }
-
-                        //console.log(partesDelKit);
-                        url = endpointApiURL.url + "/conjunto/add/" + parId;
+                        // If yes, then delete if haves previous kits seted
+                        url = endpointApiURL.url + "/conjunto/delete/allPartsOfKit/" + parId;
                         $scope.PartesPromise = $http({
                             url: url,
-                            method: 'POST',
-                            data: partesDelKit
+                            method: 'DELETE'
                         }).then(function (response) {
-                            //console.log(response.data);
+                            // Once that all previous parts has been deleted (if haves one)
+                            // then add the new kit parts
+                            //Create a dynamic object to send to Conjuntos
+                            partesDelKit = {};
+                            for (i = 0; i < kitParts.length; i++) {
+                                partesDelKit['parte' + i] = kitParts[i].id;
+                            }
+                            // Add the parts of a kit
+                            url = endpointApiURL.url + "/conjunto/add/" + parId;
+                            $scope.PartesPromise = $http({
+                                url: url,
+                                method: 'POST',
+                                data: partesDelKit
+                            }).then(function (response) {
+                                //console.log(response.data);
+                                partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                                ngToast.create({
+                                    className: 'info',
+                                    content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
+                                });
+                                partesc.selectedItem.id = 0;
+                                // Redirect once the edit ends
+                                $state.go('partes', {}, {
+                                    reload: true
+                                });
+                            }).catch(function (error) {
+                                //console.log(error);
+                            })
+
+                        })
+                    } else {
+                        // If parKit = 0
+                        // remove all the parts of a kit 
+                        // if haves
+                        url = endpointApiURL.url + "/conjunto/delete/allPartsOfKit/" + parId;
+                        $scope.PartesPromise = $http({
+                            url: url,
+                            method: 'DELETE'
+                        }).then(function (response) {
                             partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
                             ngToast.create({
                                 className: 'info',
@@ -403,20 +304,7 @@ angular
                             $state.go('partes', {}, {
                                 reload: true
                             });
-                        }).catch(function (error) {
-                            //console.log(error);
                         })
-                    } else {
-                        partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
-                        ngToast.create({
-                            className: 'info',
-                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
-                        });
-                        partesc.selectedItem.id = 0;
-                        // Redirect once the edit ends
-                        $state.go('partes', {}, {
-                            reload: true
-                        });
                     }
                 })
                 .catch(function (error) {
@@ -429,19 +317,6 @@ angular
         // Get items
         partesc.getPartes = function (limit, page, searchText) {
 
-            /*
-            // Dummy data to test
-            partesc.partes = dummyData;
-            partesc.totalPages = 1;
-            partesc.pageFrom = 1;
-            partesc.pageTo = 1;
-            partesc.totalPartes = 1;
-            partesc.actualRange = "Mostrando registros " + partesc.pageFrom + " a " + partesc.pageTo + " de " + partesc.totalPartes
-            partesc.allLoad = true;
-            // End of dummy data
-
-            return true;
-            */
             if (searchText !== undefined) {
                 if (searchText !== "") {
                     var url = endpointApiURL.url + "/parte/" + limit + "/" + page + "/" + searchText;
@@ -513,10 +388,7 @@ angular
             var url = endpointApiURL.url + "/parte"; // cambiar a partes despues
             return $http.get(url)
                 .then(function (response) {
-                    // Dummy data to test
-                    //var dummyPartes = dummyData;
-                    //return dummyPartes;
-                    //console.log("GET ALL PARTES--> " + response);
+
                     return response.data;
                 })
                 .catch(function (error) {
@@ -564,18 +436,10 @@ angular
                                 //console.log(response.data);
                                 response.data.forEach(function (parte) {
                                     //console.log(parte.partePar.parId);
-                                 partesc.multiselectData.push({
-                                        'id':parte.partePar.parId
-                                    })
-                            }, this);
-                            /*
-                                partesc.parte.kit.forEach(function (parte) {
                                     partesc.multiselectData.push({
-                                        id: String(parte.parte.parId)
+                                        'id': parte.partePar.parId
                                     })
                                 }, this);
-                            */
-                                //console.log(partesc.multiselectData);
                             });
                     })
                     .catch(function (error) {
@@ -594,15 +458,9 @@ angular
             var url = endpointApiURL.url + "/parte/" + id; //cambiar a partes despues
             return $http.get(url)
                 .then(function (response) {
-                    // Dummy data to test
-                    //var dummyPartes = dummyData;
-                    //partesc.parte = dummyPartes[id - 1];
-                    //console.log("GET PARTE--> " + response);
                     partesc.parte = response.data;
                     partesc.parte.kit = [];
                     return true;
-                    //end of dummy data
-
                     partesc.parte = response.data;
                 })
                 .catch(function (error) {
