@@ -394,7 +394,7 @@
                                 translation-texts="partesc.translatedText" ng-customdir="{{partesc.multiselectData.length}}" checkboxes="true"></div>
                         </div>
                     </div>
-                        <div class="help-block" ng-messages="newParteForm.kitParts.$error" ng-if="newParteForm.kitParts.$error">
+                        <div class="help-block" ng-messages="editParteForm.kitParts.$error" ng-if="editParteForm.kitParts.$error">
                             <p ng-message="customdir">Debe elejir al menos 1 parte para el Kit.</p>
                         </div>
                 </div>
@@ -441,14 +441,6 @@
                         <li ng-repeat="kitComponent in $ctrl.items.kit">{{kitComponent.parte.parCodigo}}</li>
                     </ul>
                 </li>
-                <!--
-                <li><b>Nombre Pieza:</b> {{$ctrl.items.parNombret}}</li>
-                <li><b>Nombre Inventario:</b> {{$ctrl.items.parNombrein}}</li>
-                <li><b>Parte en Amazon:</b> {{$ctrl.items.parAsin}}</li>
-                <li><b>Sub-Grupo:</b> {{$ctrl.items.parSubgrupo}}</li>
-                <li><b>Equivalencia:</b> {{$ctrl.items.parEq}}</li>
-                <li><b>Conjunto:</b> {{$ctrl.items.kit}}</li>
--->
             </ul>
         </div>
         <div class="modal-footer">

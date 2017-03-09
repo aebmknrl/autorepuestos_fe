@@ -1,7 +1,6 @@
 angular.module('autorepuestosApp').controller('modalInstanceController', function ($uibModalInstance, items) {
   var $ctrl = this;
   $ctrl.items = items;
-  
   //console.log($ctrl.items);
 
   //  $ctrl.data = items[1];

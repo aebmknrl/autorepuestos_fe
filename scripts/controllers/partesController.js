@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', '$window','$httpParamSerializerJQLike', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService, $window,$httpParamSerializerJQLike) {
+    .controller('partesController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', '$window', '$httpParamSerializerJQLike', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService, $window, $httpParamSerializerJQLike) {
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
         $rootScope.userrole = storageService.getUserData('role');
@@ -205,10 +205,10 @@ angular
             $scope.PartesPromise = $http.delete(url)
                 .then(function (response) {
                     // console.log(response.data);
-                    partesc.getModelos($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                    partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
                     ngToast.create({
                         className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.modid + '</strong>'
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.parnombreid + '</strong>'
                     });
                     partesc.selectedItem.id = 0;
                 })
@@ -276,39 +276,61 @@ angular
                     }
                 )
                 .then(function (response) {
-                    //console.log(response.data.fabricantes);
+                    //console.log(response.data.parte[0].id);
                     // Add kit if this new Parte has a kit:
+                    // Add Conjunto if this new Parte has a kit:
+                    var parId = response.data.parte[0].id;
+                    var parteAgregada = response.data.parte[0].parte;
+
                     if (parKit == 1) {
-                        console.log(kitParts);
+                        //console.log(kitParts);
+                        //Create a dynamic object to send to Conjuntos
+                        partesDelKit = {};
+                        for (i = 0; i < kitParts.length; i++) {
+                            partesDelKit['parte' + i] = kitParts[i].id;
+                        }
+
+                        //console.log(partesDelKit);
+                        url = endpointApiURL.url + "/conjunto/add/" + parId;
+                        $scope.PartesPromise = $http({
+                            url: url,
+                            method: 'POST',
+                            data: partesDelKit
+                        }).then(function (response) {
+                            //console.log(response.data);
+                            partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                            ngToast.create({
+                                className: 'info',
+                                content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + parteAgregada + '</strong>'
+                            });
+                            partesc.selectedItem.id = 0;
+                            partesc.newItem = {
+                                parCodigo: '',
+                                fabricanteFab: '',
+                                parNombre: '',
+                                parGrupo: '',
+                                parUpc: '',
+                                parSku: '',
+                                parLargo: '',
+                                parAncho: '',
+                                parEspesor: '',
+                                parPeso: '',
+                                parOripar: '',
+                                parCaract: '',
+                                parObservacion: '',
+                                parKit: '' //falta imagenes
+                            };
+
+                            $scope.newParteForm.parCodigo.$touched = false;
+                            $scope.newParteForm.fabricanteFab.$touched = false;
+                            $scope.newParteForm.parNombre.$touched = false;
+                            partesc.isAddNewParte = false;
+                        }).catch(function (error) {
+                            //console.log(error);
+                        })
                     }
 
-                    partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
-                    ngToast.create({
-                        className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.parte[0].parte + '</strong>'
-                    });
-                    partesc.selectedItem.id = 0;
-                    partesc.newItem = {
-                        parCodigo: '',
-                        fabricanteFab: '',
-                        parNombre: '',
-                        parGrupo: '',
-                        parUpc: '',
-                        parSku: '',
-                        parLargo: '',
-                        parAncho: '',
-                        parEspesor: '',
-                        parPeso: '',
-                        parOripar: '',
-                        parCaract: '',
-                        parObservacion: '',
-                        parKit: '' //falta imagenes
-                    };
 
-                    $scope.newParteForm.parCodigo.$touched = false;
-                    $scope.newParteForm.fabricanteFab.$touched = false;
-                    $scope.newParteForm.parNombre.$touched = false;
-                    partesc.isAddNewParte = false;
                 })
                 .catch(function (error) {
                     //console.log(error);
@@ -352,7 +374,7 @@ angular
                     }
                 )
                 .then(function (response) {
-                    console.log(parId);
+                    //console.log(parId);
 
                     // Add Conjunto if this new Parte has a kit:
                     if (parKit == 1) {
@@ -363,31 +385,28 @@ angular
                             partesDelKit['parte' + i] = kitParts[i].id;
                         }
 
-                        console.log(partesDelKit);
-
+                        //console.log(partesDelKit);
                         url = endpointApiURL.url + "/conjunto/add/" + parId;
                         $scope.PartesPromise = $http({
                             url: url,
                             method: 'POST',
                             data: partesDelKit
                         }).then(function (response) {
-                            console.log(response.data);
+                            //console.log(response.data);
+                            partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                            ngToast.create({
+                                className: 'info',
+                                content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
+                            });
+                            partesc.selectedItem.id = 0;
+                            // Redirect once the edit ends
+                            $state.go('partes', {}, {
+                                reload: true
+                            });
                         }).catch(function (error) {
-                            console.log(error);
+                            //console.log(error);
                         })
                     }
-
-
-                    partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
-                    ngToast.create({
-                        className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
-                    });
-                    partesc.selectedItem.id = 0;
-                    // Redirect once the edit ends
-                    $state.go('partes', {}, {
-                        reload: true
-                    });
                 })
                 .catch(function (error) {
                     //console.log(error);
@@ -426,6 +445,7 @@ angular
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
                     //console.log(response.data.partes);
+                    
                     partesc.allLoad = false;
                     partesc.CurrentPage = page;
                     partesc.partes = response.data.partes;
@@ -591,7 +611,13 @@ angular
             $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     //console.log(partesc.parte);
-                    partesc.open(partesc.parte, action);
+                    url = endpointApiURL.url + "/conjunto/bypart/" + id;
+                            $scope.PartesPromise = $http.get(url)
+                                .then(function(response){
+                                    partesc.parte.kitParts = response.data;
+                                    partesc.open(partesc.parte, action);
+                                    console.log(partesc.parte);
+                                });
                 });
         }
 
@@ -681,4 +707,20 @@ angular
             }
         };
 
+
+        // Get Kit components for a Parte that is a Kit
+        partesc.getKitParts = function (parteKitId) {
+            var url = endpointApiURL.url + "/conjunto/bypart/" + parteKitId;
+            return $http.get(url)
+                .then(function (response) {
+                    //console.log(response.data);
+                    partesc.kitParts = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
     }])
