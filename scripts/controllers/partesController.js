@@ -16,6 +16,8 @@ angular
         partesc.loadingEditing = false;
         partesc.multiselectData = []; // For edit kits
         partesc.multiselectDataNew = [] // For new items
+        partesc.loadingData = false;
+        partesc.EqPartsIsCollapsed = true;
         //Vacío por ahora
         partesc.selectedItem = {};
         //
@@ -198,6 +200,35 @@ angular
                         }).catch(function (error) {
                             //console.log(error);
                         })
+                    } else {
+                        //console.log(response.data);
+                        partesc.getPartes($scope.QtyPagesSelected, partesc.CurrentPage, partesc.searchText);
+                        ngToast.create({
+                            className: 'info',
+                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + parteAgregada + '</strong>'
+                        });
+                        partesc.selectedItem.id = 0;
+                        partesc.newItem = {
+                            parCodigo: '',
+                            fabricanteFab: '',
+                            parNombre: '',
+                            parGrupo: '',
+                            parUpc: '',
+                            parSku: '',
+                            parLargo: '',
+                            parAncho: '',
+                            parEspesor: '',
+                            parPeso: '',
+                            parOripar: '',
+                            parCaract: '',
+                            parObservacion: '',
+                            parKit: '' //falta imagenes
+                        };
+
+                        $scope.newParteForm.parCodigo.$touched = false;
+                        $scope.newParteForm.fabricanteFab.$touched = false;
+                        $scope.newParteForm.parNombre.$touched = false;
+                        partesc.isAddNewParte = false;
                     }
 
 
@@ -589,6 +620,8 @@ angular
             } else {
                 partesc.newItem.parGrupo = "";
             }
+            //when update the group then get equivalent parts
+            //partesc.getEquivalentParts()
         };
 
 
@@ -607,4 +640,30 @@ angular
                     }
                 });
         };
+
+
+        //Obtain equivalent parts
+        partesc.getEquivalentParts = function(nombreid, grupoid, partid){
+            partesc.loadingData = true;
+            partesc.equivalentParts = [];
+            if(!partid || partid == ''){
+                // Obtain all equivalent parts for 1 specific group and name of part
+                var url = endpointApiURL.url + "/parte/findEqualsParts/" + nombreid + "/" + grupoid;
+                return $http.post(url)
+                .then(function(response){
+                    partesc.equivalentParts = response.data;
+                    partesc.equivalentParts.qtyEqParts = partesc.equivalentParts.length;
+                    partesc.loadingData = false;
+                })
+            } else {
+                // Obtain all equivalent part for 1 specific group and name of part excluding a part from the return list
+                var url = endpointApiURL.url + "/parte/findEqualsExcludePart/" + nombreid + "/" + grupoid + "/" + partid;
+                return $http.post(url)
+                .then(function(response){
+                    partesc.equivalentParts = response.data;
+                    partesc.loadingData = false;
+                });
+            }
+        }
+
     }])
