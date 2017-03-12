@@ -11,6 +11,7 @@
     <link href="scripts/vendor/ngToast/dist/ngToast.min.css" rel="stylesheet">
     <link rel="stylesheet" href="scripts/vendor/ngToast/dist/ngToast-animations.min.css">
     <link rel="stylesheet" href="styles/tree.css">
+    <link rel="stylesheet" href="scripts/vendor/components-font-awesome/css/font-awesome.min.css">
     <link href="styles/main.css" rel="stylesheet">
 </head>
 
@@ -29,18 +30,18 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
             <ul class="nav navbar-nav">
-                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'main']"><a ui-sref='main'>Inicio</a></li>
-                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'marcas']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='marcas'>Marcas</a></li>
-                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'proveedores']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='proveedores'>Proveedores</a></li>
-                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'modelos']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='modelos'>Modelos</a></li>
-                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'fabricantes']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='fabricantes'>Fabricantes</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'main']"><a ui-sref='main'><i class="fa fa-home"></i> Inicio</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'marcas']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='marcas'><i class="fa fa-certificate"></i> Marcas</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'proveedores']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='proveedores'><i class="fa fa-handshake-o"></i> Proveedores</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'modelos']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='modelos'><i class="fa fa-barcode"></i> Modelos</a></li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'fabricantes']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='fabricantes'><i class="fa fa-industry"></i> Fabricantes</a></li>
                 <li class="dropdown" uib-dropdown ng-class="{true:'active', false: 'none'}[$state.current.name == 'partes']" ng-if="userrole=='ROLE_ADMIN'">
-                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Partes <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" uib-dropdown-toggle data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Partes <span class="caret"></span></a>
                     <ul class="dropdown-menu" uib-dropdown-menu>
-                        <li ><a ui-sref='partes'>Agregar/Listar/Editar</a></li>
-                        <li><a ui-sref='partesNombres'>Agregar/Listar Nombres</a></li>
+                        <li ><a ui-sref='partes'><i class="fa fa-cog"></i> Gestión de Partes</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a ui-sref='grupos'>Agregar/Listar Grupos</a></li>
+                        <li><a ui-sref='partesNombres'><i class="fa fa-i-cursor"></i> Nombres de Partes</a></li>
+                        <li><a ui-sref='grupos'><i class="fa fa-cogs"></i> Grupos</a></li>
                     </ul>
                 </li>
                 <!--
@@ -68,9 +69,9 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- <li><a href="#">Link</a></li> -->
                 <li dropdown uib-dropdown>
-                    <a href="#" dropdown-toggle uib-dropdown-toggle><strong>Usuario: {{username}}</strong><b class="caret"></b></a>
+                    <a href="#" dropdown-toggle uib-dropdown-toggle><strong><i class="fa fa-user-circle"></i> Usuario: {{username}}</strong><b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a ui-sref='logout'>Cerrar Sesión</a></li>
+                        <li><a ui-sref='logout'><i class="fa fa-sign-out"></i> Cerrar Sesión</a></li>
                     </ul>
                 </li>
             </ul>
