@@ -118,6 +118,37 @@
     color: #d9534f;
 }
 
+.margin-top-10 {
+    margin-top: 10px;
+}
+
+.forum-icon {
+    float: left;
+    width: 30px;
+    margin-right: 20px;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 8px;
+    color: #337ab7; 
+}
+.forum-item-title {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+}
+.forum-sub-title{
+    color: #555;
+    margin-left: 50px;
+}
+
+.btn-extra{
+    color: #337ab7;
+}
+
+.btn-extra:hover{
+    color: #23527c;
+}
+
 /* Overrides */
 
 .in-line-paginator {

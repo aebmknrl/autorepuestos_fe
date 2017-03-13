@@ -10,10 +10,15 @@ angular.module('autorepuestosApp').controller('modalInstanceController', functio
   //  };
 
   $ctrl.ok = function () {
-    $uibModalInstance.close('okey');
+    $uibModalInstance.close();
   };
 
   $ctrl.cancel = function () {
-    $uibModalInstance.dismiss('cancelar');
+    $uibModalInstance.dismiss();
   };
+
+  $ctrl.openPart = function (partToOpen) {
+    $uibModalInstance.close(partToOpen);
+  };
+
 });

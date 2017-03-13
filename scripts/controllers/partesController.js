@@ -18,6 +18,7 @@ angular
         partesc.multiselectDataNew = [] // For new items
         partesc.loadingData = false;
         partesc.EqPartsIsCollapsed = true;
+        partesc.EqPartsIsCollapsedEdit = true;
         //Vacío por ahora
         partesc.selectedItem = {};
         //
@@ -114,6 +115,7 @@ angular
                     } else {
                         partesc.selectedItem.parKit = false;
                     }
+                    partesc.getEquivalentParts(partesc.selectedItem.parNombre.parNombreId,partesc.selectedItem.parNombre.parGrupo.id,partesc.selectedItem.parId);
                     partesc.loadingEditing = false;
                 });
         }
@@ -523,6 +525,8 @@ angular
 
         // For Edit operations using modals
         partesc.openModalViewEdit = function (id, action) {
+            // Scroll to top of the page when save
+            $window.scrollTo(0, 0);
             $scope.PartesPromise = partesc.getParte(id)
                 .then(function () {
                     //console.log(partesc.parte);
@@ -530,7 +534,11 @@ angular
                     $scope.PartesPromise = $http.get(url)
                         .then(function (response) {
                             partesc.parte.kitParts = response.data;
+                            $scope.PartesPromise = partesc.getEquivalentParts(partesc.parte.parNombre.parNombreId,partesc.parte.parNombre.parGrupo.id,id)
+                            .then(function(response){
+                            partesc.parte.equivalentParts = partesc.equivalentParts;
                             partesc.open(partesc.parte, action);
+                            });
                             //console.log(partesc.parte);
                         });
                 });
@@ -563,11 +571,13 @@ angular
                 }
             });
             modal.result.then(function (selectedItem) {
-                // This part is used when user hits ok button
-                partesc.selected = selectedItem;
+               // This part is used when user hits ok button
                 // Clear this variable to enable "Elmininar", "Nuevo" buttons again
                 partesc.selectedItemAction = '';
-                //console.log( partesc.selected);
+                if(selectedItem != '' && selectedItem != undefined){
+                   partesc.openModalViewEdit(selectedItem,'view');
+                }
+                //console.log(selectedItem);
             }, function () {
                 // This part is used when user hits cancelar button
                 // Clear this variable to enable "Elmininar", "Nuevo" buttons again
@@ -644,6 +654,12 @@ angular
 
         //Obtain equivalent parts
         partesc.getEquivalentParts = function(nombreid, grupoid, partid){
+  
+/*            console.log(nombreid);
+            console.log(grupoid);
+            console.log(partid);
+            return false;*/
+
             partesc.loadingData = true;
             partesc.equivalentParts = [];
             if(!partid || partid == ''){
@@ -661,6 +677,7 @@ angular
                 return $http.post(url)
                 .then(function(response){
                     partesc.equivalentParts = response.data;
+                    partesc.equivalentParts.qtyEqParts = partesc.equivalentParts.length;
                     partesc.loadingData = false;
                 });
             }

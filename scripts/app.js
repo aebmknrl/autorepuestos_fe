@@ -112,7 +112,7 @@ angular
             unauthenticatedRedirector: ['$state', 'authManager', 'storageService', 'jwtHelper', function ($state, authManager, storageService, jwtHelper) {
                 if (storageService.getToken() != null) {
                     if (jwtHelper.isTokenExpired(storageService.getToken())) {
-                        alert('Su sessión ha caducado.');
+                        alert('Su sesión ha caducado.');
                     }
                 }
 
