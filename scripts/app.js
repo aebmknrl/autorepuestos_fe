@@ -93,6 +93,13 @@ angular
                 data: {
                     requiresLogin: true
                 }
+            })
+            .state('vehiculos', {
+                url: '/vehiculos',
+                templateUrl: 'views/vehiculos.html',
+                data: {
+                    requiresLogin: true
+                }
             })    
             .state('logout', {
                 url: '/logout',

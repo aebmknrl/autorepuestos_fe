@@ -44,6 +44,7 @@
                         <li><a ui-sref='grupos'><i class="fa fa-cogs"></i> Grupos</a></li>
                     </ul>
                 </li>
+                <li ng-class="{true:'active', false: 'none'}[$state.current.name == 'vehiculos']" ng-if="userrole=='ROLE_ADMIN'"><a ui-sref='vehiculos'><i class="fa fa-car"></i> Vehículos</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li dropdown uib-dropdown>
