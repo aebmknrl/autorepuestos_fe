@@ -14,7 +14,7 @@
                     </button>
             </div>
         </div>
-        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[vehiculosc.isAddNewParte==true]">
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[vehiculosc.isAddNewVehiculo==true]">
             <div class="col-md-12">
                 <form name="newVehiculoForm" ng-submit="" novalidate>
                     <div class="form-group">
@@ -37,3 +37,147 @@
                             <p ng-message="required">"Modelo" es requerido.</p>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="vehCilindros">Configuración del Motor y Cilindros</label>
+                        <input type="text" name="vehCilindros" class="form-control" ng-model="vehiculosc.newItem.vehCilindros" placeholder="Configuración del Motor y Cilindros" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehLitros">Litros</label>
+                        <input type="text" name="vehLitros" class="form-control" ng-model="vehiculosc.newItem.vehLitros" placeholder="Litros" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehValvulas">Válvulas</label>
+                        <input type="text" name="vehValvulas" class="form-control" ng-model="vehiculosc.newItem.vehValvulas" placeholder="Válvulas" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehLevas">Configuración Levas</label>
+                        <input type="text" name="vehLevas" class="form-control" ng-model="vehiculosc.newItem.vehLevas" placeholder="Configuración Levas" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehVersion">Versión</label>
+                        <input type="text" name="vehVersion" class="form-control" ng-model="vehiculosc.newItem.vehVersion" placeholder="Versión" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehFabDesde">Año Inicio</label>
+                        <input type="text" name="vehFabDesde" class="form-control" ng-model="vehiculosc.newItem.vehFabDesde" placeholder="En formato AAAA" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehFabHasta">Año Fin</label>
+                        <input type="text" name="vehFabHasta" class="form-control" ng-model="vehiculosc.newItem.vehFabHasta" placeholder="En formato AAAA" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehTipo">Tipo</label>
+                        <input type="text" name="vehTipo" class="form-control" ng-model="vehiculosc.newItem.vehTipo" placeholder="Tipo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehTraccion">Tracción</label>
+                        <input type="text" name="vehTraccion" class="form-control" ng-model="vehiculosc.newItem.vehTraccion" placeholder="Tracción" />
+                    </div>
+                    <div class="form-group">
+                        <label for="vehCaja">Caja</label>
+                            <select id="CajaSelector" class="form-control input-group" name="vehCaja" ng-model="vehiculosc.newItem.vehCaja"
+                                ng-options="caja as caja.label for caja in vehiculosc.tiposDeCajas track by caja.id"
+                                required>
+                                <option value="">--Seleccione Tipo de Caja--</option>
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehObservacion">Observación</label>
+                        <textarea rows="" cols="" name="vehObservacion" class="form-control" ng-model="vehiculosc.newItem.vehObservacion" placeholder="Observación"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" ng-click="vehiculosc.addVehiculo(vehiculosc.newItem.modeloMod,vehiculosc.newItem.vehCilindros,vehiculosc.newItem.vehLitros,vehiculosc.newItem.vehValvulas,vehiculosc.newItem.vehLevas,vehiculosc.newItem.vehVersion,vehiculosc.newItem.vehFabDesde,vehiculosc.newItem.vehFabHasta,vehiculosc.newItem.vehTipo,vehiculosc.newItem.vehTraccion,vehiculosc.newItem.vehCaja,vehiculosc.newItem.vehObservacion)"
+                            ng-disabled="(newVehiculoForm.$invalid) || (vehiculosc.selectedItemAction == 'view')">
+                            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
+                            <span class="button-text">Agregar</span>
+                            </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar en todos los Vehículos..." ng-model="vehiculosc.searchText" on-enter="vehiculosc.getVehiculos(QtyPagesSelected,1,vehiculosc.searchText)">
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-class="{true:'item-visible', false: 'item-no-visible'}[vehiculosc.searchText !='']" ng-click="vehiculosc.searchText=''">
+		        	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                    <span class="input-group-btn">
+		        <button class="btn btn-default btn-left-margin-2" type="button" ng-click="vehiculosc.getVehiculos(QtyPagesSelected,1,vehiculosc.searchText)">
+		        	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-4">
+                <input type="text" class="form-control" id="txtFilter" placeholder="Filtro" ng-model="vehiculosc.filter">
+            </div>
+        </div>
+            <hr>
+        </div>
+        <div class="row">
+            <table class="table table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[vehiculosc.orderBy=='vehId']" ng-click="vehiculosc.changeOrderByOrDirection('vehId')"><span ng-show="vehiculosc.orderBy=='vehId'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[vehiculosc.orderDirection==false && vehiculosc.orderBy=='vehId']"></span>ID</span></th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[vehiculosc.orderBy=='marNombre']" ng-click="vehiculosc.changeOrderByOrDirection('marNombre')"><span ng-show="vehiculosc.orderBy=='marNombre'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[vehiculosc.orderDirection==false && vehiculosc.orderBy=='marNombre']"></span>Marca</span></th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[vehiculosc.orderBy=='modeloMod']" ng-click="vehiculosc.changeOrderByOrDirection('modeloMod')"><span ng-show="vehiculosc.orderBy=='modeloMod'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[vehiculosc.orderDirection==false && vehiculosc.orderBy=='modeloMod']"></span>Modelo</span></th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[vehiculosc.orderBy=='vehTipo']" ng-click="vehiculosc.changeOrderByOrDirection('vehTipo')"><span ng-show="vehiculosc.orderBy=='vehTipo'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[vehiculosc.orderDirection==false && vehiculosc.orderBy=='vehTipo']"></span>Tipo</span></th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[vehiculosc.orderBy=='vehVersion']" ng-click="vehiculosc.changeOrderByOrDirection('vehVersion')"><span ng-show="vehiculosc.orderBy=='vehVersion'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[vehiculosc.orderDirection==false && vehiculosc.orderBy=='vehVersion']"></span>Versión</span></th>
+                        <th><span class="btn" ng-class="{true:'bold-text',false:''}[vehiculosc.orderBy=='vehCaja']" ng-click="vehiculosc.changeOrderByOrDirection('vehCaja')"><span ng-show="vehiculosc.orderBy=='vehCaja'" ng-class="{true:'glyphicon glyphicon-sort-by-alphabet', false:'glyphicon glyphicon-sort-by-alphabet-alt'}[vehiculosc.orderDirection==false && vehiculosc.orderBy=='vehCaja']"></span>Caja</span></th>
+                        <th><span class="btn">Acción</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="vehiculo in vehiculosc.vehiculos | orderObjectBy: vehiculosc.orderBy : vehiculosc.orderDirection | filter : vehiculosc.filter">
+                        <td class="">{{vehiculosc.vehId}}</td>
+                        <td class="">{{vehiculosc.marNombre}}</td>
+                        <td class="">{{vehiculosc.modeloMod}}</td>
+                        <td class="">{{vehiculosc.vehTipo}}</td>
+                        <td class="">{{vehiculosc.vehVersion}}</td>
+                        <td class="">{{vehiculosc.vehCaja}}</td>
+                        <td class="action-buttons-td">
+                            <button type="button" class="btn btn-primary" ng-click="vehiculosc.openModalView(vehiculo.vehId); vehiculosc.selectedItemAction='view';">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                <span class="button-text">Ver</span>
+                            </button>
+                            <button type="button" class="btn btn-primary" ng-click="vehiculosc.copyRowData(vehiculo.vehId)"
+                                ng-disabled="vehiculosc.selectedItemAction == 'view'">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                <span class="button-text">Editar</span>
+                            </button>
+                            <button type="button" class="btn btn-danger" ng-click="vehiculosc.removeVehiculo(vehiculo.vehId)" confirm="¿Está seguro de eliminar el registro?. Esta acción no se puede deshacer."
+                                confirm-title="Atención" confirm-ok="Si" confirm-cancel="No" ng-disabled="vehiculosc.selectedItemAction == 'view'">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                <span class="button-text">Eliminar</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+        </div>
+        <div class="row" ng-cloak ng-show="vehiculosc.allLoad">
+            <form class="form-inline">
+                <div class="form-group">
+                    <select class="form-control in-line-paginator" id="selQtyPages" ng-model="QtyPagesSelected" ng-change="vehiculosc.ChangeQtyPagesTables(QtyPagesSelected,vehiculosc.searchText)"
+                        ng-init="QtyPagesSelected=QtyPageTables">
+                        <option value=10>10</option>
+                        <option value=20>20</option>
+                        <option value=50>50</option>
+                        <option value=100>100</option>
+                        <option value=Todos>Todos</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="vehiculosc.totalVehiculos"
+                        ng-model="vehiculosc.CurrentPage" ng-change="vehiculosc.setPage(vehiculosc.CurrentPage)"></ul>
+                </div>
+                <div class="form-group pull-right actual-range" ng-cloak>
+                    {{vehiculosc.actualRange}}
+                </div>
+            </form>
+        </div>
+        <hr>

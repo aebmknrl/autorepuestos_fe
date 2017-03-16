@@ -316,7 +316,7 @@
                         </select>
                 </div>
                 <div class="form-group">
-                    <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="partesc.totalFabricantes"
+                    <ul uib-pagination previous-text="Anterior" next-text="Siguiente" items-per-page="QtyPageTables" total-items="partesc.totalPartes"
                         ng-model="partesc.CurrentPage" ng-change="partesc.setPage(partesc.CurrentPage)"></ul>
                 </div>
                 <div class="form-group pull-right actual-range" ng-cloak>
@@ -325,19 +325,6 @@
             </form>
         </div>
         <hr>
-        <!--
-        <div class="row">
-            <div class="col-md-9">
-                <div class="forum-icon">
-                    <i class="fa fa-shield"></i>
-                </div>
-                <a href="forum_post.html" class="forum-item-title">General Discussion</a>
-                <div class="forum-sub-title">
-                    Talk about sports, entertainment, music, movies, your favorite color, talk about enything.
-                </div>
-            </div>
-        </div>
-        -->
     </div>
     <div class="row" id="edit-section" ng-class="partesc.loadingEditing == true || partesc.editing == false ? 'item-no-visible' : 'item-visible'">
         <div class="row">
