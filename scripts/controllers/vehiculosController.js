@@ -305,8 +305,42 @@ angular
 
         vehiculosc.reloadDropDownData = function () {
             $scope.VehiculosPromise = vehiculosc.getModelos()
-            .then(function(response){
-            })
+                .then(function (response) {})
+        }
+
+        // ----------- FOR MODAL OPERATIONS ----------------------------
+        vehiculosc.animationsEnabled = true;
+        vehiculosc.openModalView = function (id) {
+            // Scroll to top of the page when save
+            $window.scrollTo(0, 0);
+            $scope.VehiculosPromise = vehiculosc.getVehiculo(id)
+                .then(function () {
+                    var modal = $uibModal.open({
+                        animation: vehiculosc.animationsEnabled,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: 'vehiculosView.html',
+                        controller: 'modalVehController',
+                        controllerAs: '$ctrl',
+                        appendTo: undefined,
+                        resolve: {
+                            items: function () {
+                                return vehiculosc.vehiculo;
+                            }
+                        }
+                    });
+                    modal.result.then(function (selectedItem) {
+                        // This part is used when user hits ok button
+                        // Clear this variable to enable "Elmininar", "Nuevo" buttons again
+                        vehiculosc.selectedItemAction = '';
+                        //console.log(selectedItem);
+                    }, function () {
+                        // This part is used when user hits cancelar button
+                        // Clear this variable to enable "Elmininar", "Nuevo" buttons again
+                        vehiculosc.selectedItemAction = '';
+                        //$log.info('Modal dismissed at: ' + new Date());
+                    })
+                });
         }
 
     }])

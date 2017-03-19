@@ -228,7 +228,7 @@
                     <label for="modeloMod">Modelo</label>
                     <div class="input-group">
                         <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.selectedItem.modeloMod"
-                            ng-options="modelo as modelo.modNombre for modelo in vehiculosc.modelos track by modelo.modId" required>
+                            ng-options="modelo as (modelo.modNombre + ' - ' + modelo.marcaMar.marNombre) for modelo in vehiculosc.modelos track by modelo.modId" required>
                                 </select>
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" ng-click="vehiculosc.getModelos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
@@ -329,7 +329,7 @@
     <!-- Modal  -->
     <script type="text/ng-template" id="vehiculosView.html">
         <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">Vehículo {{$ctrl.items.modeloMod}}</h3>
+            <h3 class="modal-title" id="modal-title">Vehículo {{$ctrl.items.modeloMod.marcaMar.marNombre}} {{$ctrl.items.modeloMod.modNombre}}</h3>
         </div>
         <div class="modal-body" id="modal-body">
             <div class="row">
@@ -339,9 +339,9 @@
                     </div>
                     <span class="forum-item-title">Datos Generales</span>
                     <div class="forum-sub-title">
-                        <b>Marca:</b> {{$ctrl.items.marcaMod}}
+                        <b>Marca:</b> {{$ctrl.items.modeloMod.marcaMar.marNombre}}
                         </br>
-                        <b>Modelo:</b> {{$ctrl.items.modNombre}}
+                        <b>Modelo:</b> {{$ctrl.items.modeloMod.modNombre}}
                     </div>
                 </div>
             </div>
@@ -361,6 +361,8 @@
                         <b>Configuración de Levas:</b> {{$ctrl.items.vehLevas}}
                         <br>
                         <b>Versión:</b> {{$ctrl.items.vehVersion}}
+                        <br>
+                        <b>Año:</b> {{$ctrl.items.anioAniId}}
                         <br>
                         <b>Año Inicio:</b> {{$ctrl.items.vehFabDesde}}
                         <br>

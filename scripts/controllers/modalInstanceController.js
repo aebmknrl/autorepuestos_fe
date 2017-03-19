@@ -22,3 +22,16 @@ angular.module('autorepuestosApp').controller('modalInstanceController', functio
   };
 
 });
+
+angular.module('autorepuestosApp').controller('modalVehController', function ($uibModalInstance, items) {
+  var $ctrl = this;
+  $ctrl.items = items;
+
+  $ctrl.ok = function () {
+    $uibModalInstance.close();
+  };
+  $ctrl.cancel = function () {
+    $uibModalInstance.dismiss();
+  };
+
+});
