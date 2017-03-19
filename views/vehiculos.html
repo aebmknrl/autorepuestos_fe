@@ -26,12 +26,17 @@
                     <div class="form-group" ng-class="{ 'has-error': newVehiculoForm.modeloMod.$touched && newVehiculoForm.modeloMod.$invalid}">
                         <label for="modeloMod">Modelo <span class="label label-primary">REQUERIDO</span></label>
                         <div class="input-group">
+                            <select name="modeloMod" selector model="vehiculosc.newItem.modeloMod" options="vehiculosc.modelos"
+                                 label-attr="modNombre" require="true" placeholder="--Seleccione Modelo--" group-attr="marcaMar.marNombre">
+                            </select>
+                            <!--
                             <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.newItem.modeloMod" ng-options="modelo as (modelo.modNombre + ' - ' + modelo.marcaMar.marNombre) for modelo in vehiculosc.modelos track by modelo.modId"
                                 required>
                                 <option value="">--Seleccione Modelo--</option>
                                 </select>
+                            -->
                             <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="vehiculosc.getModelos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                            <button class="btn btn-default btn-refresh" type="button" ng-click="vehiculosc.reloadDropDownData()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
                             </span>
                         </div>
                         <div class="help-block" ng-messages="newVehiculoForm.modeloMod.$error" ng-if="newVehiculoForm.modeloMod.$touched">
@@ -227,11 +232,18 @@
                 <div class="form-group">
                     <label for="modeloMod">Modelo</label>
                     <div class="input-group">
+                        <!--
+                            <select name="modeloMod" selector model="vehiculosc.selectedItem.modeloMod"  options="vehiculosc.modelos" label-attr="modNombre" require="true" placeholder="--Seleccione Modelo--" group-attr="marcaMar.marNombre">
+                            </select>
+                        -->
+                        
                         <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.selectedItem.modeloMod"
-                            ng-options="modelo as (modelo.modNombre + ' - ' + modelo.marcaMar.marNombre) for modelo in vehiculosc.modelos track by modelo.modId" required>
+                            ng-options="modelo as (modelo.modNombre + ' - ' + modelo.marcaMar.marNombre) for modelo in vehiculosc.modelos track by modelo.modId"
+                            required>
                                 </select>
+                        
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="vehiculosc.getModelos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                            <button class="btn btn-default btn-refresh" type="button" ng-click="vehiculosc.getModelos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
                         </span>
                     </div>
                 </div>

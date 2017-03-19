@@ -37,7 +37,8 @@
     "ngScrollTo": "*",
     "ngToast": "ngtoast#^2.0.0",
     "update": "^0.7.4",
-    "components-font-awesome": "^4.7.0"
+    "components-font-awesome": "^4.7.0",
+    "angular-selector": "^1.5.0"
   },
   "resolutions": {
     "angular": "1.5.8"

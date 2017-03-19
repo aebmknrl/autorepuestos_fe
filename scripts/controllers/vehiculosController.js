@@ -1,6 +1,6 @@
 angular
     .module('autorepuestosApp')
-    .controller('vehiculosController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', '$window', '$httpParamSerializerJQLike', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService, $window, $httpParamSerializerJQLike) {
+    .controller('vehiculosController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', '$document', '$log', 'countryService', '$window', '$httpParamSerializerJQLike', '$timeout', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, $document, $log, countryService, $window, $httpParamSerializerJQLike, $timeout) {
 
         // Set the username for the app
         $rootScope.username = storageService.getUserData('username');
@@ -67,7 +67,6 @@ angular
             $scope.QtyPageTables = storageService.getQtyPageTables();
             vehiculosc.getVehiculos(Qty, 1, searchText);
         }
-
 
         // Copy temporally item data for edit
         vehiculosc.copyRowData = function (id) {
