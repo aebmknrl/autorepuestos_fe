@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <form name="newPnombreForm" ng-submit="" novalidate>
                     <div ng-class="{ 'has-error': newPnombreForm.parNombre.$touched && newPnombreForm.parNombre.$invalid}" class="form-group">
-                        <label for="parNombre">Nombre</label>
+                        <label for="parNombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                         <input type="text" name="parNombre" class="form-control" ng-model="pnombresc.newItem.parNombre" placeholder="Nombre" required/>
                         <div class="help-block" ng-messages="newPnombreForm.parNombre.$error" ng-if="newPnombreForm.parNombre.$touched">
                             <p ng-message="required">"Nombre" es requerido.</p>
@@ -34,7 +34,7 @@
                         <textarea rows="" cols="" name="parNombreOtros" class="form-control" ng-model="pnombresc.newItem.parNombreOtros" placeholder="Nombre Tropical"></textarea>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': newPnombreForm.parGrupo.$touched && newPnombreForm.parGrupo.$invalid}">
-                        <label for="parGrupo">Grupo</label>
+                        <label for="parGrupo">Grupo <span class="label label-primary">REQUERIDO</span></label>
                         <div class="input-group">
                             <select id="grupoSelector" class="form-control input-group" name="parGrupo" ng-model="pnombresc.newItem.parGrupo" ng-options="grupos as grupos.grupoNombre for grupos in pnombresc.grupos track by grupos.id"
                                 required>

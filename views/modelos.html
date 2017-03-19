@@ -17,7 +17,7 @@
         <div class="col-md-12">
             <form name="newModeloForm" ng-submit="" novalidate>
                 <div ng-class="{ 'has-error': newModeloForm.nombre.$touched && newModeloForm.nombre.$invalid}" class="form-group">
-                    <label for="nombre">Nombre</label>
+                    <label for="nombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                     <input type="text" name="nombre" class="form-control" ng-model="modelosc.newItem.nombre" placeholder="Nombre" required/>
                     <div class="help-block" ng-messages="newModeloForm.nombre.$error" ng-if="newModeloForm.nombre.$touched">
                         <p ng-message="required">"Nombre" es requerido.</p>
@@ -28,7 +28,7 @@
                     <textarea rows="" cols="" name="observacion" class="form-control" ng-model="modelosc.newItem.observacion" placeholder="Observación"></textarea>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': newModeloForm.marca.$touched && newModeloForm.marca.$invalid}">
-                    <label for="marca">Marca</label>
+                    <label for="marca">Marca <span class="label label-primary">REQUERIDO</span></label>
                     <div class="input-group">
                         <select id="MarcaSelector" class="form-control input-group" name="marca" ng-model="modelosc.newItem.marca"  ng-options="marca as marca.marNombre for marca in modelosc.marcas track by marca.marId" required>
                             <option value="">--Seleccione Marca--</option>

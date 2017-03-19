@@ -17,18 +17,19 @@
         <div class="col-md-12">
             <form name="newMarcaForm" ng-submit="" novalidate>
                 <div ng-class="{ 'has-error': newMarcaForm.nombre.$touched && newMarcaForm.nombre.$invalid}" class="form-group">
-                    <label for="nombre">Nombre</label>
+                    <label for="nombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                     <input type="text" name="nombre" class="form-control" ng-model="mc.newItem.nombre" placeholder="Nombre" required/>
                     <div class="help-block" ng-messages="newMarcaForm.nombre.$error" ng-if="newMarcaForm.nombre.$touched">
                         <p ng-message="required">"Nombre" es requerido.</p>
                     </div>
                 </div>
                 <div ng-class="{ 'has-error': newMarcaForm.observaciones.$touched && newMarcaForm.observaciones.$invalid}" class="form-group">
-                    <label for="observaciones">Observaciones</label>
-                    <textarea rows="" cols="" name="observaciones" class="form-control" ng-model="mc.newItem.observacion" placeholder="Observaciones"
+                    <label for="observaciones">Observaciones <span class="label label-primary">REQUERIDO</span></label>
+                    <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.newItem.observacion" placeholder="Observaciones"
                         required></textarea>
                     <div class="help-block" ng-messages="newMarcaForm.observaciones.$error" ng-if="newMarcaForm.observaciones.$touched">
                         <p ng-message="required">"Observación" es requerido.</p>
+                        <p ng-message="maxlength">Escriba máximo 250 caracteres.</p>
                     </div>
                 </div>
                 <button type="button" class="btn btn-success" ng-click="mc.addMarca(mc.newItem.nombre,mc.newItem.observacion)" ng-disabled="newMarcaForm.$invalid">

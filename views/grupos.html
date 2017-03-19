@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <form name="newGrupoForm" ng-submit="" novalidate>
                     <div ng-class="{ 'has-error': newGrupoForm.grupoNombre.$touched && newGrupoForm.grupoNombre.$invalid}" class="form-group">
-                        <label for="grupoNombre">Nombre del Grupo</label>
+                        <label for="grupoNombre">Nombre del Grupo <span class="label label-primary">REQUERIDO</span></label>
                         <input type="text" name="grupoNombre" class="form-control" ng-model="gruposc.newItem.grupoNombre" placeholder="Nombre del Grupo"
                             required/>
                         <div class="help-block" ng-messages="newGrupoForm.grupoNombre.$error" ng-if="newGrupoForm.grupoNombre.$touched">

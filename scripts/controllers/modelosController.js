@@ -93,7 +93,7 @@ angular
                     }
                 )
                 .then(function (response) {
-                    console.log(response.data.modelos);
+                    //console.log(response.data.modelos);
                     modelosc.getModelos($scope.QtyPagesSelected, modelosc.CurrentPage, modelosc.searchText);
                     ngToast.create({
                         className: 'info',

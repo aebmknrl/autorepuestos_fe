@@ -17,14 +17,14 @@
         <div class="col-md-12">
             <form name="newFabricanteForm" ng-submit="" novalidate>
                 <div ng-class="{ 'has-error': newFabricanteForm.nombre.$touched && newFabricanteForm.nombre.$invalid}" class="form-group">
-                    <label for="nombre">Nombre</label>
+                    <label for="nombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                     <input type="text" name="nombre" class="form-control" ng-model="fabricantesc.newItem.nombre" placeholder="Nombre" required/>
                     <div class="help-block" ng-messages="newFabricanteForm.nombre.$error" ng-if="newFabricanteForm.nombre.$touched">
                         <p ng-message="required">"Nombre" es requerido.</p>
                     </div>
                 </div>
                 <div ng-class="{ 'has-error': newFabricanteForm.descripcion.$touched && newFabricanteForm.descripcion.$invalid}" class="form-group">
-                    <label for="nombre">Descripción</label>
+                    <label for="nombre">Descripción <span class="label label-primary">REQUERIDO</span></label>
                     <textarea rows="" cols="" type="text" name="descripcion" class="form-control" ng-model="fabricantesc.newItem.descripcion"
                         placeholder="Descripción" required></textarea>
                         <div class="help-block" ng-messages="newFabricanteForm.descripcion.$error" ng-if="newFabricanteForm.descripcion.$touched">
@@ -32,7 +32,7 @@
                         </div>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': newFabricanteForm.pais.$touched && newFabricanteForm.pais.$invalid}">
-                    <label for="pais">País</label>
+                    <label for="pais">País <span class="label label-primary">REQUERIDO</span></label>
                     <div class="input-group">
                         <select id="pais" class="form-control input-group" name="pais" ng-model="fabricantesc.newItem.pais" ng-options="pais as pais for pais in fabricantesc.paises"
                             required>

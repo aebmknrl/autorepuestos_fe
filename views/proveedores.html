@@ -17,26 +17,26 @@
         <div class="col-md-12">
             <form name="newProveedorForm" ng-submit="" novalidate>
                 <div ng-class="{ 'has-error': newProveedorForm.nombre.$touched && newProveedorForm.nombre.$invalid}" class="form-group">
-                    <label for="nombre">Nombre</label>
+                    <label for="nombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                     <input type="text" name="nombre" class="form-control" ng-model="proveedoresc.newItem.nombre" placeholder="Nombre" required/>
                     <div class="help-block" ng-messages="newProveedorForm.nombre.$error" ng-if="newProveedorForm.nombre.$touched">
                         <p ng-message="required">"Nombre" es requerido.</p>
                     </div>
                 </div>
                 <div ng-class="{ 'has-error': newProveedorForm.rif.$touched && newProveedorForm.rif.$invalid}" class="form-group">
-                    <label for="rif">RIF</label>
+                    <label for="rif">RIF <span class="label label-primary">REQUERIDO</span></label>
                     <input type="text" name="rif" class="form-control" ng-model="proveedoresc.newItem.rif" placeholder="RIF" required/>
                     <div class="help-block" ng-messages="newProveedorForm.rif.$error" ng-if="newProveedorForm.rif.$touched">
                         <p ng-message="required">"RIF" es requerido.</p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="direccion">Dirección</label>
+                    <label for="direccion">Dirección <span class="label label-primary">REQUERIDO</span></label>
                     <textarea rows="" cols="" name="direccion" class="form-control" ng-model="proveedoresc.newItem.direccion" placeholder="Dirección"
                         required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="observacion">Observación</label>
+                    <label for="observacion">Observación <span class="label label-primary">REQUERIDO</span></label>
                     <textarea rows="" cols="" name="observacion" class="form-control" ng-model="proveedoresc.newItem.observacion" placeholder="Observación"
                         required></textarea>
                 </div>

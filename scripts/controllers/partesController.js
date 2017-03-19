@@ -364,7 +364,6 @@ angular
             $scope.PartesPromise = $http.get(url)
                 .then(function (response) {
                     //console.log(response.data.partes);
-
                     partesc.allLoad = false;
                     partesc.CurrentPage = page;
                     partesc.partes = response.data.partes;

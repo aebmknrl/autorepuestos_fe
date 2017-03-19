@@ -74,7 +74,7 @@ angular
             vehiculosc.editing = true;
             vehiculosc.loadingEditing = true;
             vehiculosc.selectedItem.vehId = id;
-            $scope.vehiculosPromise = vehiculosc.getVehiculo(id)
+            $scope.VehiculosPromise = vehiculosc.getVehiculo(id)
                 .then(function (response) {
                     vehiculosc.selectedItem = vehiculosc.vehiculo;
                     vehiculosc.loadingEditing = false;
@@ -100,7 +100,7 @@ angular
         // Remove item
         vehiculosc.removeVehiculo = function (id) {
             url = endpointApiURL.url + "/vehiculo/delete/" + id;
-            $scope.vehiculosPromise = $http.delete(url)
+            $scope.VehiculosPromise = $http.delete(url)
                 .then(function (response) {
                     // console.log(response.data);
                     vehiculosc.getVehiculos($scope.QtyPagesSelected, vehiculosc.CurrentPage, vehiculosc.searchText);
@@ -118,18 +118,21 @@ angular
         };
 
         // Add item
-        vehiculosc.addVehiculo = function (anioAniId, vehCilindros, vehLitros, vehValvulas, vehLevas, vehVersion, vehTipo, vehTraccion, vehCaja, vehObservacion, vehVin, vehFabDesde, vehFabHasta, modeloMod) {
-            console.log(modeloMod);
-            return false;
-            
+        vehiculosc.addVehiculo = function (anioAniId, vehCilindros, vehLitros, vehValvulas, vehLevas, vehVersion, vehTipo, vehTraccion, vehCaja, vehObservacion, vehFabDesde, vehFabHasta, modeloMod) {
             // Scroll to top of the page when save
             $window.scrollTo(0, 0);
 
+            if (vehFabDesde == '') {
+                vehFabDesde = null;
+            }
+            if (vehFabHasta == '') {
+                vehFabHasta = null;
+            }
             url = endpointApiURL.url + "/vehiculo/add";
             $scope.VehiculosPromise = $http.post(
                     url, {
-                        anioAniId: anioAniId,
                         vehCilindros: vehCilindros,
+                        anioAniId: anioAniId,
                         vehLitros: vehLitros,
                         vehValvulas: vehValvulas,
                         vehLevas: vehLevas,
@@ -138,7 +141,6 @@ angular
                         vehTraccion: vehTraccion,
                         vehCaja: vehCaja,
                         vehObservacion: vehObservacion,
-                        vehVin: vehVin,
                         vehFabDesde: vehFabDesde,
                         vehFabHasta: vehFabHasta,
                         modeloMod: modeloMod.modId //falta imagenes
@@ -149,12 +151,12 @@ angular
                     vehiculosc.getVehiculos($scope.QtyPagesSelected, vehiculosc.CurrentPage, vehiculosc.searchText);
                     ngToast.create({
                         className: 'info',
-                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.vehiculoid + '</strong>'
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.vehiculo[0].vehiculoid + '</strong>'
                     });
                     vehiculosc.selectedItem.id = 0;
                     vehiculosc.newItem = {
-                        anioAniId: '',
                         vehCilindros: '',
+                        anioAniId: '',
                         vehLitros: '',
                         vehValvulas: '',
                         vehLevas: '',
@@ -163,7 +165,6 @@ angular
                         vehTraccion: '',
                         vehCaja: '',
                         vehObservacion: '',
-                        vehVin: '',
                         vehFabDesde: '',
                         vehFabHasta: '',
                         modeloMod: '' //falta imagenes
@@ -178,20 +179,25 @@ angular
                 });
         }
 
-        vehiculosc.updateVehiculo = function (vehId, anioAniId, vehCilindros, vehLitros, vehValvulas, vehLevas, vehVersion, vehTipo, vehTraccion, vehCaja, vehObservacion, vehVin, vehFabDesde, vehFabHasta, modeloMod) {
+        vehiculosc.updateVehiculo = function (vehId, anioAniId, vehCilindros, vehLitros, vehValvulas, vehLevas, vehVersion, vehTipo, vehTraccion, vehCaja, vehObservacion, vehFabDesde, vehFabHasta, modeloMod) {
             // Scroll to top of the page when save
             $window.scrollTo(0, 0);
 
             if (!vehId || !modeloMod) {
                 return false;
             }
-
+            if (vehFabDesde == '') {
+                vehFabDesde = null;
+            }
+            if (vehFabHasta == '') {
+                vehFabHasta = null;
+            }
             url = endpointApiURL.url + "/vehiculo/edit/" + vehId;
-            $scope.vehiculosPromise = $http.post(
+            $scope.VehiculosPromise = $http.post(
                     url, {
                         vehId: vehId,
-                        anioAniId: anioAniId,
                         vehCilindros: vehCilindros,
+                        anioAniId: anioAniId,
                         vehLitros: vehLitros,
                         vehValvulas: vehValvulas,
                         vehLevas: vehLevas,
@@ -200,7 +206,6 @@ angular
                         vehTraccion: vehTraccion,
                         vehCaja: vehCaja,
                         vehObservacion: vehObservacion,
-                        vehVin: vehVin,
                         vehFabDesde: vehFabDesde,
                         vehFabHasta: vehFabHasta,
                         modeloMod: modeloMod.modId //falta imagenes
@@ -238,7 +243,7 @@ angular
                 var url = endpointApiURL.url + "/vehiculo/" + limit + "/" + page;
             }
             //console.log('The parameters send are: URL=' + url);
-            $scope.vehiculosPromise = $http.get(url)
+            $scope.VehiculosPromise = $http.get(url)
                 .then(function (response) {
                     //console.log(response.data.vehiculos);
                     vehiculosc.allLoad = false;
@@ -254,9 +259,8 @@ angular
                         vehiculosc.pageFrom = (limit * page) - (limit - 1);
                         vehiculosc.pageTo = (vehiculosc.pageFrom + vehiculosc.totalVehiculosReturned) - 1;
                         vehiculosc.actualRange = "Mostrando registros " + vehiculosc.pageFrom + " a " + vehiculosc.pageTo + " de " + vehiculosc.totalVehiculos
-
                     };
-
+                    vehiculosc.getModelos();
                     vehiculosc.allLoad = true;
                 })
                 .catch(function (error) {
@@ -286,7 +290,7 @@ angular
 
         vehiculosc.getModelos = function () {
             var url = endpointApiURL.url + "/modelo";
-            $scope.vehiculosPromise = $http.get(url)
+            return $http.get(url)
                 .then(function (response) {
                     vehiculosc.modelos = response.data;
                     //console.log(vehiculosc.modelos);
@@ -299,11 +303,10 @@ angular
                 });
         };
 
-        vehiculosc.getTipoCajas = function () {
-            $scope.vehiculosPromise = $http.get("scripts/model/optVehCaja.json")
-                .then(function (response) {
-                    vehiculosc.tiposDeCajas = response.data;
-                })
+        vehiculosc.reloadDropDownData = function () {
+            $scope.VehiculosPromise = vehiculosc.getModelos()
+            .then(function(response){
+            })
         }
 
     }])

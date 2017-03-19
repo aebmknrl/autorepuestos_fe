@@ -19,7 +19,7 @@
             <div class="col-md-12">
                 <form name="newParteForm" ng-submit="" novalidate>
                     <div ng-class="{ 'has-error': newParteForm.parCodigo.$touched && newParteForm.parCodigo.$invalid}" class="form-group">
-                        <label for="parCodigo">Código Comercial</label>
+                        <label for="parCodigo">Código Comercial <span class="label label-primary">REQUERIDO</span></label>
                         <input type="text" name="parCodigo" class="form-control" ng-model="partesc.newItem.parCodigo" placeholder="Código Comercial"
                             required/>
                         <div class="help-block" ng-messages="newParteForm.parCodigo.$error" ng-if="newParteForm.parCodigo.$touched">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': newParteForm.fabricanteFab.$touched && newParteForm.fabricanteFab.$invalid}">
-                        <label for="fabricanteFab">Fabricante</label>
+                        <label for="fabricanteFab">Fabricante <span class="label label-primary">REQUERIDO</span></label>
                         <div class="input-group">
                             <select id="FabricanteSelector" class="form-control input-group" name="fabricanteFab" ng-model="partesc.newItem.fabricanteFab"
                                 ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricante.fabId"
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': newParteForm.parNombre.$touched && newParteForm.parNombre.$invalid}">
-                        <label for="parNombre">Nombre</label>
+                        <label for="parNombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                         <div class="input-group">
                             <select id="grupoSelector" class="form-control input-group" name="parNombre" ng-model="partesc.newItem.parNombre" ng-options="nombres as nombres.parNombre for nombres in partesc.nombres track by nombres.parNombreId"
                                 ng-change="partesc.updateAsociatedNameGroup(partesc.newItem.parNombre); partesc.getEquivalentParts(partesc.newItem.parNombre.parNombreId,partesc.newItem.parNombre.parGrupo.id);"
@@ -335,7 +335,7 @@
         <div class="col-md-12">
             <form name="editParteForm" ng-submit="" novalidate>
                 <div ng-class="{ 'has-error': editParteForm.parCodigo.$touched && editParteForm.parCodigo.$invalid}" class="form-group">
-                    <label for="parCodigo">Código Comercial</label>
+                    <label for="parCodigo">Código Comercial <span class="label label-primary">REQUERIDO</span></label>
                     <input type="text" name="parCodigo" class="form-control" ng-model="partesc.selectedItem.parCodigo" placeholder="Código Comercial"
                         required/>
                     <div class="help-block" ng-messages="editParteForm.parCodigo.$error" ng-if="editParteForm.parCodigo.$touched">
@@ -343,7 +343,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="fabricanteFab">Fabricante</label>
+                    <label for="fabricanteFab">Fabricante <span class="label label-primary">REQUERIDO</span></label>
                     <div class="input-group">
                         <select id="FabricanteSelector" class="form-control input-group" name="fabricanteFab" ng-model="partesc.selectedItem.fabricanteFab"
                             ng-options="fabricante as fabricante.fabNombre for fabricante in partesc.fabricantes track by fabricante.fabId"
@@ -352,7 +352,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="parNombre">Nombre</label>
+                    <label for="parNombre">Nombre <span class="label label-primary">REQUERIDO</span></label>
                     <div class="input-group">
                         <select id="grupoSelector" class="form-control input-group" name="parNombre" ng-model="partesc.selectedItem.parNombre" ng-options="nombres as nombres.parNombre for nombres in partesc.nombres track by nombres.parNombreId"
                             ng-change="partesc.getEquivalentParts(partesc.selectedItem.parNombre.parNombreId,partesc.selectedItem.parNombre.parGrupo.id,partesc.selectedItem.parId);"
