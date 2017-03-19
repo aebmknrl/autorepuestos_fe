@@ -3,13 +3,14 @@
     <div ng-class="vehiculosc.editing == true  ? 'item-no-visible' : 'item-visible'">
         <div class="row">
             <div class="col-md-12">
-                <h2>Lista de vehiculos</h2>
+                <h2>Lista de Vehículos</h2>
             </div>
         </div>
         <div class="row button-margin">
             <div class="col-md-12">
                 <button class="btn btn-primary" type="button" ng-disabled="(vehiculosc.selectedItemAction == 'edit') || (vehiculosc.selectedItemAction == 'view')"
-                    ng-model="vehiculosc.isAddNewVehiculo" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                    ng-model="vehiculosc.isAddNewVehiculo" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
+                    ng-click="vehiculosc.getModelos(); vehiculosc.getTipoCajas()">
                     <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Nuevo
                     </button>
             </div>
@@ -19,13 +20,13 @@
                 <form name="newVehiculoForm" ng-submit="" novalidate>
                     <div class="form-group">
                         <label for="marNombre">Marca</label>
-                        <input type="text" name="marNombre" class="form-control" ng-model="vehiculosc.newItem.marNombre" placeholder="Seleccione un modelo"
+                        <input type="text" name="marNombre" class="form-control" ng-model="vehiculosc.newItem.modeloMod.marcaMar.marNombre" placeholder="Seleccione un modelo"
                             readonly/>
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': newVehiculoForm.modeloMod.$touched && newVehiculoForm.modeloMod.$invalid}">
                         <label for="modeloMod">Modelo</label>
                         <div class="input-group">
-                            <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.newItem.modeloMod" ng-options="modelo as modelo.modNombre for modelo in vehiculosc.modelos track by modelo.modId"
+                            <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.newItem.modeloMod" ng-options="modelo as (modelo.modNombre + ' - ' + modelo.marcaMar.marNombre) for modelo in vehiculosc.modelos track by modelo.modId"
                                 required>
                                 <option value="">--Seleccione Modelo--</option>
                                 </select>
@@ -61,15 +62,21 @@
                         <input type="text" name="vehVersion" class="form-control" ng-model="vehiculosc.newItem.vehVersion" placeholder="Versión"
                         />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error': newVehiculoForm.vehFabDesde.$touched && newVehiculoForm.vehFabDesde.$invalid}">
                         <label for="vehFabDesde">Año Inicio</label>
                         <input type="text" name="vehFabDesde" class="form-control" ng-model="vehiculosc.newItem.vehFabDesde" placeholder="En formato AAAA"
-                        />
+                            ng-pattern="/^[0-9]{4}$/" />
+                        <div class="help-block" ng-messages="newVehiculoForm.vehFabDesde.$error" ng-if="newVehiculoForm.vehFabDesde.$touched">
+                            <p ng-message="pattern">Escriba un año válido.</p>
+                        </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{ 'has-error': newVehiculoForm.vehFabHasta.$touched && newVehiculoForm.vehFabHasta.$invalid}">
                         <label for="vehFabHasta">Año Fin</label>
                         <input type="text" name="vehFabHasta" class="form-control" ng-model="vehiculosc.newItem.vehFabHasta" placeholder="En formato AAAA"
-                        />
+                            ng-pattern="/^[0-9]{4}$/" />
+                        <div class="help-block" ng-messages="newVehiculoForm.vehFabHasta.$error" ng-if="newVehiculoForm.vehFabHasta.$touched">
+                            <p ng-message="pattern">Escriba un año válido.</p>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="vehTipo">Tipo</label>
@@ -82,8 +89,7 @@
                     </div>
                     <div class="form-group">
                         <label for="vehCaja">Caja</label>
-                        <select id="CajaSelector" class="form-control input-group" name="vehCaja" ng-model="vehiculosc.newItem.vehCaja" ng-options="caja as caja.label for caja in vehiculosc.tiposDeCajas track by caja.id"
-                            required>
+                        <select id="CajaSelector" class="form-control input-group" name="vehCaja" ng-model="vehiculosc.newItem.vehCaja" ng-options="caja as caja.label for caja in vehiculosc.tiposDeCajas track by caja.id">
                                 <option value="">--Seleccione Tipo de Caja--</option>
                             </select>
                     </div>
@@ -92,7 +98,7 @@
                         <textarea rows="" cols="" name="vehObservacion" class="form-control" ng-model="vehiculosc.newItem.vehObservacion" placeholder="Observación"></textarea>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-success" ng-click="vehiculosc.addVehiculo(vehiculosc.newItem.modeloMod,vehiculosc.newItem.vehCilindros,vehiculosc.newItem.vehLitros,vehiculosc.newItem.vehValvulas,vehiculosc.newItem.vehLevas,vehiculosc.newItem.vehVersion,vehiculosc.newItem.vehFabDesde,vehiculosc.newItem.vehFabHasta,vehiculosc.newItem.vehTipo,vehiculosc.newItem.vehTraccion,vehiculosc.newItem.vehCaja,vehiculosc.newItem.vehObservacion)"
+                        <button type="button" class="btn btn-success" ng-click="vehiculosc.addVehiculo(vehiculosc.newItem.anioAniId,vehiculosc.newItem.vehCilindros,vehiculosc.newItem.vehLitros,vehiculosc.newItem.vehValvulas,vehiculosc.newItem.vehLevas,vehiculosc.newItem.vehVersion,vehiculosc.newItem.vehFabDesde,vehiculosc.newItem.vehFabHasta,vehiculosc.newItem.vehTipo,vehiculosc.newItem.vehTraccion,vehiculosc.newItem.vehCaja,vehiculosc.newItem.vehObservacion)"
                             ng-disabled="(newVehiculoForm.$invalid) || (vehiculosc.selectedItemAction == 'view')">
                             <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                             <span class="button-text">Agregar</span>
@@ -192,150 +198,148 @@
         </form>
     </div>
     <hr>
-</div>
-<div class="row" id="edit-section" ng-class="vehiculos.loadingEditing == true || vehiculosc.editing == false ? 'item-no-visible' : 'item-visible'">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Editar Vehículo {{vehiculosc.selectedItem.modeloMod}}</h2>
+    <div class="row" id="edit-section" ng-class="vehiculos.loadingEditing == true || vehiculosc.editing == false ? 'item-no-visible' : 'item-visible'">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Editar Vehículo {{vehiculosc.selectedItem.modeloMod}}</h2>
+            </div>
         </div>
-    </div>
-    <div class="col-md-12">
-        <form name="editVehiculoForm" ng-submit="" novalidate>
-            <div class="form-group">
-                <label for="marNombre">Marca</label>
-                <input type="text" name="marNombre" class="form-control" ng-model="vehiculosc.selectedItem.marNombre" placeholder="Seleccione un modelo"
-                    readonly/>
-            </div>
-            <div class="form-group">
-                <label for="modeloMod">Modelo</label>
-                <div class="input-group">
-                    <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.selectedItem.modeloMod"
-                        ng-options="modelo as modelo.modNombre for modelo in vehiculosc.modelos track by modelo.modId" required>
-                                </select>
-                    <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" ng-click="vehiculosc.getModelos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
-                    </span>
+        <div class="col-md-12">
+            <form name="editVehiculoForm" ng-submit="" novalidate>
+                <div class="form-group">
+                    <label for="marNombre">Marca</label>
+                    <input type="text" name="marNombre" class="form-control" ng-model="vehiculosc.selectedItem.marNombre" placeholder="Seleccione un modelo"
+                        readonly/>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="vehCilindros">Configuración del Motor y Cilindros</label>
-                <input type="text" name="vehCilindros" class="form-control" ng-model="vehiculosc.selectedItem.vehCilindros" placeholder="Configuración del Motor y Cilindros"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehLitros">Litros</label>
-                <input type="text" name="vehLitros" class="form-control" ng-model="vehiculosc.selectedItem.vehLitros" placeholder="Litros"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehValvulas">Válvulas</label>
-                <input type="text" name="vehValvulas" class="form-control" ng-model="vehiculosc.selectedItem.vehValvulas" placeholder="Válvulas"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehLevas">Configuración Levas</label>
-                <input type="text" name="vehLevas" class="form-control" ng-model="vehiculosc.selectedItem.vehLevas" placeholder="Configuración Levas"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehVersion">Versión</label>
-                <input type="text" name="vehVersion" class="form-control" ng-model="vehiculosc.selectedItem.vehVersion" placeholder="Versión"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehFabDesde">Año Inicio</label>
-                <input type="text" name="vehFabDesde" class="form-control" ng-model="vehiculosc.selectedItem.vehFabDesde" placeholder="En formato AAAA"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehFabHasta">Año Fin</label>
-                <input type="text" name="vehFabHasta" class="form-control" ng-model="vehiculosc.selectedItem.vehFabHasta" placeholder="En formato AAAA"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehTipo">Tipo</label>
-                <input type="text" name="vehTipo" class="form-control" ng-model="vehiculosc.selectedItem.vehTipo" placeholder="Tipo" />
-            </div>
-            <div class="form-group">
-                <label for="vehTraccion">Tracción</label>
-                <input type="text" name="vehTraccion" class="form-control" ng-model="vehiculosc.selectedItem.vehTraccion" placeholder="Tracción"
-                />
-            </div>
-            <div class="form-group">
-                <label for="vehCaja">Caja</label>
-                <select id="CajaSelector" class="form-control input-group" name="vehCaja" ng-model="vehiculosc.selectedItem.vehCaja" ng-options="caja as caja.label for caja in vehiculosc.tiposDeCajas track by caja.id"
-                    required>
+                <div class="form-group">
+                    <label for="modeloMod">Modelo</label>
+                    <div class="input-group">
+                        <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.selectedItem.modeloMod"
+                            ng-options="modelo as modelo.modNombre for modelo in vehiculosc.modelos track by modelo.modId" required>
+                                </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="vehiculosc.getModelos()"><span class="glyphicon glyphicon-refresh" aria-hidden="true" ></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="vehCilindros">Configuración del Motor y Cilindros</label>
+                    <input type="text" name="vehCilindros" class="form-control" ng-model="vehiculosc.selectedItem.vehCilindros" placeholder="Configuración del Motor y Cilindros"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehLitros">Litros</label>
+                    <input type="text" name="vehLitros" class="form-control" ng-model="vehiculosc.selectedItem.vehLitros" placeholder="Litros"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehValvulas">Válvulas</label>
+                    <input type="text" name="vehValvulas" class="form-control" ng-model="vehiculosc.selectedItem.vehValvulas" placeholder="Válvulas"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehLevas">Configuración Levas</label>
+                    <input type="text" name="vehLevas" class="form-control" ng-model="vehiculosc.selectedItem.vehLevas" placeholder="Configuración Levas"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehVersion">Versión</label>
+                    <input type="text" name="vehVersion" class="form-control" ng-model="vehiculosc.selectedItem.vehVersion" placeholder="Versión"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehFabDesde">Año Inicio</label>
+                    <input type="text" name="vehFabDesde" class="form-control" ng-model="vehiculosc.selectedItem.vehFabDesde" placeholder="En formato AAAA"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehFabHasta">Año Fin</label>
+                    <input type="text" name="vehFabHasta" class="form-control" ng-model="vehiculosc.selectedItem.vehFabHasta" placeholder="En formato AAAA"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehTipo">Tipo</label>
+                    <input type="text" name="vehTipo" class="form-control" ng-model="vehiculosc.selectedItem.vehTipo" placeholder="Tipo" />
+                </div>
+                <div class="form-group">
+                    <label for="vehTraccion">Tracción</label>
+                    <input type="text" name="vehTraccion" class="form-control" ng-model="vehiculosc.selectedItem.vehTraccion" placeholder="Tracción"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="vehCaja">Caja</label>
+                    <select id="CajaSelector" class="form-control input-group" name="vehCaja" ng-model="vehiculosc.selectedItem.vehCaja" ng-options="caja as caja.label for caja in vehiculosc.tiposDeCajas track by caja.id">
                             </select>
-            </div>
-            <div class="form-group">
-                <label for="vehObservacion">Observación</label>
-                <textarea rows="" cols="" name="vehObservacion" class="form-control" ng-model="vehiculosc.selectedItem.vehObservacion" placeholder="Observación"></textarea>
-            </div>
-            <div class="form-group margin-top-70">
-                <button type="button" class="btn btn-success" ng-click="vehiculosc.updateVehiculo(vehiculosc.selectedItem.vehId, vehiculosc.selectedItem.modeloMod,vehiculosc.selectedItem.vehCilindros,vehiculosc.selectedItem.vehLitros,vehiculosc.selectedItem.vehValvulas,vehiculosc.selectedItem.vehLevas,vehiculosc.selectedItem.vehVersion,vehiculosc.selectedItem.vehFabDesde,vehiculosc.selectedItem.vehFabHasta,vehiculosc.selectedItem.vehTipo,vehiculosc.selectedItem.vehTraccion,vehiculosc.selectedItem.vehCaja,vehiculosc.selectedItem.vehObservacion)"
-                    ng-disabled="(editVehiculoForm.$invalid)">
+                </div>
+                <div class="form-group">
+                    <label for="vehObservacion">Observación</label>
+                    <textarea rows="" cols="" name="vehObservacion" class="form-control" ng-model="vehiculosc.selectedItem.vehObservacion" placeholder="Observación"></textarea>
+                </div>
+                <div class="form-group margin-top-70">
+                    <button type="button" class="btn btn-success" ng-click="vehiculosc.updateVehiculo(vehiculosc.selectedItem.vehId, vehiculosc.selectedItem.modeloMod,vehiculosc.selectedItem.vehCilindros,vehiculosc.selectedItem.vehLitros,vehiculosc.selectedItem.vehValvulas,vehiculosc.selectedItem.vehLevas,vehiculosc.selectedItem.vehVersion,vehiculosc.selectedItem.vehFabDesde,vehiculosc.selectedItem.vehFabHasta,vehiculosc.selectedItem.vehTipo,vehiculosc.selectedItem.vehTraccion,vehiculosc.selectedItem.vehCaja,vehiculosc.selectedItem.vehObservacion)"
+                        ng-disabled="(editVehiculoForm.$invalid)">
                         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                         <span class="button-text">Guardar Cambios</span>
                     </button>
-                <button type="button" class="btn btn-primary" ng-click="vehiculosc.cancelAndBackFromEdit()">
+                    <button type="button" class="btn btn-primary" ng-click="vehiculosc.cancelAndBackFromEdit()">
                         <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
                         <span class="button-text">Cancelar y Volver</span>
                     </button>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- Modal  -->
-<script type="text/ng-template" id="vehiculosView.html">
-    <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">Vehículo {{$ctrl.items.modeloMod}}</h3>
-    </div>
-    <div class="modal-body" id="modal-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="forum-icon">
-                    <i class="fa fa-pencil-square-o"></i>
                 </div>
-                <span class="forum-item-title">Datos Generales</span>
-                <div class="forum-sub-title">
-                    <b>Marca:</b> {{$ctrl.items.marcaMod}}
-                    </br>
-                    <b>Modelo:</b> {{$ctrl.items.modNombre}}
+            </form>
+        </div>
+    </div>
+    <!-- Modal  -->
+    <script type="text/ng-template" id="vehiculosView.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Vehículo {{$ctrl.items.modeloMod}}</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="forum-icon">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </div>
+                    <span class="forum-item-title">Datos Generales</span>
+                    <div class="forum-sub-title">
+                        <b>Marca:</b> {{$ctrl.items.marcaMod}}
+                        </br>
+                        <b>Modelo:</b> {{$ctrl.items.modNombre}}
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-top-10">
+                <div class="col-md-12">
+                    <div class="forum-icon">
+                        <i class="fa fa-map-signs"></i>
+                    </div>
+                    <span class="forum-item-title">Variante</span>
+                    <div class="forum-sub-title">
+                        <b>Configuración del Motor y Cilindros:</b> {{$ctrl.items.vehCilindros}}
+                        <br>
+                        <b>Litros:</b> {{$ctrl.items.vehLitros}}
+                        <br>
+                        <b>Válvulas:</b> {{$ctrl.items.vehValvulas}}
+                        <br>
+                        <b>Configuración de Levas:</b> {{$ctrl.items.vehLevas}}
+                        <br>
+                        <b>Versión:</b> {{$ctrl.items.vehVersion}}
+                        <br>
+                        <b>Año Inicio:</b> {{$ctrl.items.vehFabDesde}}
+                        <br>
+                        <b>Año Fin:</b> {{$ctrl.items.vehFabHasta}}
+                        <br>
+                        <b>Tracción:</b> {{$ctrl.items.vehTraccion}}
+                        <br>
+                        <b>Caja:</b> {{$ctrl.items.vehCaja}}
+                        <br>
+                        <b>Observación:</b> {{$ctrl.items.vehObservacion}}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row margin-top-10">
-            <div class="col-md-12">
-                <div class="forum-icon">
-                    <i class="fa fa-map-signs"></i>
-                </div>
-                <span class="forum-item-title">Variante</span>
-                <div class="forum-sub-title">
-                    <b>Configuración del Motor y Cilindros:</b> {{$ctrl.items.vehCilindros}}
-                    <br>
-                    <b>Litros:</b> {{$ctrl.items.vehLitros}}
-                    <br>
-                    <b>Válvulas:</b> {{$ctrl.items.vehValvulas}}
-                    <br>
-                    <b>Configuración de Levas:</b> {{$ctrl.items.vehLevas}}
-                    <br>
-                    <b>Versión:</b> {{$ctrl.items.vehVersion}}
-                    <br>
-                    <b>Año Inicio:</b> {{$ctrl.items.vehFabDesde}}
-                    <br>
-                    <b>Año Fin:</b> {{$ctrl.items.vehFabHasta}}
-                    <br>
-                    <b>Tracción:</b> {{$ctrl.items.vehTraccion}}
-                    <br>
-                    <b>Caja:</b> {{$ctrl.items.vehCaja}}
-                    <br>
-                    <b>Observación:</b> {{$ctrl.items.vehObservacion}}
-                </div>
-            </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-    </div>
-</script>
+    </script>
 </div>

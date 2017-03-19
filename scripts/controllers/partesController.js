@@ -96,7 +96,7 @@ angular
         partesc.ChangeQtyPagesTables = function (Qty, searchText) {
             storageService.setQtyPageTables(Qty);
             $scope.QtyPageTables = storageService.getQtyPageTables();
-            partesc.getFabricantes(Qty, 1, searchText);
+            partesc.getPartes(Qty, 1, searchText);
         }
 
         // Copy temporally item data for edit
@@ -132,7 +132,7 @@ angular
             }
 
             url = endpointApiURL.url + "/parte/add";
-            $scope.FabricantesPromise = $http.post(
+            $scope.PartesPromise = $http.post(
                     url, {
                         parCodigo: parCodigo,
                         fabricanteFab: fabricanteFab.fabId,
@@ -602,10 +602,6 @@ angular
             dynamicButtonTextSuffix: 'Parte(s) Seleccionada(s)'
         }
 
-
-        // Crear:
-
-        // partesc.getNombres() para obtener nombres de nueva tabla nombre de partes
         partesc.getNombres = function () {
             var url = endpointApiURL.url + "/nombre_parte";
             $scope.PartesPromise = $http.get(url)
