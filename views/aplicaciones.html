@@ -1,0 +1,21 @@
+<toast></toast>
+<div class="container" ng-controller="aplicacionesController as aplicacionesc" ng-cloak cg-busy="{promise:AplicacionesPromise,message:'Cargando...',templateUrl:'scripts/vendor/angular-busy/angular-busy.html'}">
+    <div ng-class="aplicacionesc.editing == true  ? 'item-no-visible' : 'item-visible'">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Aplicaciones</h2>
+            </div>
+        </div>
+        <div class="row button-margin">
+            <div class="col-md-12">
+                <button class="btn btn-primary" type="button" ng-disabled="(aplicacionesc.selectedItemAction == 'edit') || (aplicacionesc.selectedItemAction == 'view')"
+                    ng-model="aplicacionesc.isAddNewAplicacion" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                    <span class="glyphicon glyphicon-certificate" aria-hidden="true"></span> Agregar Aplicación
+                </button>
+            </div>
+        </div>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[aplicacionesc.isAddNewAplicacion==true]">
+            <div class="col-md-12">
+            </div>
+        </div>
+    </div>
