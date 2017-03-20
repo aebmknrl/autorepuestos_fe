@@ -26,9 +26,21 @@
                     <div class="form-group" ng-class="{ 'has-error': newVehiculoForm.modeloMod.$touched && newVehiculoForm.modeloMod.$invalid}">
                         <label for="modeloMod">Modelo <span class="label label-primary">REQUERIDO</span></label>
                         <div class="input-group">
+
+                        <select ng-model="tipost" ng-options="modelo as modelo.modNombre group by modelo.marcaMar.marNombre for modelo in vehiculosc.modelos track by modelo.modId" id="ModeloSelector" class="form-control input-group"><br>
+                            <option value="">--Seleccione Modelo--</option>
+                        </select>
+                        
+                        
+                        
+                        <div ng-dropdown-multiselect="" options="example11data" selected-model="example11model" extra-settings="example11settings"></div>
+ 
+ 
+                            <!--
                             <select name="modeloMod" selector model="vehiculosc.newItem.modeloMod" options="vehiculosc.modelos"
                                  label-attr="modNombre" require="true" placeholder="--Seleccione Modelo--" group-attr="marcaMar.marNombre">
                             </select>
+                            -->
                             <!--
                             <select id="ModeloSelector" class="form-control input-group" name="modeloMod" ng-model="vehiculosc.newItem.modeloMod" ng-options="modelo as (modelo.modNombre + ' - ' + modelo.marcaMar.marNombre) for modelo in vehiculosc.modelos track by modelo.modId"
                                 required>
