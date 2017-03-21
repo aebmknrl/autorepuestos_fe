@@ -16,6 +16,10 @@ angular
         aplicacionesc.loadingEditing = false;
         aplicacionesc.loadingData = false;
 
+
+        aplicacionesc.parteSeleccionada = null;
+        aplicacionesc.vehiculosSeleccionados = null;
+
         //Vacío por ahora
         aplicacionesc.selectedItem = {};
         //
@@ -56,5 +60,56 @@ angular
             $scope.QtyPageTables = storageService.getQtyPageTables();
             aplicacionesc.getVehiculos(Qty, 1, searchText);
         }
-    
+
+        aplicacionesc.selectParteGroup = function (item) {
+            return item.parNombre.parGrupo.grupoNombre;
+        };
+
+
+        aplicacionesc.selectVehiculoGroup = function (item) {
+            return item.modeloMod.marcaMar.marNombre;
+        };
+
+        aplicacionesc.getPartes = function () {
+            var url = endpointApiURL.url + "/parte";
+            return $http.get(url)
+                .then(function (response) {
+                    aplicacionesc.partes = response.data;
+                    //console.log(aplicacionesc.modelos);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
+
+        aplicacionesc.getVehiculos = function () {
+            var url = endpointApiURL.url + "/vehiculo";
+            return $http.get(url)
+                .then(function (response) {
+                    aplicacionesc.vehiculos = response.data;
+                    //console.log(aplicacionesc.modelos);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
+
+        $scope.AplicacionesPromise = aplicacionesc.getPartes()
+            .then(function (response) {
+                $scope.AplicacionesPromise = aplicacionesc.getVehiculos()
+                    .then(function (response) {
+                        //console.log(aplicacionesc.vehiculos)
+                        //finnished
+                    });
+            });
+
+        $scope.verAplicacion = function () {
+            console.log(aplicacionesc.vehiculosSeleccionados);
+        }
     }]);

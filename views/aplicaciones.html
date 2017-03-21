@@ -15,7 +15,52 @@
             </div>
         </div>
         <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[aplicacionesc.isAddNewAplicacion==true]">
-            <div class="col-md-12">
+            <div class="col-md-12 text-center">
+                <h3>Nueva Aplicación de Parte</h3>
+            </div>
+        </div>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[aplicacionesc.isAddNewAplicacion==true]">
+            <div class="col-md-5">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Parte a aplicar</h3>
+                        <span class="pull-right clickable"><i class="fa fa-cog"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <ui-select ng-model="aplicacionesc.parteSeleccionada" theme="bootstrap">
+                            <ui-select-match placeholder="Seleccione una parte...">{{$select.selected.parNombre.parNombre}} {{$select.selected.parCodigo}}</ui-select-match>
+                            <ui-select-choices group-by="aplicacionesc.selectParteGroup" repeat="parte in (aplicacionesc.partes | filter: $select.search) track by parte.parId">
+                                <span ng-bind-html="parte.parNombre.parNombre | highlight: $select.search"></span>
+                                <small ng-bind-html="parte.parCodigo | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 text-center">
+                <i class="fa fa-long-arrow-right large-simbol primary-text"></i>
+            </div>
+            <div class="col-md-5">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Vehículo para la aplicación de parte</h3>
+                        <span class="pull-right clickable"><i class="fa fa-car"></i></span>
+                    </div>
+                    <div class="panel-body">
+                        <ui-select ng-model="aplicacionesc.vehiculosSeleccionados" multiple theme="bootstrap" ng-disabled="aplicacionesc.parteSeleccionada == null">
+                            <ui-select-match placeholder="Seleccione los vehículos...">{{$item.modeloMod.marcaMar.marNombre}} {{$item.modeloMod.modNombre}}</ui-select-match>
+                            <ui-select-choices group-by="aplicacionesc.selectVehiculoGroup" repeat="vehiculo in (aplicacionesc.vehiculos | filter: $select.search) track by vehiculo.vehId">
+                                <span ng-bind-html="vehiculo.modeloMod.modNombre | highlight: $select.search"></span>
+                                <small ng-bind-html="vehiculo.vehCilindros + '-' + vehiculo.vehLitros + '-' + vehiculo.vehValvulas + '-' + vehiculo.vehLevas + '-' + vehiculo.vehVersion + '-' + vehiculo.vehFabDesde + '-' + vehiculo.vehFabHasta | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[aplicacionesc.isAddNewAplicacion==true]">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-primary" type="button" ng-click="verAplicacion()">Agregar</button>
             </div>
         </div>
     </div>
