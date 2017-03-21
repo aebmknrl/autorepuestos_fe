@@ -1,5 +1,5 @@
 angular
-    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt', 'ngOrderObjectBy', 'angular.filter', 'ngScrollTo','angularjs-dropdown-multiselect','selector','dndLists'])
+    .module('autorepuestosApp', ['ui.router', 'cgBusy', 'LocalStorageModule', 'ui.bootstrap', 'ngMessages', 'ngAnimate', 'ngToast', 'angular-confirm', 'angular-jwt', 'ngOrderObjectBy', 'angular.filter', 'ngScrollTo','angularjs-dropdown-multiselect','selector','dndLists','ui.select', 'ngSanitize'])
     .run(function (authManager, $location, $rootScope, $state, storageService,$uibModalStack) {
         //Work with auhtentication:
         authManager.checkAuthOnRefresh();

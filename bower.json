@@ -39,7 +39,8 @@
     "update": "^0.7.4",
     "components-font-awesome": "^4.7.0",
     "angular-selector": "^1.5.0",
-    "angular-drag-and-drop-lists": "^2.1.0"
+    "angular-drag-and-drop-lists": "^2.1.0",
+    "angular-ui-select": "^0.19.6"
   },
   "resolutions": {
     "angular": "1.5.8"

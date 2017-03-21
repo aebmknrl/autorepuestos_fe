@@ -198,3 +198,7 @@
 th {
    text-align: center; 
 }
+
+.ui-select-bootstrap .ui-select-toggle {
+    border-radius: 4px !important;
+}

@@ -343,67 +343,17 @@ angular
         }
 
 
+        //---- SELECT OF MODELOS ----
+        // This select able to use filter and group
 
-        $scope.VehiculosPromise = vehiculosc.getModelos()
-            .then(function (response) {
-                var list = [];
-                vehiculosc.modelos.forEach(function (element) {
-
-                    list.push({
-                        id: element.modId,
-                        label: element.modNombre,
-                        marca: element.marcaMar.marNombre
-                    })
-                }, this);
-                vehiculosc.modelosNuevos = list;
-                console.log(vehiculosc.modelosNuevos);
-            })
-
-        $scope.example1model = [];
-        vehiculosc.multiselectConfig = {
-            groupBy: 'marca'
+        vehiculosc.selectModeloGroup = function (item) {
+            return item.marcaMar.marNombre;
+            /*
+            if (item.name[0] >= 'A' && item.name[0] <= 'M')
+                    return 'From A - M';
+        
+            if (item.name[0] >= 'N' && item.name[0] <= 'Z')
+                return 'From N - Z';           */
         };
-
-
-
-        $scope.example11model = [];
-        $scope.example11data = [{
-            id: 1,
-            label: "David",
-            gender: 'M'
-        }, {
-            id: 2,
-            label: "Jhon",
-            gender: 'M'
-        }, {
-            id: 3,
-            label: "Lisa",
-            gender: 'F'
-        }, {
-            id: 4,
-            label: "Nicole",
-            gender: 'F'
-        }, {
-            id: 5,
-            label: "Danny",
-            gender: 'M'
-        }];
-        $scope.example11settings = {
-            groupByTextProvider: function (groupValue) {
-                if (groupValue === 'M') {
-                    return 'Male';
-                } else {
-                    return 'Female';
-                }
-            },
-            groupBy: 'gender',
-        };
-
-$scope.tipall = [
-             {"ID":"1", "TIPIS":"GroupName1", "DESC":"name"},
-             {"ID":"2", "TIPIS":"GroupName1", "DESC":"name1"},
-             {"ID":"3", "TIPIS":"GroupName2", "DESC":"name2"},
-             {"ID":"4", "TIPIS":"GroupName1", "DESC":"name3"},
-        ];
 
     }])

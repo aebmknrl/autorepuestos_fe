@@ -56,4 +56,5 @@ angular
             $scope.QtyPageTables = storageService.getQtyPageTables();
             aplicacionesc.getVehiculos(Qty, 1, searchText);
         }
+    
     }]);
