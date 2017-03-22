@@ -58,7 +58,7 @@ angular
         aplicacionesc.ChangeQtyPagesTables = function (Qty, searchText) {
             storageService.setQtyPageTables(Qty);
             $scope.QtyPageTables = storageService.getQtyPageTables();
-            aplicacionesc.getVehiculos(Qty, 1, searchText);
+            aplicacionesc.getAplicaciones(Qty, 1, searchText);
         }
 
         aplicacionesc.selectParteGroup = function (item) {
@@ -109,7 +109,25 @@ angular
                     });
             });
 
-        $scope.verAplicacion = function () {
-            console.log(aplicacionesc.vehiculosSeleccionados);
+        aplicacionesc.addAplicacion = function (parId) {
+            aplicacionesc.isAddNewAplicacion = true;
+            vehiculos = {};
+            for (i = 0; i < aplicacionesc.vehiculosSeleccionados.length; i++) {
+                vehiculos['vehiculo' + i] = aplicacionesc.vehiculosSeleccionados[i].vehId;
+            }
+            url = endpointApiURL.url + "/aplicacion/add/" + parId;
+            $scope.AplicacionesPromise = $http({
+                url: url,
+                method: 'POST',
+                data: vehiculos
+            }).then(function (response) {
+                ngToast.create({
+                    className: 'info',
+                    content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.Aplicacion[0].ID + '</strong>'
+                });
+                aplicacionesc.isAddNewAplicacion = false;
+            }).catch(function (error) {
+                console.log(error);
+            })
         }
     }]);
