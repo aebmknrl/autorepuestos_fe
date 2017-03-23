@@ -48,10 +48,14 @@
                     </div>
                     <div class="panel-body">
                         <ui-select ng-model="aplicacionesc.vehiculosSeleccionados" multiple theme="bootstrap" ng-disabled="aplicacionesc.parteSeleccionada == null">
-                            <ui-select-match placeholder="Seleccione los vehículos...">{{$item.modeloMod.marcaMar.marNombre}} {{$item.modeloMod.modNombre}}</ui-select-match>
+                            <ui-select-match placeholder="Seleccione los vehículos...">{{$item.modeloMod.marcaMar.marNombre}} {{$item.modeloMod.modNombre}} {{$item.vehCilindros ==
+                                null ? '' : $item.vehCilindros + '-'}}{{$item.vehLitros == null ? '' : $item.vehLitros +
+                                '-'}}{{$item.vehValvulas == null ? '' : $item.vehValvulas + '-'}}{{$item.vehLevas == null
+                                ? '' : $item.vehLevas + '-'}}{{$item.vehVersion == null ? '' : $item.vehVersion + '-'}}{{$item.vehFabDesde
+                                == null ? '' : $item.vehFabDesde + '-'}}{{$item.vehFabHasta == null ? '' : $item.vehFabHasta}}</ui-select-match>
                             <ui-select-choices group-by="aplicacionesc.selectVehiculoGroup" repeat="vehiculo in (aplicacionesc.vehiculos | filter: $select.search) track by vehiculo.vehId">
                                 <span ng-bind-html="vehiculo.modeloMod.modNombre | highlight: $select.search"></span>
-                                <small ng-bind-html="(vehiculo.vehCilindros == null ? '' : vehiculo.vehCilindros + '-') + ( vehiculo.vehLitros == null ? '' :  vehiculo.vehLitros + '-') + ( vehiculo.vehValvulas == null ? '' :  vehiculo.vehValvulas + '-') + ( vehiculo.vehLevas == null ? '' :  vehiculo.vehLevas + '-') + ( vehiculo.vehVersion == null ? '' :  vehiculo.vehVersion + '-') + ( vehiculo.vehFabDesde == null ? '' :  vehiculo.vehFabDesde + '-') + ( vehiculo.vehFabHasta == null ? 'Actual' :  vehiculo.vehFabHasta + '-')  | highlight: $select.search"></small>
+                                <small ng-bind-html="(vehiculo.vehCilindros == null ? '' : vehiculo.vehCilindros + '-') + ( vehiculo.vehLitros == null ? '' :  vehiculo.vehLitros + '-') + ( vehiculo.vehValvulas == null ? '' :  vehiculo.vehValvulas + '-') + ( vehiculo.vehLevas == null ? '' :  vehiculo.vehLevas + '-') + ( vehiculo.vehVersion == null ? '' :  vehiculo.vehVersion + '-') + ( vehiculo.vehFabDesde == null ? '' :  vehiculo.vehFabDesde + '-') + ( vehiculo.vehFabHasta == null ? 'Actual' :  vehiculo.vehFabHasta)  | highlight: $select.search"></small>
                             </ui-select-choices>
                         </ui-select>
                     </div>
@@ -106,7 +110,32 @@
         </div>
         </br>
         <div class="row">
-
+            <table class="table table-hover" ng-cloak>
+                <thead>
+                    <tr>
+                        <th><span class="btn">Vehículos de la Aplicación</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="aplicacion in aplicacionesc.vehiculosQueAplica | filter : vehiculosc.Aplicacionfilter">
+                        <td class="">{{aplicacion.vehiculoVeh.modeloMod.marcaMar.marNombre}} {{aplicacion.vehiculoVeh.modeloMod.modNombre}} {{aplicacion.vehiculoVeh.vehCilindros ==
+                                null ? '' : aplicacion.vehiculoVeh.vehCilindros + '-'}}{{aplicacion.vehiculoVeh.vehLitros == null ? '' : aplicacion.vehiculoVeh.vehLitros +
+                                '-'}}{{aplicacion.vehiculoVeh.vehValvulas == null ? '' : aplicacion.vehiculoVeh.vehValvulas + '-'}}{{aplicacion.vehiculoVeh.vehLevas == null
+                                ? '' : aplicacion.vehiculoVeh.vehLevas + '-'}}{{aplicacion.vehiculoVeh.vehVersion == null ? '' : aplicacion.vehiculoVeh.vehVersion + '-'}}{{aplicacion.vehiculoVeh.vehFabDesde
+                                == null ? '' : aplicacion.vehiculoVeh.vehFabDesde + '-'}}{{aplicacion.vehiculoVeh.vehFabHasta == null ? '' : aplicacion.vehiculoVeh.vehFabHasta}}</td>
+                    </tr>                   
+                    <!--
+                    <tr ng-repeat-start="modelo in modelosc.modelos | orderObjectBy: modelosc.orderBy : modelosc.orderDirection | filter : modelosc.filter">
+                        <td class=""></td>
+                    </tr>
+                    <tr ng-repeat-end ng-class="{true:'row-visible', false: 'row-no-visible'}[modelosc.selectedItem.id == modelo.modId]">
+                        <td>
+                            <strong>Editando Modelo ID: {{modelo.modId}}</strong>
+                        </td>
+                    </tr>
+                    -->
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

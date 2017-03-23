@@ -8,7 +8,7 @@ angular
         var aplicacionesc = this;
 
         aplicacionesc.allLoad = false;
-        aplicacionesc.filter = "";
+        aplicacionesc.Aplicacionfilter = "";
         aplicacionesc.orderBy = "aplId";
         aplicacionesc.orderDirection = false; // False = Ascendent
         aplicacionesc.searchText = "";
@@ -22,6 +22,7 @@ angular
         aplicacionesc.grupoSeleccionado = null;
         aplicacionesc.partesByGrupo = null;
         aplicacionesc.parteSeleccionadaParaAplicacion = null;
+        aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
 
         //Vacío por ahora
         aplicacionesc.selectedItem = {};
