@@ -19,6 +19,9 @@ angular
 
         aplicacionesc.parteSeleccionada = null;
         aplicacionesc.vehiculosSeleccionados = null;
+        aplicacionesc.grupoSeleccionado = null;
+        aplicacionesc.partesByGrupo = null;
+        aplicacionesc.parteSeleccionadaParaAplicacion = null;
 
         //Vacío por ahora
         aplicacionesc.selectedItem = {};
@@ -100,12 +103,31 @@ angular
                 });
         };
 
+        aplicacionesc.getGrupos = function () {
+            var url = endpointApiURL.url + "/grupo";
+            return $http.get(url)
+                .then(function (response) {
+                    aplicacionesc.grupos = response.data;
+                    //console.log(aplicacionesc.modelos);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
+
         $scope.AplicacionesPromise = aplicacionesc.getPartes()
             .then(function (response) {
                 $scope.AplicacionesPromise = aplicacionesc.getVehiculos()
                     .then(function (response) {
-                        //console.log(aplicacionesc.vehiculos)
-                        //finnished
+                        $scope.AplicacionesPromise = aplicacionesc.getGrupos()
+                            .then(function (response) {
+                                //console.log(aplicacionesc.vehiculos)
+                                //finnished
+                            })
+
                     });
             });
 
@@ -130,4 +152,37 @@ angular
                 console.log(error);
             })
         }
+
+        aplicacionesc.onSelectGrupo = function (item, model) {
+
+            var url = endpointApiURL.url + "/parte/findPartsByGroup/" + item.id;
+            $scope.AplicacionesPromise = $http.post(url)
+                .then(function (response) {
+                    aplicacionesc.partesByGrupo = response.data;
+                    //console.log(aplicacionesc.partesByGrupo);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
+
+        aplicacionesc.onSelectParteAplicacion = function (item, model) {
+            //console.log(item);
+            var url = endpointApiURL.url + "/aplicacion/aplicationbypart/" + item.parId;
+            $scope.AplicacionesPromise = $http.post(url)
+                .then(function (response) {
+                    aplicacionesc.vehiculosQueAplica = response.data;
+                    //console.log(aplicacionesc.partesByGrupo);
+                    console.log(aplicacionesc.vehiculosQueAplica);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
     }]);
