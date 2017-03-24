@@ -96,34 +96,58 @@
                     <i class="fa fa-exclamation-triangle "></i> <b>No existen partes para el grupo seleccionado.</b>
                 </div>
                 <div ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.grupoSeleccionado != null) && (aplicacionesc.partesByGrupo.length > 0) ]">
-                    <label for="grupoParte">Seleccione una Parte</label><br>
-                    <ui-select ng-model="aplicacionesc.parteSeleccionada" theme="bootstrap" on-select="aplicacionesc.onSelectParteAplicacion($item, $model)">
-                        <ui-select-match placeholder="Seleccione una parte...">{{$select.selected.parNombre.parNombre}} {{$select.selected.parCodigo}}</ui-select-match>
-                        <ui-select-choices repeat="parte in (aplicacionesc.partesByGrupo | filter: $select.search) track by parte.parId">
-                            <span ng-bind-html="parte.parNombre.parNombre | highlight: $select.search"></span>
-                            <small ng-bind-html="parte.parCodigo | highlight: $select.search"></small>
-                        </ui-select-choices>
-                    </ui-select>
+                    <div ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.progressBarMax!=0)]">
+                        <span>Cargando datos...</span>
+                        </br>
+                        <uib-progressbar value="aplicacionesc.progressBarValue" max="aplicacionesc.progressBarMax" animate="true"></uib-progressbar>
+                    </div>
+                    <br>
+                    <div ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.progressBarMax==0)]">
+                        <label for="grupoParte">Seleccione una Parte</label><br>
+                        <ui-select ng-model="aplicacionesc.parteSeleccionada" theme="bootstrap" on-select="aplicacionesc.onSelectParteAplicacion($item, $model)">
+                            <ui-select-match placeholder="Seleccione una parte...">{{$select.selected.parNombre.parNombre}} {{$select.selected.parCodigo}} ({{aplicacionesc.cantAplicaciones}} aplicaciones)</ui-select-match>
+                            <ui-select-choices repeat="parte in (aplicacionesc.partesByGrupo | filter: $select.search) track by parte.parId">
+                                <span ng-bind-html="parte.parNombre.parNombre | highlight: $select.search"></span>
+                                <small ng-bind-html="parte.parCodigo + ' (' + parte.cantAplicaciones + ' aplicaciones)'| highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 text-center"></div>
         </div>
         </br>
-        <div class="row">
+        <div class="row text-center" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length <= 0)]">
+            <div class="col-md-12"> <i class="fa fa-exclamation-triangle "></i> <b>No existen aplicaciones para la parte seleccionada.</b></div>
+        </div>
+        <div class="row"  ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
             <table class="table table-hover" ng-cloak>
                 <thead>
                     <tr>
-                        <th><span class="btn">Vehículos de la Aplicación</span></th>
+                        <th><span class="btn"><b>ID de la Aplicación</b></span></th>
+                        <th><span class="btn"><b>Vehículos de la Aplicación</b></span></th>
+                        <th><span class="btn"><b>Acciones</b></span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="aplicacion in aplicacionesc.vehiculosQueAplica | filter : vehiculosc.Aplicacionfilter">
-                        <td class="">{{aplicacion.vehiculoVeh.modeloMod.marcaMar.marNombre}} {{aplicacion.vehiculoVeh.modeloMod.modNombre}} {{aplicacion.vehiculoVeh.vehCilindros ==
-                                null ? '' : aplicacion.vehiculoVeh.vehCilindros + '-'}}{{aplicacion.vehiculoVeh.vehLitros == null ? '' : aplicacion.vehiculoVeh.vehLitros +
-                                '-'}}{{aplicacion.vehiculoVeh.vehValvulas == null ? '' : aplicacion.vehiculoVeh.vehValvulas + '-'}}{{aplicacion.vehiculoVeh.vehLevas == null
-                                ? '' : aplicacion.vehiculoVeh.vehLevas + '-'}}{{aplicacion.vehiculoVeh.vehVersion == null ? '' : aplicacion.vehiculoVeh.vehVersion + '-'}}{{aplicacion.vehiculoVeh.vehFabDesde
-                                == null ? '' : aplicacion.vehiculoVeh.vehFabDesde + '-'}}{{aplicacion.vehiculoVeh.vehFabHasta == null ? '' : aplicacion.vehiculoVeh.vehFabHasta}}</td>
-                    </tr>                   
+                        <td>{{aplicacion.aplId}}</td>
+                        <td class="">{{aplicacion.vehiculoVeh.modeloMod.marcaMar.marNombre}} {{aplicacion.vehiculoVeh.modeloMod.modNombre}}
+                            {{aplicacion.vehiculoVeh.vehCilindros == null ? '' : aplicacion.vehiculoVeh.vehCilindros + '-'}}{{aplicacion.vehiculoVeh.vehLitros
+                            == null ? '' : aplicacion.vehiculoVeh.vehLitros + '-'}}{{aplicacion.vehiculoVeh.vehValvulas ==
+                            null ? '' : aplicacion.vehiculoVeh.vehValvulas + '-'}}{{aplicacion.vehiculoVeh.vehLevas == null
+                            ? '' : aplicacion.vehiculoVeh.vehLevas + '-'}}{{aplicacion.vehiculoVeh.vehVersion == null ? ''
+                            : aplicacion.vehiculoVeh.vehVersion + '-'}}{{aplicacion.vehiculoVeh.vehFabDesde == null ? ''
+                            : aplicacion.vehiculoVeh.vehFabDesde + '-'}}{{aplicacion.vehiculoVeh.vehFabHasta == null ? ''
+                            : aplicacion.vehiculoVeh.vehFabHasta}}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" ng-click="aplicacionesc.removeOneAplicacion(aplicacion.aplId)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <span class="button-text">Eliminar este Vehículo de la Aplicación</span>
+                            </button>
+                        </td>
+                    </tr>
                     <!--
                     <tr ng-repeat-start="modelo in modelosc.modelos | orderObjectBy: modelosc.orderBy : modelosc.orderDirection | filter : modelosc.filter">
                         <td class=""></td>

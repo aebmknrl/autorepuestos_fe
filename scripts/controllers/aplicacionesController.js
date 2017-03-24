@@ -23,6 +23,11 @@ angular
         aplicacionesc.partesByGrupo = null;
         aplicacionesc.parteSeleccionadaParaAplicacion = null;
         aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
+        aplicacionesc.cantAplicaciones = 0;
+
+        aplicacionesc.progressBarValue = 0;
+        aplicacionesc.progressBarMax = 0;
+
 
         //Vacío por ahora
         aplicacionesc.selectedItem = {};
@@ -109,7 +114,14 @@ angular
             return $http.get(url)
                 .then(function (response) {
                     aplicacionesc.grupos = response.data;
-                    //console.log(aplicacionesc.modelos);
+                    // Add a Todos item to bring all items
+                    aplicacionesc.grupos.push({
+                        id: 'todos',
+                        descripcion: 'todos',
+                        grupoNombre: 'Todos los Grupos',
+                        grupoPadre: null
+                    })
+                    //console.log(a);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -155,12 +167,72 @@ angular
         }
 
         aplicacionesc.onSelectGrupo = function (item, model) {
+            if (item.id == 'todos') {
+                var url = endpointApiURL.url + "/parte";
+                $scope.AplicacionesPromise = $http.get(url)
+                    .then(function (response) {
+                        aplicacionesc.partesByGrupo = response.data;
 
-            var url = endpointApiURL.url + "/parte/findPartsByGroup/" + item.id;
+                        var cantPartes = aplicacionesc.partesByGrupo.length;
+                        aplicacionesc.progressBarMax = cantPartes;
+                        var count = 0;
+
+
+                        var loop = function (count) {
+                            aplicacionesc.progressBarValue = count + 1; 
+                            var element = aplicacionesc.partesByGrupo[count];
+                            //console.log(element);
+                            var url = endpointApiURL.url + "/aplicacion/getqtyappbypartaction/" + element.parId;
+                            $scope.AplicacionesPromise = $http.post(url)
+                                .then(function (response) {
+                                    //console.log(element);
+                                    element.cantAplicaciones = response.data;
+                                    if (count === cantPartes -1) {
+                                        aplicacionesc.progressBarMax = 0;
+                                        return true;
+                                    } else {
+                                        loop(++count);
+                                    }
+                                })
+                            //console.log(aplicacionesc.partesByGrupo);
+                        }
+                        // start count
+                        loop(count);
+                        //console.log(aplicacionesc.partesByGrupo);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        if (error.status == '412') {
+                            console.log('Error obteniendo datos: ' + error.data.error);
+                        }
+                    });
+            } else {
+                var url = endpointApiURL.url + "/parte/findPartsByGroup/" + item.id;
+                $scope.AplicacionesPromise = $http.post(url)
+                    .then(function (response) {
+                        aplicacionesc.partesByGrupo = response.data;
+                        //console.log(aplicacionesc.partesByGrupo);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        if (error.status == '412') {
+                            console.log('Error obteniendo datos: ' + error.data.error);
+                        }
+                    });
+            }
+
+        };
+
+        aplicacionesc.onSelectParteAplicacion = function (item, model) {
+            //console.log(item);
+            aplicacionesc.parteSeleccionadaParaAplicacion = item;
+            aplicacionesc.cantAplicaciones = item.cantAplicaciones;
+            var url = endpointApiURL.url + "/aplicacion/aplicationbypart/" + item.parId;
             $scope.AplicacionesPromise = $http.post(url)
                 .then(function (response) {
-                    aplicacionesc.partesByGrupo = response.data;
+                    aplicacionesc.vehiculosQueAplica = response.data;
                     //console.log(aplicacionesc.partesByGrupo);
+                    //console.log(aplicacionesc.vehiculosQueAplica);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -170,14 +242,18 @@ angular
                 });
         };
 
-        aplicacionesc.onSelectParteAplicacion = function (item, model) {
+
+            aplicacionesc.removeOneAplicacion = function (aplId) {
+                $window.scrollTo(0, 0);
             //console.log(item);
-            var url = endpointApiURL.url + "/aplicacion/aplicationbypart/" + item.parId;
-            $scope.AplicacionesPromise = $http.post(url)
-                .then(function (response) {
-                    aplicacionesc.vehiculosQueAplica = response.data;
-                    //console.log(aplicacionesc.partesByGrupo);
-                    console.log(aplicacionesc.vehiculosQueAplica);
+            var url = endpointApiURL.url + "/aplicacion/delete/" + aplId;
+            $scope.AplicacionesPromise = $http.delete(url)
+                .then(function (response) {           
+                    aplicacionesc.onSelectParteAplicacion(aplicacionesc.parteSeleccionadaParaAplicacion)
+                        ngToast.create({
+                            className: 'info',
+                            content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.aplid + '</strong>'
+                        });
                 })
                 .catch(function (error) {
                     console.log(error);
