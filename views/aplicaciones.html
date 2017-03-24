@@ -117,7 +117,7 @@
             <div class="col-md-4 text-center"></div>
         </div>
         </br>
-        <div class="row text-center" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length <= 0)]">
+        <div class="row text-center" ng-class="(aplicacionesc.vehiculosQueAplica.length <= 0 && aplicacionesc.parteSeleccionadaParaAplicacion !== null) ? 'item-visible' : 'item-no-visible'">
             <div class="col-md-12"> <i class="fa fa-exclamation-triangle "></i> <b>No existen aplicaciones para la parte seleccionada.</b></div>
         </div>
         <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">

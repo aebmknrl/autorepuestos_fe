@@ -306,34 +306,36 @@ angular
                 var url = endpointApiURL.url + "/parte/findPartsByGroup/" + item.id;
                 $scope.AplicacionesPromise = $http.post(url)
                     .then(function (response) {
-                       aplicacionesc.partesByGrupo = response.data;
+                        aplicacionesc.partesByGrupo = response.data;
 
                         var cantPartes = aplicacionesc.partesByGrupo.length;
-                        aplicacionesc.progressBarMax = cantPartes;
-                        var count = 0;
 
-
-                        var loop = function (count) {
-                            aplicacionesc.progressBarValue = count + 1;
-                            var element = aplicacionesc.partesByGrupo[count];
-                            //console.log(element);
-                            var url = endpointApiURL.url + "/aplicacion/getqtyappbypartaction/" + element.parId;
-                            $scope.AplicacionesPromise = $http.post(url)
-                                .then(function (response) {
-                                    //console.log(element);
-                                    element.cantAplicaciones = response.data;
-                                    if (count === cantPartes - 1) {
-                                        aplicacionesc.progressBarMax = 0;
-                                        return true;
-                                    } else {
-                                        loop(++count);
-                                    }
-                                })
+                        if (cantPartes != 0) {
+                            aplicacionesc.progressBarMax = cantPartes;
+                            var count = 0;
+                            var loop = function (count) {
+                                aplicacionesc.progressBarValue = count + 1;
+                                var element = aplicacionesc.partesByGrupo[count];
+                                //console.log(element);
+                                var url = endpointApiURL.url + "/aplicacion/getqtyappbypartaction/" + element.parId;
+                                $scope.AplicacionesPromise = $http.post(url)
+                                    .then(function (response) {
+                                        //console.log(element);
+                                        element.cantAplicaciones = response.data;
+                                        if (count === cantPartes - 1) {
+                                            aplicacionesc.progressBarMax = 0;
+                                            return true;
+                                        } else {
+                                            loop(++count);
+                                        }
+                                    })
+                                //console.log(aplicacionesc.partesByGrupo);
+                            }
+                            // start count
+                            loop(count);
                             //console.log(aplicacionesc.partesByGrupo);
                         }
-                        // start count
-                        loop(count);
-                        //console.log(aplicacionesc.partesByGrupo);
+
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -385,7 +387,7 @@ angular
                     }
                 });
         };
-    
+
         aplicacionesc.removeAllPartAplicacion = function (partId) {
             $window.scrollTo(0, 0);
             console.log(partId);
@@ -397,17 +399,17 @@ angular
                         className: 'info',
                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.aplid + '</strong>'
                     });
-                aplicacionesc.parteSeleccionada = null;
-                aplicacionesc.vehiculosSeleccionados = null;
-                aplicacionesc.isAddNewAplicacion = false;
-                aplicacionesc.grupoSeleccionado = null;
-                aplicacionesc.partesByGrupo = null;
-                aplicacionesc.parteSeleccionadaParaAplicacion = null;
-                aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
-                aplicacionesc.cantAplicaciones = 0;
-                aplicacionesc.vehiculosQueAplica = null;
-                aplicacionesc.progressBarValue = 0;
-                aplicacionesc.progressBarMax = 0;
+                    aplicacionesc.parteSeleccionada = null;
+                    aplicacionesc.vehiculosSeleccionados = null;
+                    aplicacionesc.isAddNewAplicacion = false;
+                    aplicacionesc.grupoSeleccionado = null;
+                    aplicacionesc.partesByGrupo = null;
+                    aplicacionesc.parteSeleccionadaParaAplicacion = null;
+                    aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
+                    aplicacionesc.cantAplicaciones = 0;
+                    aplicacionesc.vehiculosQueAplica = null;
+                    aplicacionesc.progressBarValue = 0;
+                    aplicacionesc.progressBarMax = 0;
                 })
                 .catch(function (error) {
                     console.log(error);
