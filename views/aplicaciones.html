@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 text-center" >
+            <div class="col-md-2 text-center">
                 <i class="fa fa-long-arrow-right large-simbol primary-text"></i>
             </div>
             <div class="col-md-5">
@@ -47,7 +47,7 @@
                         <span class="pull-right clickable"><i class="fa fa-car"></i></span>
                     </div>
                     <div class="panel-body">
-                        <ui-select ng-model="aplicacionesc.vehiculosSeleccionados" multiple theme="bootstrap" ng-disabled="aplicacionesc.vehiculos == null" >
+                        <ui-select ng-model="aplicacionesc.vehiculosSeleccionados" multiple theme="bootstrap" ng-disabled="aplicacionesc.vehiculos == null">
                             <ui-select-match placeholder="Seleccione los vehículos...">{{$item.modeloMod.marcaMar.marNombre}} {{$item.modeloMod.modNombre}} {{$item.vehCilindros ==
                                 null ? '' : $item.vehCilindros + '-'}}{{$item.vehLitros == null ? '' : $item.vehLitros +
                                 '-'}}{{$item.vehValvulas == null ? '' : $item.vehValvulas + '-'}}{{$item.vehLevas == null
@@ -120,9 +120,33 @@
         <div class="row text-center" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length <= 0)]">
             <div class="col-md-12"> <i class="fa fa-exclamation-triangle "></i> <b>No existen aplicaciones para la parte seleccionada.</b></div>
         </div>
-        <div class="row"  ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
-            <h4><span class="label label-info">Cantidad de Vehículos en esta aplicación: {{aplicacionesc.cantAplicaciones}}</span></h4>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
+            <div class="col-md-4">
+                <h4><span class="label label-info">Cantidad de Vehículos en esta aplicación: {{aplicacionesc.cantAplicaciones}}</span></h4>
+            </div>
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <b>Acciones de esta Aplicación</b>
+                    </div>
+                </div>
+                </br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-danger" ng-click="aplicacionesc.removeAllPartAplicacion(aplicacionesc.parteSeleccionadaParaAplicacion.parId)" confirm="¿Está seguro de eliminar el registro?">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <span class="button-text">Eliminar esta Aplicación</span>
+                            </button>
+                    </div>
+                </div>
+            </div>
             </br>
+        </div>
+        <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
+
             <table class="table table-hover" ng-cloak>
                 <thead>
                     <tr>

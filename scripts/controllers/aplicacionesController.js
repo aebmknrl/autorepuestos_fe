@@ -385,4 +385,36 @@ angular
                     }
                 });
         };
+    
+        aplicacionesc.removeAllPartAplicacion = function (partId) {
+            $window.scrollTo(0, 0);
+            console.log(partId);
+            var url = endpointApiURL.url + "/aplicacion/delete/allpartapp/" + partId;
+            $scope.AplicacionesPromise = $http.delete(url)
+                .then(function (response) {
+                    aplicacionesc.onSelectParteAplicacion(aplicacionesc.parteSeleccionadaParaAplicacion)
+                    ngToast.create({
+                        className: 'info',
+                        content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.aplid + '</strong>'
+                    });
+                aplicacionesc.parteSeleccionada = null;
+                aplicacionesc.vehiculosSeleccionados = null;
+                aplicacionesc.isAddNewAplicacion = false;
+                aplicacionesc.grupoSeleccionado = null;
+                aplicacionesc.partesByGrupo = null;
+                aplicacionesc.parteSeleccionadaParaAplicacion = null;
+                aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
+                aplicacionesc.cantAplicaciones = 0;
+                aplicacionesc.vehiculosQueAplica = null;
+                aplicacionesc.progressBarValue = 0;
+                aplicacionesc.progressBarMax = 0;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if (error.status == '412') {
+                        console.log('Error obteniendo datos: ' + error.data.error);
+                    }
+                });
+        };
+
     }]);
