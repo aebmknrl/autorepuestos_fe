@@ -124,6 +124,8 @@
         <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
             <div class="col-md-4">
                 <h4><span class="label label-info">Cantidad de Vehículos en esta aplicación: {{aplicacionesc.cantAplicaciones}}</span></h4>
+                <br>
+                <input type="text" class="form-control" id="txtFilter" placeholder="Buscar en la lista" ng-model="aplicacionesc.Aplicacionfilter">
             </div>
             <div class="col-md-4">
 
@@ -175,7 +177,6 @@
         </div>
         <br>
         <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
-
             <table class="table table-hover" ng-cloak>
                 <thead>
                     <tr>
@@ -185,7 +186,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="aplicacion in aplicacionesc.vehiculosQueAplica | filter : vehiculosc.Aplicacionfilter">
+                    <tr ng-repeat="aplicacion in aplicacionesc.vehiculosQueAplica | filter : aplicacionesc.Aplicacionfilter">
                         <td>{{aplicacion.aplId}}</td>
                         <td class="">{{aplicacion.vehiculoVeh.modeloMod.marcaMar.marNombre}} {{aplicacion.vehiculoVeh.modeloMod.modNombre}}
                             {{aplicacion.vehiculoVeh.vehCilindros == null ? '' : aplicacion.vehiculoVeh.vehCilindros + '-'}}{{aplicacion.vehiculoVeh.vehLitros
