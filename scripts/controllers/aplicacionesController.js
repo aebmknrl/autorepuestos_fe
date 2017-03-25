@@ -16,6 +16,7 @@ angular
         aplicacionesc.loadingEditing = false;
         aplicacionesc.loadingData = false;
 
+        aplicacionesc.isAddingVehiculosToApp = true;
 
         aplicacionesc.parteSeleccionada = null;
         aplicacionesc.vehiculosSeleccionados = null;
@@ -25,6 +26,8 @@ angular
         aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
         aplicacionesc.cantAplicaciones = 0;
         aplicacionesc.vehiculosQueAplica = null;
+        aplicacionesc.vehiculosForUpdate = null;
+        aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
 
         aplicacionesc.progressBarValue = 0;
         aplicacionesc.progressBarMax = 0;
@@ -67,6 +70,8 @@ angular
         aplicacionesc.iniNewApp = function () {
             aplicacionesc.parteSeleccionada = null;
             aplicacionesc.vehiculosSeleccionados = null;
+            aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
+            aplicacionesc.isAddingVehiculosToApp = true;
         };
 
         // Change the items per page
@@ -197,36 +202,6 @@ angular
                 });
         }
 
-        // First data to load
-
-        /*
-
-                $scope.AplicacionesPromise = aplicacionesc.getPartes()
-                    .then(function (response) {
-
-                        var url = endpointApiURL.url + "/vehiculo";
-                        return $http.get(url)
-                            .then(function (response) {
-                               // aplicacionesc.vehiculos = response.data;
-                               var vehiculosObtenidos = response.data;
-                               vehiculohasappl
-
-               
-                                $scope.AplicacionesPromise = aplicacionesc.getGrupos()
-                                    .then(function (response) {
-                                        //console.log(aplicacionesc.vehiculos)
-                                        //finnished
-                                    })
-                            })
-                            .catch(function (error) {
-                                console.log(error);
-                                if (error.status == '412') {
-                                    console.log('Error obteniendo datos: ' + error.data.error);
-                                }
-                            });
-                    });
-        */
-
         aplicacionesc.addAplicacion = function (parId) {
             aplicacionesc.isAddNewAplicacion = true;
             vehiculos = {};
@@ -252,6 +227,8 @@ angular
                 aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
                 aplicacionesc.cantAplicaciones = 0;
                 aplicacionesc.vehiculosQueAplica = null;
+                aplicacionesc.vehiculosForUpdate = null;
+                aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
                 aplicacionesc.progressBarValue = 0;
                 aplicacionesc.progressBarMax = 0;
 
@@ -356,8 +333,26 @@ angular
                 .then(function (response) {
                     aplicacionesc.vehiculosQueAplica = response.data;
                     aplicacionesc.cantAplicaciones = aplicacionesc.vehiculosQueAplica.length;
-                    //console.log(aplicacionesc.partesByGrupo);
-                    //console.log(aplicacionesc.vehiculosQueAplica);
+                    var url = endpointApiURL.url + "/vehiculo";
+                    $scope.AplicacionesPromise = $http.get(url)
+                        .then(function (response) {
+                            var vehiculos = response.data;
+                            var vehiculosNewList = null;
+                            var vehiculosNewList = [];
+                            var aplicaciones = aplicacionesc.vehiculosQueAplica;
+                            //Create new list of vehiculos
+                            for (var index = 0; index < aplicaciones.length; index++) {
+                                var aplicacion = aplicaciones[index];
+                                for (var y = 0; y < vehiculos.length; y++) {
+                                    var vehiculo = vehiculos[y];
+                                    if (vehiculo.vehId === aplicacion.vehiculoVeh.vehId) {
+                                        vehiculos.splice(y, 1);
+                                    }
+                                }
+                            }
+                            //console.log(vehiculos);
+                            aplicacionesc.vehiculosForUpdate = vehiculos;
+                        })
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -374,7 +369,29 @@ angular
             var url = endpointApiURL.url + "/aplicacion/delete/" + aplId;
             $scope.AplicacionesPromise = $http.delete(url)
                 .then(function (response) {
-                    aplicacionesc.onSelectParteAplicacion(aplicacionesc.parteSeleccionadaParaAplicacion)
+                    aplicacionesc.cantAplicaciones = aplicacionesc.parteSeleccionadaParaAplicacion.cantAplicaciones;
+                    var url = endpointApiURL.url + "/aplicacion/aplicationbypart/" + aplicacionesc.parteSeleccionadaParaAplicacion.parId;
+                    $scope.AplicacionesPromise = $http.post(url)
+                        .then(function (response) {
+                            aplicacionesc.vehiculosQueAplica = response.data;
+                            aplicacionesc.cantAplicaciones = aplicacionesc.vehiculosQueAplica.length;
+                            aplicacionesc.parteSeleccionadaParaAplicacion.cantAplicaciones = aplicacionesc.cantAplicaciones;
+                            if (aplicacionesc.vehiculosQueAplica.length <= 0) {
+                                aplicacionesc.parteSeleccionada = null;
+                                aplicacionesc.vehiculosSeleccionados = null;
+                                aplicacionesc.isAddNewAplicacion = false;
+                                aplicacionesc.grupoSeleccionado = null;
+                                aplicacionesc.partesByGrupo = null;
+                                aplicacionesc.parteSeleccionadaParaAplicacion = null;
+                                aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
+                                aplicacionesc.cantAplicaciones = 0;
+                                aplicacionesc.vehiculosQueAplica = null;
+                                aplicacionesc.vehiculosForUpdate = null;
+                                aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
+                                aplicacionesc.progressBarValue = 0;
+                                aplicacionesc.progressBarMax = 0;
+                            }
+                        })
                     ngToast.create({
                         className: 'info',
                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.aplid + '</strong>'
@@ -408,6 +425,8 @@ angular
                     aplicacionesc.vehiculoSeleccionadoParaAplicacion = null;
                     aplicacionesc.cantAplicaciones = 0;
                     aplicacionesc.vehiculosQueAplica = null;
+                    aplicacionesc.vehiculosForUpdate = null;
+                    aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
                     aplicacionesc.progressBarValue = 0;
                     aplicacionesc.progressBarMax = 0;
                 })
@@ -418,5 +437,38 @@ angular
                     }
                 });
         };
+
+
+        aplicacionesc.addAplicacionEdit = function (parId) {
+            vehiculos = {};
+            for (i = 0; i < aplicacionesc.vehiculosSeleccionadosParaEdicion.length; i++) {
+                vehiculos['vehiculo' + i] = aplicacionesc.vehiculosSeleccionadosParaEdicion[i].vehId;
+            }
+            url = endpointApiURL.url + "/aplicacion/add/" + parId;
+            $scope.AplicacionesPromise = $http({
+                url: url,
+                method: 'POST',
+                data: vehiculos
+            }).then(function (response) {
+                ngToast.create({
+                    className: 'info',
+                    content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.Aplicacion[0].ID + '</strong>'
+                });
+
+                aplicacionesc.cantAplicaciones = aplicacionesc.parteSeleccionadaParaAplicacion.cantAplicaciones;
+                var url = endpointApiURL.url + "/aplicacion/aplicationbypart/" + aplicacionesc.parteSeleccionadaParaAplicacion.parId;
+                $scope.AplicacionesPromise = $http.post(url)
+                    .then(function (response) {
+                        aplicacionesc.vehiculosQueAplica = response.data;
+                        aplicacionesc.cantAplicaciones = aplicacionesc.vehiculosQueAplica.length;
+                        aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
+                        aplicacionesc.isAddingVehiculosToApp = true;
+                        aplicacionesc.parteSeleccionadaParaAplicacion.cantAplicaciones = aplicacionesc.cantAplicaciones;
+                    })
+            }).catch(function (error) {
+                console.log(error);
+            })
+        }
+
 
     }]);

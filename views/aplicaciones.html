@@ -64,7 +64,8 @@
         </div>
         <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[aplicacionesc.isAddNewAplicacion==true]">
             <div class="col-md-12 text-center">
-                <button class="btn btn-primary" type="button" ng-click="aplicacionesc.addAplicacion(aplicacionesc.parteSeleccionada.parId)">Agregar</button>
+                <button class="btn btn-primary" type="button" ng-disabled="(aplicacionesc.vehiculosSeleccionados == null) || (aplicacionesc.vehiculosSeleccionados == '')"
+                    ng-click="aplicacionesc.addAplicacion(aplicacionesc.parteSeleccionada.parId)">Agregar</button>
             </div>
         </div>
     </div>
@@ -98,7 +99,7 @@
                 <div ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.grupoSeleccionado != null) && (aplicacionesc.partesByGrupo.length > 0) ]">
                     <div ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.progressBarMax!=0)]">
                         <span>Cargando datos...</span>
-                        </br>
+                        <br>
                         <uib-progressbar value="aplicacionesc.progressBarValue" max="aplicacionesc.progressBarMax" animate="true"></uib-progressbar>
                     </div>
                     <br>
@@ -108,7 +109,7 @@
                             <ui-select-match placeholder="Seleccione una parte...">{{$select.selected.parNombre.parNombre}} {{$select.selected.parCodigo}}</ui-select-match>
                             <ui-select-choices repeat="parte in (aplicacionesc.partesByGrupo | filter: $select.search) track by parte.parId">
                                 <span ng-bind-html="parte.parNombre.parNombre | highlight: $select.search"></span>
-                                <small ng-bind-html="parte.parCodigo + ' (' + parte.cantAplicaciones + ' aplicaciones)'| highlight: $select.search"></small>
+                                <small ng-bind-html="parte.parCodigo + ' (' + parte.cantAplicaciones + (parte.cantAplicaciones == 1 ? ' aplicación' : ' aplicaciones') + ')'  | highlight: $select.search"></small>
                             </ui-select-choices>
                         </ui-select>
                     </div>
@@ -133,18 +134,46 @@
                         <b>Acciones de esta Aplicación</b>
                     </div>
                 </div>
-                </br>
+                <br>
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-danger" ng-click="aplicacionesc.removeAllPartAplicacion(aplicacionesc.parteSeleccionadaParaAplicacion.parId)" confirm="¿Está seguro de eliminar el registro?">
+                        <button type="button" class="btn btn-danger" ng-click="aplicacionesc.removeAllPartAplicacion(aplicacionesc.parteSeleccionadaParaAplicacion.parId)"
+                            confirm="¿Está seguro de eliminar el registro?">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 <span class="button-text">Eliminar esta Aplicación</span>
                             </button>
                     </div>
                 </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success" ng-click="aplicacionesc.isAddingVehiculosToApp = !aplicacionesc.isAddingVehiculosToApp">Agregar Vehículo <span ng-class="aplicacionesc.isAddingVehiculosToApp == true ? 'glyphicon glyphicon glyphicon-triangle-bottom' : 'glyphicon glyphicon-triangle-top'" aria-hidden="true" ></span></button>
+                        <hr>
+                        <div uib-collapse="aplicacionesc.isAddingVehiculosToApp">
+                            <div class="well well-lg">
+                                <ui-select ng-model="aplicacionesc.vehiculosSeleccionadosParaEdicion" multiple theme="bootstrap">
+                                    <ui-select-match placeholder="Seleccione vehículos">{{$item.modeloMod.marcaMar.marNombre}} {{$item.modeloMod.modNombre}} {{$item.vehCilindros
+                                        == null ? '' : $item.vehCilindros + '-'}}{{$item.vehLitros == null ? '' : $item.vehLitros
+                                        + '-'}}{{$item.vehValvulas == null ? '' : $item.vehValvulas + '-'}}{{$item.vehLevas
+                                        == null ? '' : $item.vehLevas + '-'}}{{$item.vehVersion == null ? '' : $item.vehVersion
+                                        + '-'}}{{$item.vehFabDesde == null ? '' : $item.vehFabDesde + '-'}}{{$item.vehFabHasta
+                                        == null ? '' : $item.vehFabHasta}}</ui-select-match>
+                                    <ui-select-choices group-by="aplicacionesc.selectVehiculoGroup" repeat="vehiculo in (aplicacionesc.vehiculosForUpdate | filter: $select.search) track by vehiculo.vehId">
+                                        <span ng-bind-html="vehiculo.modeloMod.modNombre | highlight: $select.search"></span>
+                                        <small ng-bind-html="(vehiculo.vehCilindros == null ? '' : vehiculo.vehCilindros + '-') + ( vehiculo.vehLitros == null ? '' :  vehiculo.vehLitros + '-') + ( vehiculo.vehValvulas == null ? '' :  vehiculo.vehValvulas + '-') + ( vehiculo.vehLevas == null ? '' :  vehiculo.vehLevas + '-') + ( vehiculo.vehVersion == null ? '' :  vehiculo.vehVersion + '-') + ( vehiculo.vehFabDesde == null ? '' :  vehiculo.vehFabDesde + '-') + ( vehiculo.vehFabHasta == null ? 'Actual' :  vehiculo.vehFabHasta)  | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <br>
+                                <button class="btn btn-primary" type="button" ng-click="aplicacionesc.addAplicacionEdit(aplicacionesc.parteSeleccionadaParaAplicacion.parId)">
+                                    <i class="fa fa-plus-square" aria-hidden="true"></i> Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            </br>
         </div>
+        <br>
         <div class="row" ng-class="{true:'item-visible', false: 'item-no-visible'}[(aplicacionesc.vehiculosQueAplica.length > 0)]">
 
             <table class="table table-hover" ng-cloak>
