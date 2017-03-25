@@ -164,6 +164,9 @@
 }
 /******************************* Overrides ********************************/
 
+input[type=search] {
+    width: 100% !important;
+}
 .in-line-paginator {
     margin-top: -4px !important;
 }

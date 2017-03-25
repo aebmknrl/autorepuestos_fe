@@ -58,6 +58,8 @@
                                 <small ng-bind-html="(vehiculo.vehCilindros == null ? '' : vehiculo.vehCilindros + '-') + ( vehiculo.vehLitros == null ? '' :  vehiculo.vehLitros + '-') + ( vehiculo.vehValvulas == null ? '' :  vehiculo.vehValvulas + '-') + ( vehiculo.vehLevas == null ? '' :  vehiculo.vehLevas + '-') + ( vehiculo.vehVersion == null ? '' :  vehiculo.vehVersion + '-') + ( vehiculo.vehFabDesde == null ? '' :  vehiculo.vehFabDesde + '-') + ( vehiculo.vehFabHasta == null ? 'Actual' :  vehiculo.vehFabHasta)  | highlight: $select.search"></small>
                             </ui-select-choices>
                         </ui-select>
+                        <br>
+                        <span ng-show="aplicacionesc.warningAllVehiculosOnParte == true"><b><i class="fa fa-exclamation-triangle"></i> Advertencia: Todos los vehículos tienen aplicada la parte seleccionada.</b>
                     </div>
                 </div>
             </div>

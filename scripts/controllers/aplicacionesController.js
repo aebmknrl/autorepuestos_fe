@@ -28,6 +28,7 @@ angular
         aplicacionesc.vehiculosQueAplica = null;
         aplicacionesc.vehiculosForUpdate = null;
         aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
+        aplicacionesc.warningAllVehiculosOnParte = false;
 
         aplicacionesc.progressBarValue = 0;
         aplicacionesc.progressBarMax = 0;
@@ -72,6 +73,7 @@ angular
             aplicacionesc.vehiculosSeleccionados = null;
             aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
             aplicacionesc.isAddingVehiculosToApp = true;
+            aplicacionesc.warningAllVehiculosOnParte = false;
         };
 
         // Change the items per page
@@ -182,7 +184,11 @@ angular
 
                                 //console.log(vehiculos);
                                 aplicacionesc.vehiculos = vehiculos;
-
+                                if (aplicacionesc.vehiculos <= 0) {
+                                    aplicacionesc.warningAllVehiculosOnParte = true;
+                                } else {
+                                   aplicacionesc.warningAllVehiculosOnParte = false; 
+                                }
                             })
                     } else {
                         // If don't have aplicaciones
@@ -231,6 +237,7 @@ angular
                 aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
                 aplicacionesc.progressBarValue = 0;
                 aplicacionesc.progressBarMax = 0;
+                aplicacionesc.warningAllVehiculosOnParte = false;
 
             }).catch(function (error) {
                 console.log(error);
@@ -390,6 +397,7 @@ angular
                                 aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
                                 aplicacionesc.progressBarValue = 0;
                                 aplicacionesc.progressBarMax = 0;
+                                aplicacionesc.warningAllVehiculosOnParte = false;
                             }
                         })
                     ngToast.create({
@@ -429,6 +437,7 @@ angular
                     aplicacionesc.vehiculosSeleccionadosParaEdicion = null;
                     aplicacionesc.progressBarValue = 0;
                     aplicacionesc.progressBarMax = 0;
+                    aplicacionesc.warningAllVehiculosOnParte = false;
                 })
                 .catch(function (error) {
                     console.log(error);
