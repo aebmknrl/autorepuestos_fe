@@ -25,13 +25,32 @@
                 </div>
                 <div ng-class="{ 'has-error': newMarcaForm.observaciones.$touched && newMarcaForm.observaciones.$invalid}" class="form-group">
                     <label for="observaciones">Observaciones <span class="label label-primary">REQUERIDO</span></label>
-                    <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.newItem.observacion" placeholder="Observaciones"
-                        required></textarea>
+                    <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.newItem.observacion"
+                        placeholder="Observaciones" required></textarea>
                     <div class="help-block" ng-messages="newMarcaForm.observaciones.$error" ng-if="newMarcaForm.observaciones.$touched">
                         <p ng-message="required">"Observación" es requerido.</p>
                         <p ng-message="maxlength">Escriba máximo 250 caracteres.</p>
                     </div>
                 </div>
+                <div class="form-group" ng-class="{ 'has-error': newMarcaForm.marImagen.$touched && newMarcaForm.marImagen.$touched}">
+                    <label for="marImagen">Imagen de la Marca</span></label>
+                    <br>
+                    <button class="btn btn-primary" ngf-select ng-model="mc.fileNew" name="marImagen" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                        ngf-max-size="2MB" ngf-min-height="100" ngf-resize="{width: 200, height: 200,centerCrop: true}">
+                        <i class="fa fa-file-image-o"></i> Seleccionar </span>
+                    </button>
+                    <span ng-hide="((mc.fileNew.$ngfName == null) || (mc.fileNew.$ngfName == '') || (mc.fileNew.$ngfName == undefined))">
+                        <b>Nombre del archivo seleccionado:</b> {{mc.fileNew.$ngfName}}
+                    </span>
+                    <br>
+                    <div class="help-block" ng-messages="newMarcaForm.marImagen.$error" ng-if="newMarcaForm.marImagen.$touched">
+                        <p ng-message="pattern">Seleccione un tipo de archivo de imagen.</p>
+                        <p ng-message="maxSize">El tamaño del archivo no debe ser mayor a 2 MB.</p>
+                        <p ng-message="minHeight">La imagen seleccionada es muy pequeña.</p>
+                    </div>
+                    <img class="preview-box" ngf-thumbnail="mc.fileNew" ngf-size="{width: 200, height: 200, quality: 0.9}">
+                </div>
+
                 <button type="button" class="btn btn-success" ng-click="mc.addMarca(mc.newItem.nombre,mc.newItem.observacion)" ng-disabled="newMarcaForm.$invalid">
 			    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                 <span class="button-text">Agregar</span>
@@ -42,7 +61,7 @@
     <div class="row">
         <hr>
     </div>
-    <div>
+    <div ng-show="mc.allLoad">
         <div class="row">
             <div class="col-md-6">
                 <div class="input-group">
@@ -73,17 +92,27 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Observación</th>
+                        <th>Imagen</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat-start="marca in mc.marcas | filter:mc.filter">
-                        <td class="col-md-3">{{marca.marId}}</td>
-                        <td class="col-md-3">{{marca.marNombre}}</td>
-                        <td class="col-md-3">{{marca.marObservacion}}</td>
-                        <td class="col-md-3">
+                        <td class="small-td">{{marca.marId}}</td>
+                        <td class="medium-td">{{marca.marNombre}}</td>
+                        <td class="large-td text-left">{{marca.marObservacion}}</td>
+                       <!-- <td class="medium-td"><img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}" width="100" height="100"></td>-->
+                        <td class="medium-td">
+                            <div class="container-image">
+                            <img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}" width="100" height="100">
+                                <div ng-class="(mc.goToDeleteImage == true && mc.selectedItem.id == marca.marId ) ? 'overlay' : 'no-overlay'">
+                                    <div class="text">Se eliminará</div>
+                                </div>
+                            </div>
+                       </td>
+                        <td class="action-buttons-td">
                             <button type="button" class="btn btn-primary" ng-model="mc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="marca.marId"
-                                btn-checkbox-false="0" ng-click="mc.copyRowData(marca.marNombre,marca.marObservacion)">
+                                btn-checkbox-false="0" ng-click="mc.copyRowData(marca.marNombre,marca.marObservacion); mc.fileEdit = null;">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                             <span class="button-text">Editar</span>
 						</button>
@@ -112,17 +141,45 @@
                         <td>
                             <form name="updateObsForm" novalidate>
                                 <div ng-class="{ 'has-error': updateObsForm.observaciones.$touched && updateObsForm.observaciones.$invalid}">
-                                    <input type="text" name="observaciones" class="form-control" ng-model="mc.selectedItem.observacion" placeholder={{marca.marObservacion}}
-                                        required/>
+                                    <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.selectedItem.observacion" placeholder={{marca.marObservacion}}
+                                        required>
+                                    </textarea>
                                     <div class="help-block" ng-messages="updateObsForm.observaciones.$error" ng-if="updateObsForm.observaciones.$touched">
                                         <p ng-message="required">"Observación" es requerido.</p>
+                                        <p ng-message="maxlength">Escriba máximo 250 caracteres.</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <form name="updateImgForm" novalidate>
+                                <div ng-class="{ 'has-error': updateImgForm.marImagen.$touched && updateImgForm.marImagen.$invalid}">
+                                    <button class="btn btn-primary" ng-disabled="mc.goToDeleteImage" ngf-select ng-model="mc.fileEdit" name="marImagen" ngf-pattern="'image/*'" ngf-accept="'image/*'"
+                                        ngf-max-size="2MB" ngf-min-height="100" ngf-resize="{width: 200, height: 200,centerCrop: true}">
+                                        <i class="fa fa-file-image-o"></i> Seleccionar </span>
+                                    </button>
+                                    <button type="button" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" ng-model="mc.goToDeleteImage" class="btn btn-danger" 
+                                    ng-disabled="((marca.marImagen == '' || marca.marImagen == null || marca.marImagen == undefined) || (mc.fileEdit != '' && mc.fileEdit != undefined && mc.fileEdit !=null && marca.marId == mc.selectedItem.id))">
+                                        <i class="fa fa-eraser"></i> Remover
+                                    </button>
+                                    <div class="help-block" ng-messages="updateImgForm.marImagen.$error" ng-if="updateImgForm.marImagen.$touched">
+                                        <p ng-message="pattern">Seleccione un tipo de archivo de imagen.</p>
+                                        <p ng-message="maxSize">El tamaño del archivo no debe ser mayor a 2 MB.</p>
+                                        <p ng-message="minHeight">La imagen seleccionada es muy pequeña.</p>
+                                    </div>
+                                    <div class="help-block">
+                                        <span ng-hide="((mc.fileEdit.$ngfName == null) || (mc.fileEdit.$ngfName == '') || (mc.fileEdit.$ngfName == undefined))">
+                                            <b>Archivo seleccionado:</b> {{mc.fileEdit.$ngfName}} 
+                                            <br>
+                                            <button class="btn btn-danger" ng-click="mc.fileEdit=null"><i class="fa fa-chain-broken"></i> Quitar</button>
+                                        </span>
                                     </div>
                                 </div>
                             </form>
                         </td>
                         <td>
                             <button type="button" class="btn btn-success" ng-click="mc.updateMarcas(marca.marId,mc.selectedItem.nombre,mc.selectedItem.observacion)"
-                                ng-disabled="updateNameForm.$invalid || updateObsForm.$invalid">
+                                ng-disabled="updateNameForm.$invalid || updateObsForm.$invalid || updateImgForm.$invalid">
 					        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                             <span class="button-text">Guardar</span>
 				        </button>

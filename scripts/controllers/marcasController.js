@@ -1,12 +1,15 @@
  angular
      .module('autorepuestosApp')
-     .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService) {
+     .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', 'Upload', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, Upload) {
          // Set the username for the app
          $rootScope.username = storageService.getUserData('username');
          $rootScope.userrole = storageService.getUserData('role');
          var marcas_controller = this;
          marcas_controller.filter = "";
          marcas_controller.searchText = "";
+         marcas_controller.fileNew = null;
+         marcas_controller.goToDeleteImage = false;
+
          marcas_controller.selectedItem = {
              nombre: '',
              observacion: '',
@@ -18,6 +21,7 @@
          };
          marcas_controller.isAddNewMarca = false;
          $scope.QtyPageTables = storageService.getQtyPageTables();
+
 
          marcas_controller.removeMarca = function (id) {
              url = endpointApiURL.url + "/marca/delete/" + id;
@@ -37,7 +41,7 @@
                          return;
                      }
                      if (error.status == '500') {
-                         toastMsgService.showMsg('Error: no se puede eliminar un registro asociado a otro elemento. Compruebe que no exista relación entre este elemento con otro e intente nuevamente.','danger');
+                         toastMsgService.showMsg('Error: no se puede eliminar un registro asociado a otro elemento. Compruebe que no exista relación entre este elemento con otro e intente nuevamente.', 'danger');
                          console.log('Error 500: ' + error.data.error);
                          return;
                      }
@@ -66,24 +70,27 @@
                      }
                  )
                  .then(function (response) {
-                     //console.log(response.data.marca[0]);
-                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
-                     ngToast.create({
-                         className: 'info',
-                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + response.data.marca[0].marca + '</strong>'
-                     });
-                     marcas_controller.selectedItem.id = 0;
-                     marcas_controller.newItem = {
-                         nombre: '',
-                         observacion: ''
-                     };
-                     $scope.newMarcaForm.nombre = false;
-                     $scope.newMarcaForm.observaciones = false;
-
-                     marcas_controller.isAddNewMarca = false;
+                     marcas_controller.nombreMarcaCreada = response.data.marca[0].marca;
+                     marcas_controller.MarcasPromise = marcas_controller.upload(response.data.marca[0].id, marcas_controller.fileNew)
+                         .then(function (response) {
+                             marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
+                             ngToast.create({
+                                 className: 'info',
+                                 content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Registro agregado: <strong>' + marcas_controller.nombreMarcaCreada + '</strong>'
+                             });
+                             marcas_controller.selectedItem.id = 0;
+                             marcas_controller.newItem = {
+                                 nombre: '',
+                                 observacion: ''
+                             };
+                             $scope.newMarcaForm.nombre = false;
+                             $scope.newMarcaForm.observaciones = false;
+                             marcas_controller.isAddNewMarca = false;
+                             marcas_controller.fileNew = null;
+                         })
                  })
                  .catch(function (error) {
-                     
+
                      console.log(error);
                      if (error.status == '412') {
                          console.log('Error obteniendo datos: ' + error.data.error);
@@ -103,13 +110,48 @@
                      }
                  )
                  .then(function (response) {
-                     //console.log(response.data);
-                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
-                     ngToast.create({
-                         className: 'info',
-                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
-                     });
-                     marcas_controller.selectedItem.id = 0;
+                     // Check if the user will upload the image
+                     if ((marcas_controller.fileEdit != null) && (marcas_controller.fileEdit != '') && (marcas_controller.fileEdit != undefined)) {
+                         // Image set
+                         marcas_controller.MarcasPromise = marcas_controller.upload(response.data.marcaid, marcas_controller.fileEdit)
+                             .then(function (response) {
+                                 marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
+                                 ngToast.create({
+                                     className: 'info',
+                                     content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
+                                 });
+                                 marcas_controller.selectedItem.id = 0;
+                                 marcas_controller.fileEdit = null;
+                             })
+                     } else {
+                         // Image not set
+                         if (marcas_controller.goToDeleteImage == true) {
+                             // The user wants to remove the image
+                             url = endpointApiURL.url + "/marca/delete/removeimage/" + marcas_controller.selectedItem.id;
+                             $scope.MarcasPromise = $http.delete(url)
+                                 .then(function (response) {
+                                     marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
+                                     ngToast.create({
+                                         className: 'info',
+                                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
+                                     });
+                                     marcas_controller.selectedItem.id = 0;
+                                     marcas_controller.fileEdit = null;
+                                     marcas_controller.goToDeleteImage == false;
+                                 })
+                         } else {
+                             marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
+                             ngToast.create({
+                                 className: 'info',
+                                 content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Cambios guardados'
+                             });
+                             marcas_controller.selectedItem.id = 0;
+                             marcas_controller.fileEdit = null;
+                         }
+
+
+                     }
+
                  })
                  .catch(function (error) {
                      console.log(error);
@@ -146,15 +188,18 @@
                          marcas_controller.pageFrom = (limit * page) - (limit - 1);
                          marcas_controller.pageTo = (marcas_controller.pageFrom + marcas_controller.totalMarcasReturned) - 1;
                          marcas_controller.actualRange = "Mostrando registros " + marcas_controller.pageFrom + " a " + marcas_controller.pageTo + " de " + marcas_controller.totalMarcas
-
                      }
-                     marcas_controller.allLoad = true;
-                     // Only for tests
-                     //console.log("Total paginas: " + marcas_controller.totalPages);
-                     //console.log("Página actual: " + marcas_controller.CurrentPage);  
-                     //console.log("Registro " + marcas_controller.pageFrom + " a " + marcas_controller.pageTo + " de " + marcas_controller.totalMarcas);               
-                     // or just use "success", "info", "warning" or "danger" shortcut methods:
+                     // Ask for Marcas Images Route
+                     var url = endpointApiURL.url + "/marca/getImagesRoute";
+                     $scope.MarcasPromise = $http.post(url)
+                         .then(function (response) {
+                             var imagesURL = response.data;
 
+                             marcas_controller.marcas.forEach(function (marca) {
+                                 marca.fullMarImagen = imagesURL + marca.marImagen;
+                             }, this);
+                             marcas_controller.allLoad = true;
+                         })
                  })
                  .catch(function (error) {
                      console.log(error);
@@ -171,5 +216,28 @@
 
          // The default value on load controller:
          marcas_controller.getMarcas($scope.QtyPageTables, 1);
+
+
+
+         // IMAGE WORKS
+         // upload on file select or drop
+         marcas_controller.upload = function (marcaId, file) {
+
+             var url = endpointApiURL.url + "/marca/uploadImage/" + marcaId;
+
+             return Upload.upload({
+                 url: url,
+                 data: {
+                     file: file
+                 }
+             }).then(function (resp) {
+                 //console.log('Success ' + resp.data);
+             }, function (resp) {
+                 //console.log('Error status: ' + resp.status);
+             }, function (evt) {
+                 $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                 console.log('progress: ' + $scope.progressPercentage + '% ' + evt.config.data.file.name);
+             });
+         };
 
      }])

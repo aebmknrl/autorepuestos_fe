@@ -24,6 +24,19 @@
     min-width: 200px;
 }
 
+.small-td{
+    max-width: 100px;
+}
+
+.medium-td {
+    max-width: 300px;
+}
+
+.large-td {
+    max-width: 600px;
+}
+
+
 .bold-text {
     font-weight: bold;
 }
@@ -162,6 +175,72 @@
 .large-simbol {
     font-size: 500%;
 }
+.drop-box {
+
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+    width: 170px;
+    text-align: center;
+    padding: 50px 10px;
+    margin-top: 10px;
+}
+.preview-box {
+    margin-top: 10px;
+
+    margin-bottom: 20px;
+}
+
+
+.container-image {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+}
+
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.5;
+    transition: .5s ease;
+    background-color: #d9534f;
+    margin: 0 auto;
+    color: white;
+    font-weight: bold;
+}
+
+.no-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #d9534f;
+    margin: 0 auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /******************************* Overrides ********************************/
 
 input[type=search] {
