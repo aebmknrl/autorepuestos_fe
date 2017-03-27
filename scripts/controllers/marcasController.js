@@ -30,7 +30,7 @@
                      marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
                      ngToast.create({
                          className: 'info',
-                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.marcaid + '</strong>'
+                         content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.id + '</strong>'
                      });
                      marcas_controller.selectedItem.id = 0;
                  })
