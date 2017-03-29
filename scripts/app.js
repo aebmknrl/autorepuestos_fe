@@ -146,5 +146,5 @@ angular
         $httpProvider.interceptors.push('jwtInterceptor');
     })
     .constant("endpointApiURL", {
-        "url": "http://127.0.0.1/autorepuestos/web/app_dev.php/api"
+        "url": configData.backendUrl
     })
