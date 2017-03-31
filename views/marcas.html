@@ -24,13 +24,27 @@
                     </div>
                 </div>
                 <div ng-class="{ 'has-error': newMarcaForm.observaciones.$touched && newMarcaForm.observaciones.$invalid}" class="form-group">
-                    <label for="observaciones">Observaciones <span class="label label-primary">REQUERIDO</span></label>
+                    <label for="observaciones">Sobre el Fabricante <span class="label label-primary">REQUERIDO</span></label>
                     <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.newItem.observacion"
                         placeholder="Observaciones" required></textarea>
                     <div class="help-block" ng-messages="newMarcaForm.observaciones.$error" ng-if="newMarcaForm.observaciones.$touched">
-                        <p ng-message="required">"Observación" es requerido.</p>
+                        <p ng-message="required">"Sobre el Fabricante" es requerido.</p>
                         <p ng-message="maxlength">Escriba máximo 250 caracteres.</p>
                     </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Valoración de la Marca</label>
+                    <ng-rate-it ng-model="mc.marVal"></ng-rate-it>
+                    <span class="from-group">{{(mc.marVal == undefined) || (mc.marVal == null) ? '' : 'Valoración:'}} {{mc.marVal}}</span>
+                </div>
+                <div class="form-group">
+                    <ui-select ng-model="mc.newItem.pais" theme="bootstrap">
+                        <ui-select-match placeholder="Seleccione País">{{$select.selected}}</ui-select-match>
+                        <ui-select-choices repeat="pais in (mc.paises | filter: $select.search)">
+                            <span ng-bind-html="pais | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': newMarcaForm.marImagen.$touched && newMarcaForm.marImagen.$touched}">
                     <label for="marImagen">Imagen de la Marca</span></label>
@@ -91,7 +105,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Observación</th>
+                        <th>Sobre el Fabricante</th>
                         <th>Imagen</th>
                         <th>Accion</th>
                     </tr>
@@ -101,15 +115,16 @@
                         <td class="small-td">{{marca.marId}}</td>
                         <td class="medium-td">{{marca.marNombre}}</td>
                         <td class="large-td text-left">{{marca.marObservacion}}</td>
-                       <!-- <td class="medium-td"><img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}" width="100" height="100"></td>-->
+                        <!-- <td class="medium-td"><img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}" width="100" height="100"></td>-->
                         <td class="medium-td">
                             <div class="container-image">
-                            <img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}" width="100" height="100">
+                                <img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}"
+                                    width="100" height="100">
                                 <div ng-class="(mc.goToDeleteImage == true && mc.selectedItem.id == marca.marId ) ? 'overlay' : 'no-overlay'">
                                     <div class="text">Se eliminará</div>
                                 </div>
                             </div>
-                       </td>
+                        </td>
                         <td class="action-buttons-td">
                             <button type="button" class="btn btn-primary" ng-model="mc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="marca.marId"
                                 btn-checkbox-false="0" ng-click="mc.copyRowData(marca.marNombre,marca.marObservacion); mc.fileEdit = null;">
@@ -141,11 +156,11 @@
                         <td>
                             <form name="updateObsForm" novalidate>
                                 <div ng-class="{ 'has-error': updateObsForm.observaciones.$touched && updateObsForm.observaciones.$invalid}">
-                                    <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.selectedItem.observacion" placeholder={{marca.marObservacion}}
-                                        required>
+                                    <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.selectedItem.observacion"
+                                        placeholder={{marca.marObservacion}} required>
                                     </textarea>
                                     <div class="help-block" ng-messages="updateObsForm.observaciones.$error" ng-if="updateObsForm.observaciones.$touched">
-                                        <p ng-message="required">"Observación" es requerido.</p>
+                                        <p ng-message="required">"Sobre el Fabricante" es requerido.</p>
                                         <p ng-message="maxlength">Escriba máximo 250 caracteres.</p>
                                     </div>
                                 </div>
@@ -154,12 +169,12 @@
                         <td>
                             <form name="updateImgForm" novalidate>
                                 <div ng-class="{ 'has-error': updateImgForm.marImagen.$touched && updateImgForm.marImagen.$invalid}">
-                                    <button class="btn btn-primary" ng-disabled="mc.goToDeleteImage" ngf-select ng-model="mc.fileEdit" name="marImagen" ngf-pattern="'image/*'" ngf-accept="'image/*'"
-                                        ngf-max-size="2MB" ngf-min-height="100" ngf-resize="{width: 200, height: 200,centerCrop: true}">
+                                    <button class="btn btn-primary" ng-disabled="mc.goToDeleteImage" ngf-select ng-model="mc.fileEdit" name="marImagen" ngf-pattern="'image/*'"
+                                        ngf-accept="'image/*'" ngf-max-size="2MB" ngf-min-height="100" ngf-resize="{width: 200, height: 200,centerCrop: true}">
                                         <i class="fa fa-file-image-o"></i> Seleccionar </span>
                                     </button>
-                                    <button type="button" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" ng-model="mc.goToDeleteImage" class="btn btn-danger" 
-                                    ng-disabled="((marca.marImagen == '' || marca.marImagen == null || marca.marImagen == undefined) || (mc.fileEdit != '' && mc.fileEdit != undefined && mc.fileEdit !=null && marca.marId == mc.selectedItem.id))">
+                                    <button type="button" uib-btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" ng-model="mc.goToDeleteImage"
+                                        class="btn btn-danger" ng-disabled="((marca.marImagen == '' || marca.marImagen == null || marca.marImagen == undefined) || (mc.fileEdit != '' && mc.fileEdit != undefined && mc.fileEdit !=null && marca.marId == mc.selectedItem.id))">
                                         <i class="fa fa-eraser"></i> Remover
                                     </button>
                                     <div class="help-block" ng-messages="updateImgForm.marImagen.$error" ng-if="updateImgForm.marImagen.$touched">

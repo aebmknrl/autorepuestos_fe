@@ -1,6 +1,6 @@
  angular
      .module('autorepuestosApp')
-     .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', 'Upload', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, Upload) {
+     .controller('marcasController', ['$scope', '$state', '$http', 'storageService', 'endpointApiURL', 'ngToast', '$uibModal', '$log', '$confirm', '$rootScope', 'toastMsgService', 'Upload','countryService','$window', function ($scope, $state, $http, storageService, endpointApiURL, ngToast, $uibModal, $log, $confirm, $rootScope, toastMsgService, Upload,countryService,$window) {
          // Set the username for the app
          $rootScope.username = storageService.getUserData('username');
          $rootScope.userrole = storageService.getUserData('role');
@@ -9,6 +9,8 @@
          marcas_controller.searchText = "";
          marcas_controller.fileNew = null;
          marcas_controller.goToDeleteImage = false;
+
+
 
          marcas_controller.selectedItem = {
              nombre: '',
@@ -33,8 +35,10 @@
                          content: '<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> El Registro ha sido eliminado: <strong>' + response.data.id + '</strong>'
                      });
                      marcas_controller.selectedItem.id = 0;
+                     $window.scrollTo(0, 0);
                  })
                  .catch(function (error) {
+                     $window.scrollTo(0, 0);
                      console.log(error);
                      if (error.status == '412') {
                          console.log('Error obteniendo datos: ' + error.data.error);
@@ -62,6 +66,7 @@
          }
 
          marcas_controller.addMarca = function (nombre, observacion) {
+             
              url = endpointApiURL.url + "/marca/add";
              $scope.MarcasPromise = $http.post(
                      url, {
@@ -87,14 +92,18 @@
                              $scope.newMarcaForm.observaciones = false;
                              marcas_controller.isAddNewMarca = false;
                              marcas_controller.fileNew = null;
+                             $window.scrollTo(0, 0);
                          })
                  })
                  .catch(function (error) {
-
+                    $window.scrollTo(0, 0);
                      console.log(error);
                      if (error.status == '412') {
                          console.log('Error obteniendo datos: ' + error.data.error);
                      }
+                    if (error.status == '409') {
+                         toastMsgService.showMsg('Error: la Marca que intenta crear ya existe.', 'danger', 10000);
+                    }
                  });
          }
 
@@ -122,6 +131,7 @@
                                  });
                                  marcas_controller.selectedItem.id = 0;
                                  marcas_controller.fileEdit = null;
+                                 $window.scrollTo(0, 0);
                              })
                      } else {
                          // Image not set
@@ -138,6 +148,7 @@
                                      marcas_controller.selectedItem.id = 0;
                                      marcas_controller.fileEdit = null;
                                      marcas_controller.goToDeleteImage == false;
+                                     $window.scrollTo(0, 0);
                                  })
                          } else {
                              marcas_controller.getMarcas($scope.QtyPagesSelected, marcas_controller.CurrentPage, marcas_controller.searchText);
@@ -147,6 +158,7 @@
                              });
                              marcas_controller.selectedItem.id = 0;
                              marcas_controller.fileEdit = null;
+                             $window.scrollTo(0, 0);
                          }
 
 
@@ -154,6 +166,7 @@
 
                  })
                  .catch(function (error) {
+                     $window.scrollTo(0, 0);
                      console.log(error);
                      if (error.status == '412') {
                          console.log('Error obteniendo datos: ' + error.data.error);
@@ -240,4 +253,7 @@
              });
          };
 
+
+        // Get the countrys 
+        marcas_controller.paises = countryService.getCountrys();
      }])
