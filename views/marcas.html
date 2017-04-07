@@ -35,11 +35,12 @@
 
                 <div class="form-group">
                     <label for="nombre">Valoración de la Marca</label>
-                    <ng-rate-it ng-model="mc.marVal"></ng-rate-it>
-                    <span class="from-group">{{(mc.marVal == undefined) || (mc.marVal == null) ? '' : 'Valoración:'}} {{mc.marVal}}</span>
+                    <ng-rate-it ng-model="mc.newItem.marValor"></ng-rate-it>
+                    <span class="from-group">{{(mc.newItem.marValor == undefined) || (mc.newItem.marValor == null) ? '' : 'Valoración:'}} {{mc.newItem.marValor}}</span>
                 </div>
                 <div class="form-group">
-                    <ui-select ng-model="mc.newItem.pais" theme="bootstrap">
+                    <label for="nombre">País de Origen</label>
+                    <ui-select ng-model="mc.newItem.marPais" theme="bootstrap">
                         <ui-select-match placeholder="Seleccione País">{{$select.selected}}</ui-select-match>
                         <ui-select-choices repeat="pais in (mc.paises | filter: $select.search)">
                             <span ng-bind-html="pais | highlight: $select.search"></span>
@@ -65,7 +66,8 @@
                     <img class="preview-box" ngf-thumbnail="mc.fileNew" ngf-size="{width: 200, height: 200, quality: 0.9}">
                 </div>
 
-                <button type="button" class="btn btn-success" ng-click="mc.addMarca(mc.newItem.nombre,mc.newItem.observacion)" ng-disabled="newMarcaForm.$invalid">
+                <button type="button" class="btn btn-success" ng-click="mc.addMarca(mc.newItem.nombre,mc.newItem.observacion,mc.newItem.marValor,mc.newItem.marPais)"
+                    ng-disabled="newMarcaForm.$invalid">
 			    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                 <span class="button-text">Agregar</span>
 			</button>
@@ -106,6 +108,8 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Sobre el Fabricante</th>
+                        <th>Valoración</th>
+                        <th>País de Orígen</th>
                         <th>Imagen</th>
                         <th>Accion</th>
                     </tr>
@@ -115,6 +119,8 @@
                         <td class="small-td">{{marca.marId}}</td>
                         <td class="medium-td">{{marca.marNombre}}</td>
                         <td class="large-td text-left">{{marca.marObservacion}}</td>
+                        <td class="large-td text-left">{{marca.marValor}}</td>
+                        <td class="large-td text-left">{{marca.marPais}}</td>
                         <!-- <td class="medium-td"><img ng-if="(marca.marImagen != '' && marca.marImagen != null && marca.marImagen != undefined) " ng-src="{{marca.fullMarImagen}}" width="100" height="100"></td>-->
                         <td class="medium-td">
                             <div class="container-image">
@@ -127,7 +133,7 @@
                         </td>
                         <td class="action-buttons-td">
                             <button type="button" class="btn btn-primary" ng-model="mc.selectedItem.id" uib-btn-checkbox btn-checkbox-true="marca.marId"
-                                btn-checkbox-false="0" ng-click="mc.copyRowData(marca.marNombre,marca.marObservacion); mc.fileEdit = null;">
+                                btn-checkbox-false="0" ng-click="mc.copyRowData(marca.marNombre,marca.marObservacion,marca.marValor,marca.marPais); mc.fileEdit = null;">
 							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                             <span class="button-text">Editar</span>
 						</button>
@@ -140,10 +146,10 @@
                         </td>
                     </tr>
                     <tr ng-repeat-end ng-class="{true:'row-visible', false: 'row-no-visible'}[mc.selectedItem.id == marca.marId]">
-                        <td>
+                        <td class="small-td">
                             <strong>Editando Marca ID: {{marca.marId}}</strong>
                         </td>
-                        <td>
+                        <td class="small-td">
                             <form name="updateNameForm" ng-submit="" novalidate>
                                 <div ng-class="{ 'has-error': updateNameForm.nombre.$touched && updateNameForm.nombre.$invalid}">
                                     <input type="text" name="nombre" class="form-control" ng-model="mc.selectedItem.nombre" placeholder={{marca.marNombre}} required/>
@@ -153,7 +159,7 @@
                                 </div>
                             </form>
                         </td>
-                        <td>
+                        <td class="large-td">
                             <form name="updateObsForm" novalidate>
                                 <div ng-class="{ 'has-error': updateObsForm.observaciones.$touched && updateObsForm.observaciones.$invalid}">
                                     <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.selectedItem.observacion"
@@ -165,6 +171,18 @@
                                     </div>
                                 </div>
                             </form>
+                        </td>
+                        <td class="medium-td">
+                            <ng-rate-it ng-model="mc.selectedItem.marValor"></ng-rate-it>
+                            <span>{{(mc.selectedItem.marValor == undefined) || (mc.selectedItem.marValor == null) ? '' : 'Valoración:'}} {{mc.selectedItem.marValor}}</span>
+                        </td>
+                        <td class="large-td">
+                            <ui-select ng-model="mc.selectedItem.marPais" theme="bootstrap">
+                                <ui-select-match placeholder="Sel. País">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="pais in (mc.paises | filter: $select.search)">
+                                    <span ng-bind-html="pais | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
                         </td>
                         <td>
                             <form name="updateImgForm" novalidate>
@@ -192,8 +210,8 @@
                                 </div>
                             </form>
                         </td>
-                        <td>
-                            <button type="button" class="btn btn-success" ng-click="mc.updateMarcas(marca.marId,mc.selectedItem.nombre,mc.selectedItem.observacion)"
+                        <td class="small-td">
+                            <button type="button" class="btn btn-success" ng-click="mc.updateMarcas(marca.marId,mc.selectedItem.nombre,mc.selectedItem.observacion,mc.selectedItem.marValor,mc.selectedItem.marPais)"
                                 ng-disabled="updateNameForm.$invalid || updateObsForm.$invalid || updateImgForm.$invalid">
 					        <span class="glyphicon glyphicon-ok-sign" aria-hidden="true" ></span>
                             <span class="button-text">Guardar</span>
