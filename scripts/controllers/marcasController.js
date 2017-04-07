@@ -120,7 +120,7 @@
                  })
                  .catch(function (error) {
                      $window.scrollTo(0, 0);
-                     console.log(error);
+                     //console.log(error);
                      if (error.status == '412') {
                          console.log('Error obteniendo datos: ' + error.data.error);
                      }

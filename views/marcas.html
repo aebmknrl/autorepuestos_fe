@@ -26,7 +26,7 @@
                 <div ng-class="{ 'has-error': newMarcaForm.observaciones.$touched && newMarcaForm.observaciones.$invalid}" class="form-group">
                     <label for="observaciones">Sobre el Fabricante <span class="label label-primary">REQUERIDO</span></label>
                     <textarea rows="" cols="" ng-maxlength="250" name="observaciones" class="form-control" ng-model="mc.newItem.observacion"
-                        placeholder="Observaciones" required></textarea>
+                        placeholder="Sobre el Fabricante" required></textarea>
                     <div class="help-block" ng-messages="newMarcaForm.observaciones.$error" ng-if="newMarcaForm.observaciones.$touched">
                         <p ng-message="required">"Sobre el Fabricante" es requerido.</p>
                         <p ng-message="maxlength">Escriba máximo 250 caracteres.</p>
