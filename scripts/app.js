@@ -127,7 +127,7 @@ angular
             tokenGetter: ['storageService', function (storageService) {
                 return storageService.getToken();
             }],
-            whiteListedDomains: ['127.0.0.1', 'localhost'],
+            whiteListedDomains: ['127.0.0.1', 'localhost','192.168.1.58'],
             unauthenticatedRedirector: ['$state', 'authManager', 'storageService', 'jwtHelper', function ($state, authManager, storageService, jwtHelper) {
                 if (storageService.getToken() != null) {
                     if (jwtHelper.isTokenExpired(storageService.getToken())) {
