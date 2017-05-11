@@ -493,7 +493,7 @@ angular
                     partesc.parte = response.data;
                     partesc.parte.kit = [];
                     return true;
-                    partesc.parte = response.data;
+                    //partesc.parte = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);

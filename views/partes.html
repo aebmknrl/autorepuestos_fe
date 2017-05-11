@@ -58,15 +58,15 @@
                             <p ng-message="required">"Nombre" es requerido.</p>
                         </div>
                         <div ng-if="partesc.loadingData" class="primary-text">
-                            <span class="glyphicon glyphicon-refresh spinning"></span> Buscando equivalencias...
+                            <span class="glyphicon glyphicon-refresh spinning"></span> Buscando partes similares...
                         </div>
                         <div ng-if="(partesc.equivalentParts.qtyEqParts != undefined || partesc.equivalentParts.qtyEqParts != '') && partesc.newItem.parNombre.parNombre != undefined">
                             <div ng-if="partesc.equivalentParts.qtyEqParts > 0">
                                 <p class="warning-text">{{partesc.equivalentParts.qtyEqParts == 1 ? 'Se ha encontrado' : ' Se han encontrado' }}
                                     {{partesc.equivalentParts.qtyEqParts}} {{partesc.equivalentParts.qtyEqParts == 1 ? 'parte
-                                    equivalente.' : ' partes equivalentes.' }}
+                                    equivalente.' : ' partes similares.' }}
                                 </p>
-                                <button type="button" class="btn btn-default" ng-click="partesc.EqPartsIsCollapsed = !partesc.EqPartsIsCollapsed">{{partesc.EqPartsIsCollapsed == true ? 'Ver Equivalencias' : 'Ocultar Equivalencias' }} <span ng-class="partesc.EqPartsIsCollapsed == true ? 'glyphicon glyphicon glyphicon-triangle-bottom' : 'glyphicon glyphicon-triangle-top'" aria-hidden="true" ></span></button>
+                                <button type="button" class="btn btn-default" ng-click="partesc.EqPartsIsCollapsed = !partesc.EqPartsIsCollapsed">{{partesc.EqPartsIsCollapsed == true ? 'Ver partes similares' : 'Ocultar partes similares' }} <span ng-class="partesc.EqPartsIsCollapsed == true ? 'glyphicon glyphicon glyphicon-triangle-bottom' : 'glyphicon glyphicon-triangle-top'" aria-hidden="true" ></span></button>
                                 <hr>
                                 <div uib-collapse="partesc.EqPartsIsCollapsed">
                                     <div class="well well-lg">
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p ng-if="partesc.equivalentParts.qtyEqParts <= 0" class="success-text">No se han encontrado partes equivalentes.</p>
+                            <p ng-if="partesc.equivalentParts.qtyEqParts <= 0" class="success-text">No se han encontrado partes similares.</p>
                         </div>
                     </div>
                     <div class="form-group">
@@ -579,8 +579,8 @@
                     <div class="forum-icon">
                         <i class="fa fa-exchange"></i>
                     </div>
-                    <span class="forum-item-title">Equivalencias</span>
-                    <div ng-if="$ctrl.items.equivalentParts.qtyEqParts <= 0">No existen partes equivalentes.</div>
+                    <span class="forum-item-title">Partes similares</span>
+                    <div ng-if="$ctrl.items.equivalentParts.qtyEqParts <= 0">No existen partes similares.</div>
                     <div class="forum-sub-title text-center" ng-if="$ctrl.items.equivalentParts.qtyEqParts > 0">
                         <table class="table">
                             <thead>

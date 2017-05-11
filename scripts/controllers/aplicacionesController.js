@@ -33,6 +33,9 @@ angular
         aplicacionesc.progressBarValue = 0;
         aplicacionesc.progressBarMax = 0;
 
+        aplicacionesc.PartDetailIsCollapsed = true;
+
+        aplicacionesc.equivalencias = [];
 
         //Vacío por ahora
         aplicacionesc.selectedItem = {};
@@ -187,7 +190,7 @@ angular
                                 if (aplicacionesc.vehiculos <= 0) {
                                     aplicacionesc.warningAllVehiculosOnParte = true;
                                 } else {
-                                   aplicacionesc.warningAllVehiculosOnParte = false; 
+                                    aplicacionesc.warningAllVehiculosOnParte = false;
                                 }
                             })
                     } else {
@@ -347,18 +350,46 @@ angular
                             var vehiculosNewList = null;
                             var vehiculosNewList = [];
                             var aplicaciones = aplicacionesc.vehiculosQueAplica;
+
+
                             //Create new list of vehiculos
                             for (var index = 0; index < aplicaciones.length; index++) {
                                 var aplicacion = aplicaciones[index];
                                 for (var y = 0; y < vehiculos.length; y++) {
                                     var vehiculo = vehiculos[y];
+                                    var vehList = [];
                                     if (vehiculo.vehId === aplicacion.vehiculoVeh.vehId) {
+                                        vehList.push(vehiculo.vehId);
                                         vehiculos.splice(y, 1);
                                     }
                                 }
                             }
-                            //console.log(vehiculos);
+                            //console.log(aplicacionesc.vehiculosQueAplica);
                             aplicacionesc.vehiculosForUpdate = vehiculos;
+
+                            // Get all equivalent parts on the applications
+                            aplicacionesc.equivalencias = [];
+                            for (var z = 0; z < aplicacionesc.vehiculosQueAplica.length; z++) {
+                                var element = aplicacionesc.vehiculosQueAplica[z];
+                                var url = endpointApiURL.url + "/aplicacion/equiv/10000/1";
+                                $scope.AplicacionesPromise = $http.post(url, {
+                                        vehId: element.vehiculoVeh.vehId,
+                                        parId: item.parNombre.parNombreId
+                                    })
+                                    .then(function (response) {
+                                        //console.log(item.parId);
+                                        aplicacionesc.equivalencias.push(response.data);
+                                    })
+                            }
+                            aplicacionesc.vehiculosQueAplica.equivalencias = aplicacionesc.equivalencias;
+                            //console.log(aplicacionesc.vehiculosQueAplica.equivalencias);
+
+                            url = endpointApiURL.url + "/conjunto/bypart/" + aplicacionesc.parteSeleccionadaParaAplicacion.parId;
+                            $scope.AplicacionesPromise = $http.get(url)
+                                .then(function (response) {
+                                    aplicacionesc.parteSeleccionadaParaAplicacion.kitParts = response.data;
+
+                                });
                         })
                 })
                 .catch(function (error) {
@@ -476,6 +507,42 @@ angular
                     })
             }).catch(function (error) {
                 console.log(error);
+            })
+        }
+
+
+
+
+
+
+
+
+
+        // Modal
+        aplicacionesc.openModalViewPart = function (parte) {
+            // Setup the data that will be passed to modal
+            var parte = parte;
+            var modal = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'EquivalenciaView.html',
+                controller: 'modalInstanceController',
+                controllerAs: '$ctrl',
+                appendTo: undefined,
+                resolve: {
+                    items: function () {
+                        return parte;
+                    }
+                }
+            });
+            modal.result.then(function (selectedItem) {
+                // This part is used when user hits ok button
+
+                //console.log(selectedItem);
+            }, function () {
+                // This part is used when user hits cancelar button
+
             })
         }
 
